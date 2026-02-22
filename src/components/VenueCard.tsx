@@ -63,36 +63,49 @@ function formatDiscountLabel(discount: Venue["discount"]): string | null {
   return String(discount);
 }
 
+const numberFormatter = new Intl.NumberFormat("en-US");
+
+function getPriceLevelLabel(venue: Venue): string | null {
+  const explicit = (venue as unknown as { priceLevel?: unknown }).priceLevel;
+  if (typeof explicit === "string" && explicit.trim()) return explicit.trim();
+
+  const tags = (venue.tags ?? []).map((t) => String(t).toLowerCase());
+  if (tags.some((t) => t.includes("$$$"))) return "$$$";
+  if (tags.some((t) => t.includes("$$"))) return "$$";
+  if (tags.some((t) => t.includes("$"))) return "$";
+  if (tags.some((t) => t.includes("budget") || t.includes("cheap"))) return "$";
+  if (tags.some((t) => t.includes("mid") || t.includes("mid-range")))
+    return "$$";
+  if (tags.some((t) => t.includes("premium") || t.includes("luxury")))
+    return "$$$";
+  return null;
+}
+
+function getPrimaryRibbonText(venue: Venue): string {
+  const discountLabel = formatDiscountLabel(venue.discount);
+  if (discountLabel) {
+    const match = discountLabel.match(/(\d+\s*%)/);
+    if (match?.[1]) return `SAVE ${match[1].replace(/\s+/g, "")}`;
+    return discountLabel.replace(/^Save\s+/i, "SAVE ").toUpperCase();
+  }
+
+  const firstOffer = Array.isArray(venue.offers)
+    ? venue.offers.map(formatOfferLabel).find((x): x is string => Boolean(x))
+    : null;
+  if (firstOffer) return String(firstOffer).trim().toUpperCase();
+
+  const perk = venue.cardPerk != null ? String(venue.cardPerk).trim() : "";
+  if (perk) return perk.replace(/\s+/g, " ").slice(0, 24).toUpperCase();
+
+  return "PASS PERK";
+}
+
 export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
   const actions: ReactNode[] = [];
 
   const discountLabel = formatDiscountLabel(venue.discount);
-
-  const desktopCoverHeightPx =
-    variant === "desktop"
-      ? (() => {
-          const cardHeightPx = getNumericPx(cardStyle?.height);
-          return cardHeightPx != null ? Math.round(cardHeightPx * 0.4) : null;
-        })()
-      : null;
-
-  const hasDesktopCoverImage =
-    variant === "desktop" && Boolean(venue.image || venue.logo);
-
-  const categoryLocationLabel = (() => {
-    const category = venue.categories?.length
-      ? String(venue.categories[0])
-      : "";
-    const location =
-      venue.area != null && String(venue.area).trim() !== ""
-        ? String(venue.area)
-        : "";
-    if (!category && !location) return null;
-    if (category && location) return `${category} : ${location}`;
-    return category || location;
-  })();
-
-  const starsLabel = (() => {
+  const ribbonText = getPrimaryRibbonText(venue);
+  const ratingLine = (() => {
     const parsed =
       typeof venue.stars === "number"
         ? venue.stars
@@ -113,9 +126,21 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
         : null;
 
     return reviewsCount != null
-      ? `⭐️${parsed.toFixed(1)} | ${reviewsCount} reviews`
-      : `⭐️${parsed.toFixed(1)}`;
+      ? `⭐ ${parsed.toFixed(1)} (${numberFormatter.format(reviewsCount)} reviews)`
+      : `⭐ ${parsed.toFixed(1)}`;
   })();
+  const priceLevel = getPriceLevelLabel(venue);
+
+  const desktopCoverHeightPx =
+    variant === "desktop"
+      ? (() => {
+          const cardHeightPx = getNumericPx(cardStyle?.height);
+          return cardHeightPx != null ? Math.round(cardHeightPx * 0.4) : null;
+        })()
+      : null;
+
+  const hasDesktopCoverImage =
+    variant === "desktop" && Boolean(venue.image || venue.logo);
 
   const excerptLine =
     venue.excerpt != null && String(venue.excerpt).trim() !== ""
@@ -159,12 +184,13 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
   return (
     <Card
       hoverable={variant === "desktop"}
+      className="ahg-venue-card"
       style={
         variant === "desktop"
           ? {
               ...cardStyle,
               background: "var(--venue-card-bg)",
-              borderRadius: 12,
+              borderRadius: 14,
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
@@ -199,62 +225,29 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               }}
               loading="lazy"
             />
-            {discountLabel ? (
-              <div style={{ position: "absolute", top: 8, left: 8 }}>
-                <Tag>{discountLabel}</Tag>
-              </div>
-            ) : null}
 
-            {starsLabel ? (
-              <div style={{ position: "absolute", top: 8, right: 8 }}>
-                <div
-                  style={{
-                    background: "rgba(0,0,0,0.38)",
-                    color: "#fff",
-                    fontSize: 12,
-                    fontWeight: 700,
-                    padding: "4px 8px",
-                    borderRadius: 10,
-                    lineHeight: "12px",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {starsLabel}
-                </div>
-              </div>
-            ) : null}
+            <div style={{ position: "absolute", top: 8, left: 8 }}>
+              <div className="ahg-venue-ribbon">{ribbonText}</div>
+            </div>
 
-            {categoryLocationLabel ? (
-              <div
-                style={{
-                  position: "absolute",
-                  left: 8,
-                  bottom: 4,
-                }}
-              >
-                <div
-                  style={{
-                    background:
-                      "linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 60%, rgba(0,0,0,0) 100%)",
-                    color: "#fff",
-                    fontSize: 11,
-                    fontWeight: 700,
-                    letterSpacing: 0.6,
-                    textTransform: "uppercase",
-                    padding: "6px 14px 6px 10px",
-                    borderRadius: 10,
-                    display: "inline-block",
-                    maxWidth: "220px",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    pointerEvents: "none",
-                  }}
-                >
-                  {categoryLocationLabel}
-                </div>
-              </div>
-            ) : null}
+            <div
+              style={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                background: "rgba(37, 211, 102, 0.12)",
+                border: "1px solid rgba(37, 211, 102, 0.25)",
+                color: "#1FAF5A",
+                fontSize: 11,
+                fontWeight: 900,
+                padding: "4px 10px",
+                borderRadius: 999,
+                whiteSpace: "nowrap",
+                pointerEvents: "none",
+              }}
+            >
+              Pass Partner
+            </div>
           </div>
         ) : undefined
       }
@@ -295,6 +288,70 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               {!hasDesktopCoverImage && discountLabel ? (
                 <Tag>{discountLabel}</Tag>
               ) : null}
+            </div>
+
+            <div
+              style={{
+                marginTop: 6,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                color: "#666",
+                fontSize: 11,
+                lineHeight: "14px",
+              }}
+            >
+              {ratingLine ? (
+                <div style={{ fontWeight: 700 }}>{ratingLine}</div>
+              ) : null}
+              {venue.area ? <div>📍 {venue.area}</div> : null}
+              {priceLevel ? <div>💰 {priceLevel}</div> : null}
+            </div>
+
+            <div
+              style={{
+                marginTop: 8,
+                background:
+                  "color-mix(in srgb, var(--pass-primary) 8%, #ffffff)",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: 14,
+                padding: "8px 10px",
+                boxShadow: "0 1px 6px rgba(0,0,0,0.06)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 10,
+                  letterSpacing: 0.9,
+                  textTransform: "uppercase",
+                  fontWeight: 900,
+                  color: "var(--pass-primary)",
+                }}
+              >
+                Pass Offer
+              </div>
+              <div
+                style={{
+                  marginTop: 2,
+                  fontSize: 12,
+                  fontWeight: 900,
+                  color: "#2F3E3A",
+                  lineHeight: "14px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {Array.isArray(venue.offers) && venue.offers.length
+                  ? venue.offers
+                      .map(formatOfferLabel)
+                      .filter((x): x is string => Boolean(x))
+                      .slice(0, 1)
+                      .join(" ")
+                  : venue.cardPerk || discountLabel || "Pass perk available"}
+              </div>
             </div>
 
             {excerptLine ? (
@@ -392,13 +449,22 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
         <Space direction="vertical" size={10} style={{ width: "100%" }}>
           <Space size={8} wrap>
             <Typography.Text strong>{venue.name}</Typography.Text>
-            {!hasDesktopCoverImage && discountLabel ? (
-              <Tag>{discountLabel}</Tag>
-            ) : null}
+            <Tag color="green" style={{ margin: 0 }}>
+              Pass Partner
+            </Tag>
+            <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
           </Space>
 
+          {ratingLine ? (
+            <Typography.Text type="secondary">{ratingLine}</Typography.Text>
+          ) : null}
+
           {venue.area ? (
-            <Typography.Text type="secondary">{venue.area}</Typography.Text>
+            <Typography.Text type="secondary">📍 {venue.area}</Typography.Text>
+          ) : null}
+
+          {priceLevel ? (
+            <Typography.Text type="secondary">💰 {priceLevel}</Typography.Text>
           ) : null}
 
           {venue.categories?.length ? (

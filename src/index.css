@@ -10,10 +10,135 @@
   --pass-primary-hover: #a95332;
   --pass-primary-active: #8f472b;
 
+  --ahg-mobile-cta-height: 56px;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.ahg-mobile-cta-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: none;
+  width: 100%;
+  background: #f6efe8;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 240ms ease,
+    transform 240ms ease;
+  pointer-events: none;
+}
+
+.ahg-sticky-cta-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: block;
+  width: 100%;
+  background: #f6efe8;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ahg-mobile-cta-bar.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.ahg-mobile-cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--pass-primary);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.ahg-mobile-cta-button:hover {
+  transform: scale(1.03);
+  background: var(--pass-primary-hover);
+}
+
+.ahg-mobile-cta-button:active {
+  transform: scale(0.99);
+  background: var(--pass-primary-active);
+}
+
+.ahg-mobile-cta-button:focus-visible {
+  outline: 2px solid rgba(184, 92, 56, 0.45);
+  outline-offset: 3px;
+}
+
+@media (max-width: 767.98px) {
+  .ahg-mobile-cta-bar {
+    display: block;
+  }
+
+  .ahg-mobile-cta-safe {
+    padding-bottom: calc(
+      var(--ahg-mobile-cta-height) + env(safe-area-inset-bottom) + 16px
+    );
+  }
+}
+
+.ahg-venue-card {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ahg-venue-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.ahg-venue-ribbon {
+  background: var(--pass-primary);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+  .ahg-savings-summary-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 a {

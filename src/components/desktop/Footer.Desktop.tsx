@@ -21,7 +21,9 @@ export function FooterDesktop() {
               Curated destination guides + local privileges for independent
               travellers.
             </Typography.Text>
-            <Typography.Text type="secondary">© {year} Ahangama.</Typography.Text>
+            <Typography.Text type="secondary">
+              © {year} Ahangama.
+            </Typography.Text>
           </Space>
         </Col>
 
@@ -39,7 +41,11 @@ export function FooterDesktop() {
         <Col xs={24} md={7}>
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <Typography.Text strong>Connect</Typography.Text>
-            <Typography.Link href="https://ahangama.com" target="_blank" rel="noreferrer">
+            <Typography.Link
+              href="https://ahangama.com"
+              target="_blank"
+              rel="noreferrer"
+            >
               ahangama.com
             </Typography.Link>
             <Typography.Link
