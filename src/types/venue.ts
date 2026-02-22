@@ -10,8 +10,8 @@ export type Venue = {
 
   categories: string[];
   emoji: string[];
-  stars?: number | null;
-  reviews?: number | null;
+  stars?: number | string | null;
+  reviews?: number | string | null;
   discount?: string | number | null;
 
   excerpt?: string | null;
