@@ -35,22 +35,39 @@ export function HeroDesktop({ image }: Props) {
             marginTop: 10,
             fontSize: 16,
             lineHeight: 1.45,
+            fontWeight: 600,
           }}
         >
-          Save on cafés, stays, surf, wellness & experiences — instantly.
+          Instant perks at cafés, stays, surf & wellness.
         </Typography.Text>
 
-        <div style={{ marginTop: 14, display: "grid", gap: 8 }}>
-          <Typography.Text style={{ fontSize: 14 }}>
-            ✔ Save 10–20% at top cafés
-          </Typography.Text>
-          <Typography.Text style={{ fontSize: 14 }}>
-            ✔ Free drinks, upgrades & perks
-          </Typography.Text>
-          <Typography.Text style={{ fontSize: 14 }}>
-            ✔ Instant access via QR pass
-          </Typography.Text>
-        </div>
+        <Typography.Text
+          type="secondary"
+          style={{
+            display: "block",
+            marginTop: 8,
+            fontSize: 12,
+            lineHeight: "16px",
+            opacity: 0.75,
+          }}
+        >
+          Used by 2,000+ travellers • Works instantly via QR
+        </Typography.Text>
+
+        <Typography.Text
+          type="secondary"
+          style={{
+            display: "block",
+            marginTop: 6,
+            fontSize: 12,
+            lineHeight: "16px",
+            opacity: 0.75,
+            whiteSpace: "normal",
+            overflowWrap: "anywhere",
+          }}
+        >
+          10–20% off • Free items • Upgrades
+        </Typography.Text>
 
         <div
           style={{ marginTop: 18, display: "flex", flexDirection: "column" }}
@@ -96,13 +113,6 @@ export function HeroDesktop({ image }: Props) {
               </Button>
             </a>
           </ConfigProvider>
-
-          <Typography.Text
-            type="secondary"
-            style={{ marginTop: 10, fontSize: 12 }}
-          >
-            Used by 2,000+ travellers this season
-          </Typography.Text>
         </div>
       </div>
       <div

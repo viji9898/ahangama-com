@@ -5,9 +5,15 @@ const { Title, Text, Paragraph } = Typography;
 
 type Props = {
   onGuideClick: () => void;
+  guideUrl?: string;
 };
 
-export default function FreeGuideCtaMobile({ onGuideClick }: Props) {
+export default function FreeGuideCtaMobile({ onGuideClick, guideUrl }: Props) {
+  const resolvedGuideUrl =
+    guideUrl ??
+    "https://wa.me/94777879087?text=" +
+      encodeURIComponent("Hi! I'd like the free Ahangama guide via WhatsApp.");
+
   const buttonIcon: ReactNode = (
     <span style={{ fontSize: 14, marginRight: 4 }}>💬</span>
   );
@@ -48,6 +54,25 @@ export default function FreeGuideCtaMobile({ onGuideClick }: Props) {
           📄
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ marginBottom: 6 }}>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 11,
+                fontWeight: 800,
+                padding: "4px 10px",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.65)",
+                border: "1px solid rgba(0,0,0,0.08)",
+                color: "#2F3E3A",
+                letterSpacing: 0.2,
+              }}
+            >
+              2026 • Free Guide
+            </span>
+          </div>
           <Title
             level={4}
             style={{
@@ -124,8 +149,8 @@ export default function FreeGuideCtaMobile({ onGuideClick }: Props) {
             borderRadius: 999,
             height: 44,
             fontWeight: 700,
-            background: "color-mix(in srgb, var(--pass-primary) 10%, #ffffff)",
-            border: "1px solid rgba(0,0,0,0.06)",
+            background: "color-mix(in srgb, var(--pass-primary) 12%, #ffffff)",
+            border: "1px solid rgba(0,0,0,0.08)",
             color: "var(--pass-primary)",
             boxShadow: "0 8px 18px rgba(0,0,0,0.08)",
             transition: "transform 0.15s ease, box-shadow 0.15s ease",
@@ -142,6 +167,20 @@ export default function FreeGuideCtaMobile({ onGuideClick }: Props) {
         >
           Get Guide via WhatsApp
         </Button>
+
+        <div style={{ marginTop: 8, textAlign: "center" }}>
+          <Text type="secondary" style={{ fontSize: 11, opacity: 0.75 }}>
+            No spam • one message
+          </Text>
+        </div>
+
+        {/* Keeps QR value available for parity with desktop; not rendered on mobile */}
+        <a
+          href={resolvedGuideUrl}
+          target="_blank"
+          rel="noreferrer"
+          style={{ display: "none" }}
+        />
       </ConfigProvider>
     </Card>
   );

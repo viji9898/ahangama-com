@@ -5,7 +5,10 @@ import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
 import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
-import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
+import {
+  VenueFiltersDesktop,
+  type VenueSortKey,
+} from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 
@@ -87,6 +90,7 @@ export default function HomeDesktop() {
   const [category, setCategory] = useState<string | null>(null);
   const [selectedBestFor, setSelectedBestFor] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [sortKey, setSortKey] = useState<VenueSortKey>("recommended");
   const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
   const viewAllRef = useRef<HTMLDivElement | null>(null);
 
@@ -122,7 +126,7 @@ export default function HomeDesktop() {
   const filteredVenues = useMemo(() => {
     const q = searchText.trim().toLowerCase();
 
-    return venues.filter((v) => {
+    const base = venues.filter((v) => {
       if (category && !(v.categories ?? []).includes(category)) return false;
 
       if (selectedBestFor.length) {
@@ -153,7 +157,35 @@ export default function HomeDesktop() {
 
       return haystack.includes(q);
     });
-  }, [venues, category, selectedBestFor, selectedTags, searchText]);
+
+    switch (sortKey) {
+      case "most-popular":
+        return base
+          .slice()
+          .sort((a, b) => getReviewsCount(b) - getReviewsCount(a));
+      case "best-discounts":
+        return base
+          .slice()
+          .sort((a, b) => maxPercentOfferScore(b) - maxPercentOfferScore(a));
+      case "a-z":
+        return base
+          .slice()
+          .sort((a, b) =>
+            String(a.name ?? "").localeCompare(String(b.name ?? "")),
+          );
+      case "recommended":
+      default:
+        return base;
+    }
+  }, [venues, category, selectedBestFor, selectedTags, searchText, sortKey]);
+
+  const handleClearAllFilters = () => {
+    setSearchText("");
+    setCategory(null);
+    setSelectedBestFor([]);
+    setSelectedTags([]);
+    setSortKey("recommended");
+  };
 
   const sections = useMemo(() => {
     const base = filteredVenues;
@@ -311,6 +343,9 @@ export default function HomeDesktop() {
           onSelectedBestForChange={setSelectedBestFor}
           selectedTags={selectedTags}
           onSelectedTagsChange={setSelectedTags}
+          sortKey={sortKey}
+          onSortKeyChange={setSortKey}
+          onClearAll={handleClearAllFilters}
           categoryOptions={categoryOptions}
           bestForOptions={bestForOptions}
           tagOptions={tagOptions}

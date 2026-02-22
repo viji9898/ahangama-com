@@ -5,7 +5,7 @@ export function GetPassStickyCta() {
         style={{
           maxWidth: 1100,
           margin: "0 auto",
-          padding: "12px 16px",
+          padding: "10px 16px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -28,7 +28,7 @@ export function GetPassStickyCta() {
             textAlign: "center",
           }}
         >
-          Ahangama Pass — From $18
+          Get Pass — from $18
         </div>
 
         <a
