@@ -115,8 +115,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .ahg-venue-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.14) !important;
   }
 }
 
@@ -124,10 +124,10 @@
   background: var(--pass-primary);
   color: #ffffff;
   font-weight: 900;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
-  padding: 6px 10px;
+  padding: 7px 11px;
   border-radius: 12px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -135,6 +135,34 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ahg-venue-discount-badge {
+  background: color-mix(in srgb, var(--pass-primary) 18%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--pass-primary) 34%, transparent);
+  color: var(--pass-primary);
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: 0.85px;
+  text-transform: uppercase;
+  padding: 7px 11px;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+
+.ahg-venue-partner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+  color: #1faf5a;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 6px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 
 /* Venue filters (desktop + small-screen responsive) */

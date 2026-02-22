@@ -129,7 +129,30 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
       ? `⭐ ${parsed.toFixed(1)} (${numberFormatter.format(reviewsCount)} reviews)`
       : `⭐ ${parsed.toFixed(1)}`;
   })();
+  const ratingValue = (() => {
+    const parsed =
+      typeof venue.stars === "number"
+        ? venue.stars
+        : typeof venue.stars === "string"
+          ? Number.parseFloat(venue.stars)
+          : null;
+    return parsed != null && Number.isFinite(parsed) ? parsed : null;
+  })();
+  const reviewsCount = (() => {
+    const parsed =
+      typeof venue.reviews === "number"
+        ? venue.reviews
+        : typeof venue.reviews === "string"
+          ? Number.parseFloat(venue.reviews)
+          : null;
+    return parsed != null && Number.isFinite(parsed)
+      ? Math.round(parsed)
+      : null;
+  })();
   const priceLevel = getPriceLevelLabel(venue);
+  const isPassPartner =
+    venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
+  const discountBadgeText = discountLabel ? ribbonText : null;
 
   const desktopCoverHeightPx =
     variant === "desktop"
@@ -225,29 +248,6 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               }}
               loading="lazy"
             />
-
-            <div style={{ position: "absolute", top: 8, left: 8 }}>
-              <div className="ahg-venue-ribbon">{ribbonText}</div>
-            </div>
-
-            <div
-              style={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                background: "rgba(37, 211, 102, 0.12)",
-                border: "1px solid rgba(37, 211, 102, 0.25)",
-                color: "#1FAF5A",
-                fontSize: 11,
-                fontWeight: 900,
-                padding: "4px 10px",
-                borderRadius: 999,
-                whiteSpace: "nowrap",
-                pointerEvents: "none",
-              }}
-            >
-              Pass Partner
-            </div>
           </div>
         ) : undefined
       }
@@ -265,6 +265,84 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
           >
             <div
               style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 10,
+                minHeight: 28,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  minWidth: 0,
+                  flex: 1,
+                }}
+              >
+                {discountBadgeText ? (
+                  <span className="ahg-venue-discount-badge">
+                    {discountBadgeText}
+                  </span>
+                ) : null}
+                {isPassPartner ? (
+                  <span className="ahg-venue-partner-badge">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                      focusable="false"
+                      style={{ flex: "0 0 auto" }}
+                    >
+                      <path
+                        d="M20 6L9 17l-5-5"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    Pass Partner
+                  </span>
+                ) : null}
+              </div>
+
+              {ratingValue != null ? (
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    background: "rgba(0,0,0,0.04)",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    whiteSpace: "nowrap",
+                    flex: "0 0 auto",
+                    lineHeight: "14px",
+                    fontSize: 11,
+                    fontWeight: 900,
+                    color: "#2F3E3A",
+                  }}
+                >
+                  <span aria-hidden="true">⭐</span>
+                  <span>{ratingValue.toFixed(1)}</span>
+                  {reviewsCount != null ? (
+                    <span style={{ opacity: 0.7, fontWeight: 800 }}>
+                      ({numberFormatter.format(reviewsCount)})
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+
+            <div
+              style={{
+                marginTop: 8,
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
@@ -285,9 +363,6 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                 {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
                 {venue.name}
               </Typography.Text>
-              {!hasDesktopCoverImage && discountLabel ? (
-                <Tag>{discountLabel}</Tag>
-              ) : null}
             </div>
 
             <div
@@ -302,56 +377,12 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               }}
             >
               {ratingLine ? (
-                <div style={{ fontWeight: 700 }}>{ratingLine}</div>
+                <div style={{ fontWeight: 700, color: "#2F3E3A" }}>
+                  {ratingLine}
+                </div>
               ) : null}
               {venue.area ? <div>📍 {venue.area}</div> : null}
               {priceLevel ? <div>💰 {priceLevel}</div> : null}
-            </div>
-
-            <div
-              style={{
-                marginTop: 8,
-                background:
-                  "color-mix(in srgb, var(--pass-primary) 8%, #ffffff)",
-                border: "1px solid rgba(0,0,0,0.06)",
-                borderRadius: 14,
-                padding: "8px 10px",
-                boxShadow: "0 1px 6px rgba(0,0,0,0.06)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 10,
-                  letterSpacing: 0.9,
-                  textTransform: "uppercase",
-                  fontWeight: 900,
-                  color: "var(--pass-primary)",
-                }}
-              >
-                Pass Offer
-              </div>
-              <div
-                style={{
-                  marginTop: 2,
-                  fontSize: 12,
-                  fontWeight: 900,
-                  color: "#2F3E3A",
-                  lineHeight: "14px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
-                {Array.isArray(venue.offers) && venue.offers.length
-                  ? venue.offers
-                      .map(formatOfferLabel)
-                      .filter((x): x is string => Boolean(x))
-                      .slice(0, 1)
-                      .join(" ")
-                  : venue.cardPerk || discountLabel || "Pass perk available"}
-              </div>
             </div>
 
             {excerptLine ? (
