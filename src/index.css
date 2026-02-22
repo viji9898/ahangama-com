@@ -137,6 +137,59 @@
   text-overflow: ellipsis;
 }
 
+.ahg-curated-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 2px 2px;
+  margin: 2px 0 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ahg-curated-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.ahg-curated-chip {
+  appearance: none;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.78);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.ahg-curated-chip:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.14);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+}
+
+.ahg-curated-chip.is-active {
+  background: color-mix(in srgb, var(--pass-primary) 12%, #ffffff);
+  border-color: color-mix(
+    in srgb,
+    var(--pass-primary) 35%,
+    rgba(0, 0, 0, 0.12)
+  );
+  color: var(--pass-primary);
+}
+
+.ahg-curated-chip:focus-visible {
+  outline: 2px solid rgba(184, 92, 56, 0.35);
+  outline-offset: 2px;
+}
+
 .ahg-venue-discount-badge {
   background: color-mix(in srgb, var(--pass-primary) 18%, #ffffff);
   border: 1px solid color-mix(in srgb, var(--pass-primary) 34%, transparent);

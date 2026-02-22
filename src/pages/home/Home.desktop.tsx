@@ -1,6 +1,6 @@
 import { Alert, Col, Empty, Row, Spin, Typography } from "antd";
-import { useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
@@ -86,6 +86,8 @@ export default function HomeDesktop() {
   const params = useParams();
   const destinationSlug = String(params.destinationSlug || "ahangama");
 
+  const [searchParams] = useSearchParams();
+
   const [searchText, setSearchText] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const [selectedBestFor, setSelectedBestFor] = useState<string[]>([]);
@@ -98,6 +100,12 @@ export default function HomeDesktop() {
     destinationSlug,
     liveOnly: true,
   });
+
+  // Enables footer "Best Cafés" / "Best Surf Spots" quick links via ?q=
+  const qParam = searchParams.get("q") ?? "";
+  useEffect(() => {
+    setSearchText((prev) => (prev === qParam ? prev : qParam));
+  }, [qParam]);
 
   const { categoryOptions, bestForOptions, tagOptions } = useMemo(() => {
     const categories = new Set<string>();
@@ -205,7 +213,11 @@ export default function HomeDesktop() {
 
     const beachRoadAll = base.filter((v) => {
       const area = (v.area ?? "").toString().toLowerCase();
-      return area.includes("matara road") || area.includes("beach road");
+      return (
+        area.includes("matara road") ||
+        area.includes("beach road") ||
+        area.includes("beach")
+      );
     });
     const beachRoad = beachRoadAll.slice(0, 8);
 
@@ -237,6 +249,33 @@ export default function HomeDesktop() {
         block: "start",
       });
     });
+  };
+
+  const curatedActiveKey: SectionKey | "all" = viewAllSection ?? "all";
+
+  const handleCuratedChipClick = (key: SectionKey | "all") => {
+    if (key === "all") {
+      setViewAllSection(null);
+      setSortKey("recommended");
+      return;
+    }
+
+    switch (key) {
+      case "most-popular":
+        setSortKey("most-popular");
+        break;
+      case "best-discounts":
+        setSortKey("best-discounts");
+        break;
+      case "beach-road":
+      case "wellness":
+        setSortKey("recommended");
+        break;
+      default:
+        break;
+    }
+
+    handleViewAll(key);
   };
 
   const viewAllVenues = (() => {
@@ -391,6 +430,59 @@ export default function HomeDesktop() {
 
         {!loading && !error && filteredVenues.length > 0 ? (
           <>
+            <div className="ahg-curated-strip" aria-label="Curated filters">
+              <button
+                type="button"
+                className={
+                  "ahg-curated-chip" +
+                  (curatedActiveKey === "all" ? " is-active" : "")
+                }
+                onClick={() => handleCuratedChipClick("all")}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                className={
+                  "ahg-curated-chip" +
+                  (curatedActiveKey === "most-popular" ? " is-active" : "")
+                }
+                onClick={() => handleCuratedChipClick("most-popular")}
+              >
+                ⭐ Most Popular
+              </button>
+              <button
+                type="button"
+                className={
+                  "ahg-curated-chip" +
+                  (curatedActiveKey === "best-discounts" ? " is-active" : "")
+                }
+                onClick={() => handleCuratedChipClick("best-discounts")}
+              >
+                🔥 Best Discounts
+              </button>
+              <button
+                type="button"
+                className={
+                  "ahg-curated-chip" +
+                  (curatedActiveKey === "beach-road" ? " is-active" : "")
+                }
+                onClick={() => handleCuratedChipClick("beach-road")}
+              >
+                🌊 Beach Road
+              </button>
+              <button
+                type="button"
+                className={
+                  "ahg-curated-chip" +
+                  (curatedActiveKey === "wellness" ? " is-active" : "")
+                }
+                onClick={() => handleCuratedChipClick("wellness")}
+              >
+                🌿 Wellness
+              </button>
+            </div>
+
             <Section
               title="⭐ Most Popular"
               venues={sections.mostPopular}

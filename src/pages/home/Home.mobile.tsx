@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { SavingsSummary } from "../../components/SavingsSummary";
+import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
 
@@ -1241,6 +1242,8 @@ export default function HomeMobile() {
   const params = useParams();
   const destinationSlug = String(params.destinationSlug || "ahangama");
 
+  const [searchParams] = useSearchParams();
+
   const [search, setSearch] = useState("");
   const [userLocation, setUserLocation] = useState<LatLng | null>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
@@ -1252,6 +1255,12 @@ export default function HomeMobile() {
     destinationSlug,
     liveOnly: true,
   });
+
+  // Enables footer "Best Cafés" / "Best Surf Spots" quick links via ?q=
+  const qParam = searchParams.get("q") ?? "";
+  useEffect(() => {
+    setSearch((prev) => (prev === qParam ? prev : qParam));
+  }, [qParam]);
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -1531,6 +1540,10 @@ export default function HomeMobile() {
                 />
               </div>
             ) : null}
+
+            <div style={{ marginTop: 14 }}>
+              <FooterDesktop />
+            </div>
           </>
         ) : null}
       </div>
