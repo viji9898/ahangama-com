@@ -16,6 +16,10 @@ export function AppShell({ children }: Props) {
     location.pathname === "/" || location.pathname.startsWith("/destinations/");
   const shouldShowGlobalStickyCta = !(isMobile && isHomeRoute);
 
+  const contentPadding = isMobile ? 0 : 24;
+  const stickyCtaInset = shouldShowGlobalStickyCta ? 88 : 0;
+  const contentPaddingBottom = (isMobile ? 0 : 24) + stickyCtaInset;
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Layout.Header
@@ -49,7 +53,9 @@ export function AppShell({ children }: Props) {
         </ConfigProvider>
       </Layout.Header>
 
-      <Layout.Content style={{ padding: 0, paddingBottom: 0 }}>
+      <Layout.Content
+        style={{ padding: contentPadding, paddingBottom: contentPaddingBottom }}
+      >
         {children}
       </Layout.Content>
 

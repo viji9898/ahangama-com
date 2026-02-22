@@ -5,10 +5,7 @@ import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
 import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
-import {
-  VenueFiltersDesktop,
-  type VenueSortKey,
-} from "../../components/desktop/VenueFilters.Desktop";
+import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 
@@ -89,10 +86,6 @@ export default function HomeDesktop() {
   const [searchParams] = useSearchParams();
 
   const [searchText, setSearchText] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [selectedBestFor, setSelectedBestFor] = useState<string[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [sortKey, setSortKey] = useState<VenueSortKey>("recommended");
   const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
   const viewAllRef = useRef<HTMLDivElement | null>(null);
 
@@ -107,48 +100,10 @@ export default function HomeDesktop() {
     setSearchText((prev) => (prev === qParam ? prev : qParam));
   }, [qParam]);
 
-  const { categoryOptions, bestForOptions, tagOptions } = useMemo(() => {
-    const categories = new Set<string>();
-    const bestFor = new Set<string>();
-    const tags = new Set<string>();
-
-    for (const v of venues) {
-      for (const c of v.categories ?? []) categories.add(String(c));
-      for (const b of v.bestFor ?? []) bestFor.add(String(b));
-      for (const t of v.tags ?? []) tags.add(String(t));
-    }
-
-    const sortStrings = (values: Set<string>) =>
-      Array.from(values)
-        .map((x) => x.trim())
-        .filter(Boolean)
-        .sort((a, b) => a.localeCompare(b));
-
-    return {
-      categoryOptions: sortStrings(categories),
-      bestForOptions: sortStrings(bestFor),
-      tagOptions: sortStrings(tags),
-    };
-  }, [venues]);
-
   const filteredVenues = useMemo(() => {
     const q = searchText.trim().toLowerCase();
 
     const base = venues.filter((v) => {
-      if (category && !(v.categories ?? []).includes(category)) return false;
-
-      if (selectedBestFor.length) {
-        const set = new Set((v.bestFor ?? []).map(String));
-        const matchesAny = selectedBestFor.some((b) => set.has(b));
-        if (!matchesAny) return false;
-      }
-
-      if (selectedTags.length) {
-        const set = new Set((v.tags ?? []).map(String));
-        const matchesAny = selectedTags.some((t) => set.has(t));
-        if (!matchesAny) return false;
-      }
-
       if (!q) return true;
 
       const haystack = [
@@ -165,35 +120,8 @@ export default function HomeDesktop() {
 
       return haystack.includes(q);
     });
-
-    switch (sortKey) {
-      case "most-popular":
-        return base
-          .slice()
-          .sort((a, b) => getReviewsCount(b) - getReviewsCount(a));
-      case "best-discounts":
-        return base
-          .slice()
-          .sort((a, b) => maxPercentOfferScore(b) - maxPercentOfferScore(a));
-      case "a-z":
-        return base
-          .slice()
-          .sort((a, b) =>
-            String(a.name ?? "").localeCompare(String(b.name ?? "")),
-          );
-      case "recommended":
-      default:
-        return base;
-    }
-  }, [venues, category, selectedBestFor, selectedTags, searchText, sortKey]);
-
-  const handleClearAllFilters = () => {
-    setSearchText("");
-    setCategory(null);
-    setSelectedBestFor([]);
-    setSelectedTags([]);
-    setSortKey("recommended");
-  };
+    return base;
+  }, [venues, searchText]);
 
   const sections = useMemo(() => {
     const base = filteredVenues;
@@ -251,32 +179,6 @@ export default function HomeDesktop() {
     });
   };
 
-  const curatedActiveKey: SectionKey | "all" = viewAllSection ?? "all";
-
-  const handleCuratedChipClick = (key: SectionKey | "all") => {
-    if (key === "all") {
-      setViewAllSection(null);
-      setSortKey("recommended");
-      return;
-    }
-
-    switch (key) {
-      case "most-popular":
-        setSortKey("most-popular");
-        break;
-      case "best-discounts":
-        setSortKey("best-discounts");
-        break;
-      case "beach-road":
-      case "wellness":
-        setSortKey("recommended");
-        break;
-      default:
-        break;
-    }
-
-    handleViewAll(key);
-  };
 
   const viewAllVenues = (() => {
     switch (viewAllSection) {
@@ -376,18 +278,6 @@ export default function HomeDesktop() {
         <VenueFiltersDesktop
           searchText={searchText}
           onSearchTextChange={setSearchText}
-          category={category}
-          onCategoryChange={setCategory}
-          selectedBestFor={selectedBestFor}
-          onSelectedBestForChange={setSelectedBestFor}
-          selectedTags={selectedTags}
-          onSelectedTagsChange={setSelectedTags}
-          sortKey={sortKey}
-          onSortKeyChange={setSortKey}
-          onClearAll={handleClearAllFilters}
-          categoryOptions={categoryOptions}
-          bestForOptions={bestForOptions}
-          tagOptions={tagOptions}
         />
       ) : null}
 
@@ -430,59 +320,6 @@ export default function HomeDesktop() {
 
         {!loading && !error && filteredVenues.length > 0 ? (
           <>
-            <div className="ahg-curated-strip" aria-label="Curated filters">
-              <button
-                type="button"
-                className={
-                  "ahg-curated-chip" +
-                  (curatedActiveKey === "all" ? " is-active" : "")
-                }
-                onClick={() => handleCuratedChipClick("all")}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                className={
-                  "ahg-curated-chip" +
-                  (curatedActiveKey === "most-popular" ? " is-active" : "")
-                }
-                onClick={() => handleCuratedChipClick("most-popular")}
-              >
-                ⭐ Most Popular
-              </button>
-              <button
-                type="button"
-                className={
-                  "ahg-curated-chip" +
-                  (curatedActiveKey === "best-discounts" ? " is-active" : "")
-                }
-                onClick={() => handleCuratedChipClick("best-discounts")}
-              >
-                🔥 Best Discounts
-              </button>
-              <button
-                type="button"
-                className={
-                  "ahg-curated-chip" +
-                  (curatedActiveKey === "beach-road" ? " is-active" : "")
-                }
-                onClick={() => handleCuratedChipClick("beach-road")}
-              >
-                🌊 Beach Road
-              </button>
-              <button
-                type="button"
-                className={
-                  "ahg-curated-chip" +
-                  (curatedActiveKey === "wellness" ? " is-active" : "")
-                }
-                onClick={() => handleCuratedChipClick("wellness")}
-              >
-                🌿 Wellness
-              </button>
-            </div>
-
             <Section
               title="⭐ Most Popular"
               venues={sections.mostPopular}
