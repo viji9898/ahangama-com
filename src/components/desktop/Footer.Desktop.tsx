@@ -74,8 +74,8 @@ export function FooterDesktop() {
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <SectionTitle>Quick Links</SectionTitle>
             <Space direction="vertical" size={6} style={{ width: "100%" }}>
-              <ItemLink href="/?q=cafe">Best Cafés</ItemLink>
-              <ItemLink href="/?q=surf">Best Surf Spots</ItemLink>
+              <ItemLink href="?q=cafe">Best Cafés</ItemLink>
+              <ItemLink href="?q=surf">Best Surf Spots</ItemLink>
               <ItemLink href="https://pass.ahangama.com" external>
                 How it works
               </ItemLink>
