@@ -6,6 +6,10 @@
   --venue-listing-bg: #fbf6f1;
   --venue-card-bg: #fffcf9;
 
+  --pass-primary: #b85c38;
+  --pass-primary-hover: #a95332;
+  --pass-primary-active: #8f472b;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

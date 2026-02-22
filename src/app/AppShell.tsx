@@ -1,42 +1,53 @@
-import { Layout, Menu } from "antd";
+import { Button, ConfigProvider, Layout } from "antd";
 import type { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { GetPassStickyCta } from "../components/GetPassStickyCta";
 
 type Props = {
   children: ReactNode;
 };
 
 export function AppShell({ children }: Props) {
-  const location = useLocation();
-
-  const selectedKey =
-    location.pathname === "/partnership" ? "partnership" : "home";
+  useLocation();
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Layout.Header style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ color: "white", fontWeight: 700, marginRight: 16 }}>
+      <Layout.Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "sticky",
+          top: 0,
+          zIndex: 1001,
+          background: "#fff",
+          borderBottom: "1px solid rgba(0,0,0,0.06)",
+        }}
+      >
+        <div style={{ color: "rgba(0,0,0,0.88)", fontWeight: 700 }}>
           Ahangama
         </div>
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          selectedKeys={[selectedKey]}
-          items={[
-            {
-              key: "home",
-              label: <Link to="/">Home</Link>,
+
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "var(--pass-primary)",
+              colorPrimaryHover: "var(--pass-primary-hover)",
+              colorPrimaryActive: "var(--pass-primary-active)",
             },
-            {
-              key: "partnership",
-              label: <Link to="/partnership">Partnership</Link>,
-            },
-          ]}
-          style={{ flex: 1, minWidth: 0 }}
-        />
+          }}
+        >
+          <a href="https://pass.ahangama.com" target="_blank" rel="noreferrer">
+            <Button type="primary">Get Pass</Button>
+          </a>
+        </ConfigProvider>
       </Layout.Header>
 
-      <Layout.Content style={{ padding: 24 }}>{children}</Layout.Content>
+      <Layout.Content style={{ padding: 24, paddingBottom: 24 + 88 }}>
+        {children}
+      </Layout.Content>
+
+      <GetPassStickyCta />
     </Layout>
   );
 }
