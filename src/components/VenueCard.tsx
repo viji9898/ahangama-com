@@ -21,30 +21,6 @@ function formatOfferLabel(offer: unknown): string | null {
   return null;
 }
 
-function formatStarsAndReviews(
-  stars: Venue["stars"],
-  reviews: Venue["reviews"],
-): string | null {
-  const toFiniteNumber = (value: unknown): number | null => {
-    if (typeof value === "number") return Number.isFinite(value) ? value : null;
-    if (typeof value === "string") {
-      const parsed = Number.parseFloat(value);
-      return Number.isFinite(parsed) ? parsed : null;
-    }
-    return null;
-  };
-
-  const starsNum = toFiniteNumber(stars);
-  const reviewsNum = toFiniteNumber(reviews);
-
-  if (starsNum == null && reviewsNum == null) return null;
-  if (starsNum != null && reviewsNum != null)
-    return `⭐️${starsNum.toFixed(1)} | ${Math.round(reviewsNum)} reviews`;
-  if (starsNum != null) return `⭐️${starsNum.toFixed(1)}`;
-  if (reviewsNum != null) return `${Math.round(reviewsNum)} reviews`;
-  return null;
-}
-
 function getNumericPx(value: CSSProperties["height"]): number | null {
   if (typeof value === "number") return value;
   if (typeof value === "string") {
@@ -91,11 +67,6 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
   const actions: ReactNode[] = [];
 
   const discountLabel = formatDiscountLabel(venue.discount);
-
-  const starsAndReviews =
-    variant === "desktop"
-      ? formatStarsAndReviews(venue.stars, venue.reviews)
-      : null;
 
   const desktopCoverHeightPx =
     variant === "desktop"
@@ -291,11 +262,10 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
         <>
           <div
             style={{
-              padding: 12,
+              padding: 10,
               flex: 1,
               minHeight: 0,
-              overflowY: "auto",
-              overflowX: "hidden",
+              overflow: "hidden",
             }}
           >
             <div
@@ -306,22 +276,18 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                 minHeight: 20,
               }}
             >
-              {venue.emoji?.length ? (
-                <span aria-label="emoji" style={{ fontSize: 18 }}>
-                  {venue.emoji.join(" ")}
-                </span>
-              ) : null}
               <Typography.Text
                 strong
                 style={{
-                  fontSize: 14,
-                  lineHeight: "18px",
+                  fontSize: 13,
+                  lineHeight: "16px",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   flex: 1,
                 }}
               >
+                {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
                 {venue.name}
               </Typography.Text>
               {!hasDesktopCoverImage && discountLabel ? (
@@ -329,26 +295,16 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               ) : null}
             </div>
 
-            {starsAndReviews ? (
-              <div style={{ marginTop: 4 }}>
-                <Space size={4} wrap>
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    {starsAndReviews}
-                  </Typography.Text>
-                </Space>
-              </div>
-            ) : null}
-
             {excerptLine ? (
               <div
                 style={{
-                  marginTop: 6,
-                  fontSize: 12,
-                  lineHeight: "16px",
+                  marginTop: 4,
+                  fontSize: 11,
+                  lineHeight: "14px",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   display: "-webkit-box",
-                  WebkitLineClamp: 2,
+                  WebkitLineClamp: 1,
                   WebkitBoxOrient: "vertical",
                 }}
               >
@@ -356,69 +312,47 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
               </div>
             ) : null}
 
-            {venue.categories?.length ? (
-              <div style={{ marginTop: 8 }}>
-                <Space size={6} wrap>
-                  {venue.categories.slice(0, 4).map((c) => (
-                    <Tag key={c}>{c}</Tag>
-                  ))}
-                  {venue.categories.length > 4 ? (
-                    <Tag>+{venue.categories.length - 4}</Tag>
-                  ) : null}
-                </Space>
-              </div>
-            ) : null}
-
             {Array.isArray(venue.offers) && venue.offers.length ? (
-              <div style={{ marginTop: 8 }}>
-                <Space size={6} wrap>
-                  {venue.offers
-                    .map(formatOfferLabel)
-                    .filter((x): x is string => Boolean(x))
-                    .slice(0, 3)
-                    .map((label) => (
-                      <Tag key={label}>{label}</Tag>
-                    ))}
-                  {venue.offers.length > 3 ? (
-                    <Tag>+{venue.offers.length - 3}</Tag>
-                  ) : null}
-                </Space>
+              <div
+                style={{
+                  marginTop: 6,
+                  display: "flex",
+                  gap: 6,
+                  overflow: "hidden",
+                }}
+              >
+                {venue.offers
+                  .map(formatOfferLabel)
+                  .filter((x): x is string => Boolean(x))
+                  .slice(0, 2)
+                  .map((label) => (
+                    <Tag key={label} style={{ margin: 0, fontSize: 11 }}>
+                      {label}
+                    </Tag>
+                  ))}
+                {venue.offers.length > 2 ? (
+                  <Tag style={{ margin: 0, fontSize: 11 }}>
+                    +{venue.offers.length - 2}
+                  </Tag>
+                ) : null}
               </div>
             ) : null}
 
             {venue.bestFor?.length ? (
-              <div style={{ marginTop: 8 }}>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  Best for
-                </Typography.Text>
-                <div style={{ marginTop: 6 }}>
-                  <Space size={6} wrap>
-                    {venue.bestFor.slice(0, 4).map((b) => (
-                      <Tag key={b}>{b}</Tag>
-                    ))}
-                    {venue.bestFor.length > 4 ? (
-                      <Tag>+{venue.bestFor.length - 4}</Tag>
-                    ) : null}
-                  </Space>
-                </div>
-              </div>
-            ) : null}
-
-            {venue.tags?.length ? (
-              <div style={{ marginTop: 8 }}>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  Tags
-                </Typography.Text>
-                <div style={{ marginTop: 6 }}>
-                  <Space size={6} wrap>
-                    {venue.tags.slice(0, 6).map((t) => (
-                      <Tag key={t}>{t}</Tag>
-                    ))}
-                    {venue.tags.length > 6 ? (
-                      <Tag>+{venue.tags.length - 6}</Tag>
-                    ) : null}
-                  </Space>
-                </div>
+              <div
+                style={{
+                  marginTop: 6,
+                  display: "flex",
+                  gap: 6,
+                  flexWrap: "wrap",
+                  overflow: "hidden",
+                }}
+              >
+                {venue.bestFor.map((b) => (
+                  <Tag key={b} style={{ margin: 0, fontSize: 11 }}>
+                    {b}
+                  </Tag>
+                ))}
               </div>
             ) : null}
           </div>

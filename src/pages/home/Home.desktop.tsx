@@ -61,7 +61,7 @@ export default function HomeDesktop() {
                 <VenueCard
                   venue={v}
                   variant="desktop"
-                  cardStyle={{ width: 250, height: 350 }}
+                  cardStyle={{ width: 250, height: 320 }}
                 />
               </Col>
             ))}
