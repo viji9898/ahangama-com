@@ -1,5 +1,6 @@
 import { Alert, Empty, Space, Spin, Typography } from "antd";
 import { useParams } from "react-router-dom";
+import FreeGuideCtaMobile from "../../components/FreeGuideCta.Mobile";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 
@@ -23,16 +24,32 @@ export default function HomeMobile() {
 
       <div style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}>
         {error ? (
-          <Alert
-            type="error"
-            showIcon
-            message="Could not load venues"
-            description={
-              <span>
-                {error}. Tip: run locally with <code>netlify dev</code>.
-              </span>
-            }
-          />
+          <>
+            <Alert
+              type="error"
+              showIcon
+              message="Could not load venues"
+              description={
+                <span>
+                  {error}. Tip: run locally with <code>netlify dev</code>.
+                </span>
+              }
+            />
+            <div style={{ marginTop: 12 }}>
+              <FreeGuideCtaMobile
+                onGuideClick={() => {
+                  const text = encodeURIComponent(
+                    "Hi! I'd like the free Ahangama guide via WhatsApp.",
+                  );
+                  window.open(
+                    `https://wa.me/?text=${text}`,
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
+                }}
+              />
+            </div>
+          </>
         ) : null}
 
         {loading ? (

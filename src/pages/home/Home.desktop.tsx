@@ -2,6 +2,7 @@ import { Alert, Col, Empty, Row, Spin } from "antd";
 import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FooterDesktop } from "../../components/Footer.Desktop";
+import { FreeGuideCtaDesktop } from "../../components/FreeGuideCta.Desktop";
 import { HeroDesktop } from "../../components/Hero.Desktop";
 import { VenueFiltersDesktop } from "../../components/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
@@ -84,6 +85,21 @@ export default function HomeDesktop() {
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
       <HeroDesktop image="https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/hero-2.jpg" />
+
+      <div style={{ marginBottom: 12 }}>
+        <FreeGuideCtaDesktop
+          onGuideClick={() => {
+            const text = encodeURIComponent(
+              "Hi! I'd like the free Ahangama guide via WhatsApp.",
+            );
+            window.open(
+              `https://wa.me/94777879087?text=${text}`,
+              "_blank",
+              "noopener,noreferrer",
+            );
+          }}
+        />
+      </div>
 
       {!loading && !error && venues.length > 0 ? (
         <VenueFiltersDesktop

@@ -23,6 +23,7 @@ export function GetPassStickyCta() {
           margin: "0 auto",
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
           minHeight: barHeight,
         }}
       >
@@ -35,7 +36,7 @@ export function GetPassStickyCta() {
             },
           }}
         >
-          <a href="https://pass.ahangama.com" style={{ width: "100%" }}>
+          <a href="https://pass.ahangama.com" style={{ width: "50vw" }}>
             <Button type="primary" size="large" block>
               Get Pass
             </Button>
