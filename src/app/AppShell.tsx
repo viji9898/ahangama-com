@@ -2,13 +2,19 @@ import { Button, ConfigProvider, Layout } from "antd";
 import type { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { GetPassStickyCta } from "../components/GetPassStickyCta";
+import { useIsMobile } from "../hooks/useIsMobile";
 
 type Props = {
   children: ReactNode;
 };
 
 export function AppShell({ children }: Props) {
-  useLocation();
+  const location = useLocation();
+  const isMobile = useIsMobile();
+
+  const isHomeRoute =
+    location.pathname === "/" || location.pathname.startsWith("/destinations/");
+  const shouldShowGlobalStickyCta = !(isMobile && isHomeRoute);
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -47,7 +53,7 @@ export function AppShell({ children }: Props) {
         {children}
       </Layout.Content>
 
-      <GetPassStickyCta />
+      {shouldShowGlobalStickyCta ? <GetPassStickyCta /> : null}
     </Layout>
   );
 }
