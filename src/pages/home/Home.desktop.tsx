@@ -48,10 +48,21 @@ export default function HomeDesktop() {
         ) : null}
 
         {!loading && !error && venues.length > 0 ? (
-          <Row gutter={[16, 16]} style={{ marginTop: 8 }}>
+          <Row gutter={[2, 18]} style={{ marginTop: 8 }} justify="start">
             {venues.map((v) => (
-              <Col key={String(v.id)} xs={24} sm={12} lg={8}>
-                <VenueCard venue={v} variant="desktop" />
+              <Col
+                key={String(v.id)}
+                xs={24}
+                sm={12}
+                md={12}
+                lg={6}
+                style={{ display: "flex", justifyContent: "flex-start" }}
+              >
+                <VenueCard
+                  venue={v}
+                  variant="desktop"
+                  cardStyle={{ width: 250, height: 350 }}
+                />
               </Col>
             ))}
           </Row>

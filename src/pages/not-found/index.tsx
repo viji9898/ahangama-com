@@ -1,9 +1,9 @@
-import { Button, Result } from 'antd'
-import { Link } from 'react-router-dom'
+import { Button, Result } from "antd";
+import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto' }}>
+    <div style={{ maxWidth: 720, margin: "0 auto" }}>
       <Result
         status="404"
         title="Page not found"
@@ -15,5 +15,5 @@ export default function NotFoundPage() {
         }
       />
     </div>
-  )
+  );
 }

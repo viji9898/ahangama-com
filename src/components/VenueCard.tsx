@@ -4,12 +4,13 @@ import {
   StarFilled,
 } from "@ant-design/icons";
 import { Button, Card, Space, Tag, Typography } from "antd";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { Venue } from "../types/venue";
 
 type Props = {
   venue: Venue;
   variant?: "default" | "desktop";
+  cardStyle?: CSSProperties;
 };
 
 function formatOfferLabel(offer: unknown): string | null {
@@ -38,13 +39,41 @@ function formatStarsAndReviews(
   return `${reviewsNum} Google reviews`;
 }
 
-export function VenueCard({ venue, variant = "default" }: Props) {
+function getNumericPx(value: CSSProperties["height"]): number | null {
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed.endsWith("px")) {
+      const parsed = Number.parseFloat(trimmed);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+  }
+  return null;
+}
+
+export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
   const actions: ReactNode[] = [];
+
+  const discountLabel =
+    venue.discount != null && String(venue.discount).trim() !== ""
+      ? String(venue.discount)
+      : null;
 
   const starsAndReviews =
     variant === "desktop"
       ? formatStarsAndReviews(venue.stars, venue.reviews)
       : null;
+
+  const desktopCoverHeightPx =
+    variant === "desktop"
+      ? (() => {
+          const cardHeightPx = getNumericPx(cardStyle?.height);
+          return cardHeightPx != null ? Math.round(cardHeightPx * 0.4) : null;
+        })()
+      : null;
+
+  const hasDesktopCoverImage =
+    variant === "desktop" && Boolean(venue.image || venue.logo);
 
   if (venue.mapUrl) {
     actions.push(
@@ -78,30 +107,58 @@ export function VenueCard({ venue, variant = "default" }: Props) {
 
   return (
     <Card
-      cover={
-        variant === "desktop" && (venue.image || venue.logo) ? (
-          <img
-            src={String(venue.image || venue.logo)}
-            alt={venue.name}
-            style={{ width: "100%", height: 180, objectFit: "cover" }}
-            loading="lazy"
-          />
-        ) : undefined
+      style={
+        variant === "desktop"
+          ? {
+              ...cardStyle,
+              display: "flex",
+              flexDirection: "column",
+            }
+          : cardStyle
       }
-      title={
-        <Space size={8} wrap>
-          {variant === "desktop" && venue.emoji?.length ? (
-            <span aria-label="emoji">{venue.emoji.join(" ")}</span>
-          ) : null}
-          <span>{venue.name}</span>
-          {venue.discount != null && String(venue.discount).trim() !== "" ? (
-            <Tag>{String(venue.discount)}</Tag>
-          ) : null}
-        </Space>
+      styles={
+        variant === "desktop"
+          ? {
+              body: {
+                flex: 1,
+                overflowY: "auto",
+              },
+            }
+          : undefined
+      }
+      cover={
+        hasDesktopCoverImage ? (
+          <div style={{ position: "relative" }}>
+            <img
+              src={String(venue.image || venue.logo)}
+              alt={venue.name}
+              style={{
+                width: "100%",
+                height: desktopCoverHeightPx ?? 180,
+                objectFit: "cover",
+                display: "block",
+              }}
+              loading="lazy"
+            />
+            {discountLabel ? (
+              <div style={{ position: "absolute", top: 8, left: 8 }}>
+                <Tag>{discountLabel}</Tag>
+              </div>
+            ) : null}
+          </div>
+        ) : undefined
       }
       actions={actions.length ? actions : undefined}
     >
       <Space direction="vertical" size={10} style={{ width: "100%" }}>
+        <Space size={8} wrap>
+          {variant === "desktop" && venue.emoji?.length ? (
+            <span aria-label="emoji">{venue.emoji.join(" ")}</span>
+          ) : null}
+          <Typography.Text strong>{venue.name}</Typography.Text>
+          {!hasDesktopCoverImage && discountLabel ? <Tag>{discountLabel}</Tag> : null}
+        </Space>
+
         {variant === "desktop" ? (
           <Space size={10} wrap>
             {venue.area ? (

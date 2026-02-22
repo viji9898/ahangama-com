@@ -1,12 +1,12 @@
-import { createBrowserRouter } from 'react-router-dom'
-import HomePage from '../pages/home'
-import PartnershipPage from '../pages/partnership'
-import NotFoundPage from '../pages/not-found'
-import { AppShell } from '../app/AppShell'
+import { createBrowserRouter } from "react-router-dom";
+import HomePage from "../pages/home";
+import PartnershipPage from "../pages/partnership";
+import NotFoundPage from "../pages/not-found";
+import { AppShell } from "../app/AppShell";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: (
       <AppShell>
         <HomePage />
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/partnership',
+    path: "/partnership",
     element: (
       <AppShell>
         <PartnershipPage />
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '/destinations/:destinationSlug',
+    path: "/destinations/:destinationSlug",
     element: (
       <AppShell>
         <HomePage />
@@ -30,11 +30,11 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: '*',
+    path: "*",
     element: (
       <AppShell>
         <NotFoundPage />
       </AppShell>
     ),
   },
-])
+]);
