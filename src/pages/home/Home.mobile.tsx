@@ -21,7 +21,7 @@ export default function HomeMobile() {
         <Typography.Text type="secondary">Venues - Mobile</Typography.Text>
       </Space>
 
-      <div style={{ marginTop: 16 }}>
+      <div style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}>
         {error ? (
           <Alert
             type="error"

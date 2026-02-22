@@ -163,6 +163,7 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
         variant === "desktop"
           ? {
               ...cardStyle,
+              background: "var(--venue-card-bg)",
               borderRadius: 12,
               overflow: "hidden",
               display: "flex",
@@ -179,6 +180,7 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                 flexDirection: "column",
                 minHeight: 0,
                 padding: 0,
+                background: "var(--venue-card-bg)",
               },
             }
           : undefined

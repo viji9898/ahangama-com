@@ -1,5 +1,6 @@
-import { Alert, Col, Empty, Row, Space, Spin, Typography } from "antd";
+import { Alert, Col, Empty, Row, Spin } from "antd";
 import { useParams } from "react-router-dom";
+import { HeroDesktop } from "../../components/Hero.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
 
@@ -14,14 +15,9 @@ export default function HomeDesktop() {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-      <Space direction="vertical" size={6} style={{ width: "100%" }}>
-        <Typography.Title level={2} style={{ marginBottom: 0 }}>
-          {destinationSlug}
-        </Typography.Title>
-        <Typography.Text type="secondary">Venues - Desktop</Typography.Text>
-      </Space>
+      <HeroDesktop image="https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/hero-2.jpg" />
 
-      <div style={{ marginTop: 16 }}>
+      <div style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}>
         {error ? (
           <Alert
             type="error"
