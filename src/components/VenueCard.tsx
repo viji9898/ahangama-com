@@ -129,26 +129,6 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
       ? `⭐ ${parsed.toFixed(1)} (${numberFormatter.format(reviewsCount)} reviews)`
       : `⭐ ${parsed.toFixed(1)}`;
   })();
-  const ratingValue = (() => {
-    const parsed =
-      typeof venue.stars === "number"
-        ? venue.stars
-        : typeof venue.stars === "string"
-          ? Number.parseFloat(venue.stars)
-          : null;
-    return parsed != null && Number.isFinite(parsed) ? parsed : null;
-  })();
-  const reviewsCount = (() => {
-    const parsed =
-      typeof venue.reviews === "number"
-        ? venue.reviews
-        : typeof venue.reviews === "string"
-          ? Number.parseFloat(venue.reviews)
-          : null;
-    return parsed != null && Number.isFinite(parsed)
-      ? Math.round(parsed)
-      : null;
-  })();
   const priceLevel = getPriceLevelLabel(venue);
   const isPassPartner =
     venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
@@ -310,34 +290,6 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                   </span>
                 ) : null}
               </div>
-
-              {ratingValue != null ? (
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    background: "rgba(0,0,0,0.04)",
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    padding: "6px 10px",
-                    borderRadius: 999,
-                    whiteSpace: "nowrap",
-                    flex: "0 0 auto",
-                    lineHeight: "14px",
-                    fontSize: 11,
-                    fontWeight: 900,
-                    color: "#2F3E3A",
-                  }}
-                >
-                  <span aria-hidden="true">⭐</span>
-                  <span>{ratingValue.toFixed(1)}</span>
-                  {reviewsCount != null ? (
-                    <span style={{ opacity: 0.7, fontWeight: 800 }}>
-                      ({numberFormatter.format(reviewsCount)})
-                    </span>
-                  ) : null}
-                </div>
-              ) : null}
             </div>
 
             <div
