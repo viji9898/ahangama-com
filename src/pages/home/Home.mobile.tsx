@@ -1423,7 +1423,7 @@ export default function HomeMobile() {
   return (
     <div
       style={{
-        maxWidth: 430,
+        maxWidth: 600,
         margin: "0 auto",
         padding: 0,
         background: "#F6EFE8",
@@ -1448,7 +1448,7 @@ export default function HomeMobile() {
           display: "flex",
           flexDirection: "column",
           gap: 10,
-          padding: 8,
+          padding: 0,
         }}
       >
         <SavingsSummary />

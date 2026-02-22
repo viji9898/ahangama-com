@@ -49,7 +49,7 @@ export function AppShell({ children }: Props) {
         </ConfigProvider>
       </Layout.Header>
 
-      <Layout.Content style={{ padding: 24, paddingBottom: 24 + 88 }}>
+      <Layout.Content style={{ padding: 0, paddingBottom: 0 }}>
         {children}
       </Layout.Content>
 
