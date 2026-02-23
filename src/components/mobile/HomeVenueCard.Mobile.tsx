@@ -1,6 +1,6 @@
 import { Tooltip } from "antd";
 import { useState, type CSSProperties, type ReactNode } from "react";
-import type { Venue } from "../types/venue";
+import type { Venue } from "../../types/venue";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 

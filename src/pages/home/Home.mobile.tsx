@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { HomeHeroMobile } from "../../components/HomeHero.Mobile";
-import { SavingsBreakdownMobile } from "../../components/SavingsBreakdown.Mobile";
-import { HomeVenueCardMobile } from "../../components/HomeVenueCard.Mobile";
-import { SocialProofMobile } from "../../components/SocialProof.Mobile";
+import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
+import { SavingsBreakdownMobile } from "../../components/mobile/SavingsBreakdown.Mobile";
+import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
+import { SocialProofMobile } from "../../components/mobile/SocialProof.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";

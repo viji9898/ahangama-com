@@ -95,9 +95,18 @@
   outline-offset: 3px;
 }
 
+.ahg-footer-mobile-extras {
+  display: none;
+}
+
 @media (max-width: 767.98px) {
   .ahg-mobile-cta-bar {
     display: block;
+  }
+
+  .ahg-footer-mobile-extras {
+    display: block;
+    margin-bottom: 14px;
   }
 
   .ahg-mobile-cta-safe {
