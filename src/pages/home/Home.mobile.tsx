@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { HomeHeroMobile } from "../../components/HomeHero.Mobile";
 import { SavingsBreakdownMobile } from "../../components/SavingsBreakdown.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
@@ -1249,6 +1250,7 @@ export default function HomeMobile() {
   const [ctaVisible, setCtaVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const viewAllRef = useRef<HTMLDivElement | null>(null);
+  const offersTopRef = useRef<HTMLDivElement | null>(null);
   const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
 
   const { venues, loading, error } = useVenues({
@@ -1399,6 +1401,16 @@ export default function HomeMobile() {
     });
   };
 
+  const handleSeeAllOffers = () => {
+    setViewAllSection(null);
+    requestAnimationFrame(() => {
+      offersTopRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  };
+
   const viewAllVenues = (() => {
     switch (viewAllSection) {
       case "most-popular":
@@ -1432,7 +1444,10 @@ export default function HomeMobile() {
       }}
     >
       <div ref={heroRef}>
-        <HeroBannerMobile imageUrl="https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/hero_banner_v3.jpg" />
+        <HomeHeroMobile
+          imageUrl="https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/hero_banner_v3.jpg"
+          onSeeAllOffers={handleSeeAllOffers}
+        />
       </div>
 
       <GetPassBarMobile visible={ctaVisible} />
@@ -1481,6 +1496,7 @@ export default function HomeMobile() {
 
         {!loading && !error && filteredVenues.length > 0 ? (
           <>
+            <div ref={offersTopRef} />
             <VenueSectionCarouselMobile
               title="⭐ Most Popular"
               venues={sections.mostPopular}
