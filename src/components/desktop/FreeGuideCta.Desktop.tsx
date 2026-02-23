@@ -12,7 +12,7 @@ type Props = {
 export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
   const resolvedGuideUrl =
     guideUrl ??
-    "https://wa.me/94777879087?text=" +
+    "https://wa.me/94777908790?text=" +
       encodeURIComponent("Hi! I'd like the free Ahangama guide via WhatsApp.");
 
   const buttonIcon: ReactNode = (

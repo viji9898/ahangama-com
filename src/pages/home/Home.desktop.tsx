@@ -179,7 +179,6 @@ export default function HomeDesktop() {
     });
   };
 
-
   const viewAllVenues = (() => {
     switch (viewAllSection) {
       case "most-popular":
@@ -266,7 +265,7 @@ export default function HomeDesktop() {
               "Hi! I'd like the free Ahangama guide via WhatsApp.",
             );
             window.open(
-              `https://wa.me/94777879087?text=${text}`,
+              `https://wa.me/94777908790?text=${text}`,
               "_blank",
               "noopener,noreferrer",
             );
