@@ -1,4 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
+import { Tooltip } from "antd";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import type { Venue } from "../types/venue";
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -141,6 +142,11 @@ export function HomeVenueCardMobile({
   footer,
   after,
 }: Props) {
+  const [partnerTooltipOpen, setPartnerTooltipOpen] = useState(false);
+
+  const isPassPartner =
+    venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
+
   const savePercent = getSavePercent(venue);
   const ribbonText = savePercent != null ? `SAVE ${savePercent}%` : null;
   const ratingBadge = getRatingBadge(venue);
@@ -241,6 +247,43 @@ export function HomeVenueCardMobile({
           >
             {venue.name}
           </div>
+
+          {isPassPartner ? (
+            <Tooltip
+              title="Verified partner. Discount guaranteed with valid Ahangama Pass."
+              trigger={["click"]}
+              placement="top"
+              open={partnerTooltipOpen}
+              onOpenChange={(open) => setPartnerTooltipOpen(open)}
+              overlayStyle={{ maxWidth: 240 }}
+            >
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                style={{
+                  border: "1px solid rgba(37, 211, 102, 0.25)",
+                  background: "rgba(37, 211, 102, 0.12)",
+                  color: "#1FAF5A",
+                  fontSize: 11,
+                  fontWeight: 900,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  whiteSpace: "nowrap",
+                  cursor: "pointer",
+                  lineHeight: "14px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+                aria-label="Pass Partner verification"
+              >
+                <span aria-hidden="true">✓</span>
+                Pass Partner
+              </button>
+            </Tooltip>
+          ) : null}
         </div>
 
         {venue.area || distanceKm != null ? (

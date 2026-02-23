@@ -1,5 +1,5 @@
 import { EnvironmentOutlined, InstagramOutlined } from "@ant-design/icons";
-import { Button, Card, Space, Tag, Typography } from "antd";
+import { Button, Card, Space, Tag, Tooltip, Typography } from "antd";
 import type { CSSProperties, ReactNode } from "react";
 import type { Venue } from "../types/venue";
 
@@ -267,27 +267,39 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                   </span>
                 ) : null}
                 {isPassPartner ? (
-                  <span className="ahg-venue-partner-badge">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                      focusable="false"
-                      style={{ flex: "0 0 auto" }}
+                  <Tooltip
+                    title="Verified partner. Discount guaranteed with valid Ahangama Pass."
+                    trigger={["hover", "click"]}
+                    placement="top"
+                    overlayStyle={{ maxWidth: 240 }}
+                  >
+                    <button
+                      type="button"
+                      className="ahg-venue-partner-badge"
+                      style={{ cursor: "pointer" }}
+                      aria-label="Pass Partner verification"
                     >
-                      <path
-                        d="M20 6L9 17l-5-5"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    Pass Partner
-                  </span>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        focusable="false"
+                        style={{ flex: "0 0 auto" }}
+                      >
+                        <path
+                          d="M20 6L9 17l-5-5"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      Pass Partner
+                    </button>
+                  </Tooltip>
                 ) : null}
               </div>
             </div>
@@ -432,9 +444,28 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
         <Space direction="vertical" size={10} style={{ width: "100%" }}>
           <Space size={8} wrap>
             <Typography.Text strong>{venue.name}</Typography.Text>
-            <Tag color="green" style={{ margin: 0 }}>
-              Pass Partner
-            </Tag>
+            <Tooltip
+              title="Verified partner. Discount guaranteed with valid Ahangama Pass."
+              trigger={["hover", "click"]}
+              placement="top"
+              overlayStyle={{ maxWidth: 240 }}
+            >
+              <Tag
+                color="green"
+                style={{ margin: 0, cursor: "pointer" }}
+                role="button"
+                tabIndex={0}
+                aria-label="Pass Partner verification"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    (e.currentTarget as unknown as HTMLElement).click();
+                  }
+                }}
+              >
+                Pass Partner
+              </Tag>
+            </Tooltip>
             <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
           </Space>
 
