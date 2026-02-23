@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
+import { FreeGuideWhatsAppCtaMobile } from "../../components/mobile/FreeGuideWhatsAppCta.Mobile";
 import { SavingsBreakdownMobile } from "../../components/mobile/SavingsBreakdown.Mobile";
 import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
 import { SocialProofMobile } from "../../components/mobile/SocialProof.Mobile";
@@ -971,6 +972,8 @@ export default function HomeMobile() {
         }}
       >
         <SavingsBreakdownMobile />
+
+        <FreeGuideWhatsAppCtaMobile />
 
         {error ? (
           <div
