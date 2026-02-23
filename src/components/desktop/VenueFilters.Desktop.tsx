@@ -6,10 +6,7 @@ type Props = {
   onSearchTextChange: (value: string) => void;
 };
 
-export function VenueFiltersDesktop({
-  searchText,
-  onSearchTextChange,
-}: Props) {
+export function VenueFiltersDesktop({ searchText, onSearchTextChange }: Props) {
   return (
     <div
       className="ahg-venue-filters"

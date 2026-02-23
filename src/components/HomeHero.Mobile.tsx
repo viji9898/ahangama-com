@@ -53,7 +53,14 @@ export function HomeHeroMobile({
           One Pass. Instant perks. Cafés, surf, wellness & stays.
         </Text>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 14 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            marginTop: 14,
+          }}
+        >
           <Button
             block
             size="large"
