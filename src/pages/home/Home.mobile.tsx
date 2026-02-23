@@ -900,17 +900,23 @@ export default function HomeMobile() {
   const viewAllVenues = (() => {
     switch (viewAllSection) {
       case "most-popular":
-        return { title: "⭐ Most Popular", venues: sections.mostPopularAll };
+        return {
+          title: "⭐ Crowd Favourites",
+          venues: sections.mostPopularAll,
+        };
       case "best-discounts":
         return {
-          title: "🔥 Best Discounts",
+          title: "🔥 Best Value This Week",
           venues: sections.bestDiscountsAll,
         };
       case "beach-road":
-        return { title: "🏝️ Beach Road Picks", venues: sections.beachRoadAll };
+        return {
+          title: "🏝️ Beach Road Favourites",
+          venues: sections.beachRoadAll,
+        };
       case "wellness":
         return {
-          title: "🌿 Wellness Favourites",
+          title: "🌿 Wellness Reset Spots",
           venues: sections.wellnessAll,
         };
       default:
@@ -996,22 +1002,22 @@ export default function HomeMobile() {
           <>
             <div ref={offersTopRef} />
             <VenueSectionCarouselMobile
-              title="⭐ Most Popular"
+              title="⭐ Crowd Favourites"
               venues={sections.mostPopular}
               onViewAll={() => handleViewAll("most-popular")}
             />
             <VenueSectionCarouselMobile
-              title="🔥 Best Discounts"
+              title="🔥 Best Value This Week"
               venues={sections.bestDiscounts}
               onViewAll={() => handleViewAll("best-discounts")}
             />
             <VenueSectionCarouselMobile
-              title="🏝️ Beach Road Picks"
+              title="🏝️ On the Beach Favourites"
               venues={sections.beachRoad}
               onViewAll={() => handleViewAll("beach-road")}
             />
             <VenueSectionCarouselMobile
-              title="🌿 Wellness Favourites"
+              title="🌿 Wellness Reset Spots"
               venues={sections.wellness}
               onViewAll={() => handleViewAll("wellness")}
             />
