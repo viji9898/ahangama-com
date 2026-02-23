@@ -78,16 +78,35 @@
     box-shadow 180ms ease;
 }
 
+/* Ant Design buttons can override hover colors; enforce theme tokens. */
+.ant-btn.ahg-mobile-cta-button {
+  background: var(--pass-primary) !important;
+  border-color: var(--pass-primary) !important;
+  color: #ffffff !important;
+}
+
 .ahg-mobile-cta-button:hover {
   transform: translateY(-1px);
   background: var(--pass-primary-hover);
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
+.ant-btn.ahg-mobile-cta-button:hover,
+.ant-btn.ahg-mobile-cta-button:focus {
+  background: var(--pass-primary-hover) !important;
+  border-color: var(--pass-primary-hover) !important;
+  color: #ffffff !important;
+}
+
 .ahg-mobile-cta-button:active {
   transform: translateY(0);
   background: var(--pass-primary-active);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+
+.ant-btn.ahg-mobile-cta-button:active {
+  background: var(--pass-primary-active) !important;
+  border-color: var(--pass-primary-active) !important;
 }
 
 .ahg-mobile-cta-button:focus-visible {

@@ -67,13 +67,12 @@ export function HomeHeroMobile({
             href={passUrl}
             target="_blank"
             rel="noopener noreferrer"
+            className="ahg-mobile-cta-button"
             style={{
               height: 46,
-              borderRadius: 12,
               fontWeight: 900,
-              background: "#111",
-              borderColor: "#111",
-              color: "#fff",
+              borderRadius: 999,
+              border: "none",
             }}
           >
             Get the Ahangama Pass
