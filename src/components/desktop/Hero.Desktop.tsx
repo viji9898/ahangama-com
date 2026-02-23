@@ -8,6 +8,8 @@ type Props = {
 export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
   const screens = Grid.useBreakpoint();
   const isSmall = !screens.md;
+  const backgroundImageUrl =
+    "https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/hero_desktop.jpg";
 
   return (
     <div style={{ width: "100%", marginBottom: 12 }}>
@@ -15,8 +17,10 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
         style={{
           borderRadius: 16,
           border: "1px solid rgba(0,0,0,0.06)",
-          background:
-            "radial-gradient(900px circle at 50% 0%, color-mix(in srgb, var(--pass-primary) 14%, rgba(255,255,255,0)) 0%, rgba(255,255,255,0) 55%), linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,245,240,0.92))",
+          backgroundImage: `radial-gradient(900px circle at 50% 0%, color-mix(in srgb, var(--pass-primary) 14%, rgba(255,255,255,0)) 0%, rgba(255,255,255,0) 55%), linear-gradient(180deg, rgba(255,255,255,0.82), rgba(248,245,240,0.82)), url(${backgroundImageUrl})`,
+          backgroundSize: "auto, auto, cover",
+          backgroundPosition: "center, center, center",
+          backgroundRepeat: "no-repeat, no-repeat, no-repeat",
           boxShadow: "0 16px 38px rgba(0,0,0,0.06)",
         }}
         styles={{
@@ -85,14 +89,10 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
                 <Button
                   type="primary"
                   size="middle"
+                  className="ahg-mobile-cta-button"
                   onClick={onPrimaryClick}
                   style={{
-                    height: 42,
-                    borderRadius: 999,
-                    padding: "0 18px",
-                    fontWeight: 850,
-                    boxShadow: "0 12px 26px rgba(0,0,0,0.14)",
-                    width: isSmall ? "100%" : "fit-content",
+                    width: isSmall ? "100%" : undefined,
                   }}
                 >
                   Get Ahangama Pass

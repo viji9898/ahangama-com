@@ -80,6 +80,20 @@
 
 /* Ant Design buttons can override hover colors; enforce theme tokens. */
 .ant-btn.ahg-mobile-cta-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 42px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  font-size: 15px !important;
+  white-space: nowrap !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14) !important;
+  transition:
+    transform 160ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease !important;
   background: var(--pass-primary) !important;
   border-color: var(--pass-primary) !important;
   color: #ffffff !important;
