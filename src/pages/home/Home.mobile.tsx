@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { SavingsSummary } from "../../components/SavingsSummary";
+import { SavingsBreakdownMobile } from "../../components/SavingsBreakdown.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
@@ -1451,7 +1451,7 @@ export default function HomeMobile() {
           padding: 0,
         }}
       >
-        <SavingsSummary />
+        <SavingsBreakdownMobile />
 
         {error ? (
           <div
