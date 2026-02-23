@@ -1037,25 +1037,21 @@ export default function HomeMobile() {
               title="⭐ Crowd Favourites"
               venues={sections.mostPopular}
               onViewAll={() => handleViewAll("most-popular")}
-              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🔥 Best Value This Week"
               venues={sections.bestDiscounts}
               onViewAll={() => handleViewAll("best-discounts")}
-              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🏝️ On the Beach Favourites"
               venues={sections.beachRoad}
               onViewAll={() => handleViewAll("beach-road")}
-              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🌿 Wellness Reset Spots"
               venues={sections.wellness}
               onViewAll={() => handleViewAll("wellness")}
-              userLocation={userLocation}
             />
 
             {viewAllVenues ? (

@@ -1,141 +1,182 @@
-import { Button, ConfigProvider, Typography } from "antd";
+import { Button, Card, ConfigProvider, Grid, Space, Typography } from "antd";
 
 type Props = {
-  image?: string;
+  onPrimaryClick?: () => void;
+  onSecondaryClick?: () => void;
 };
 
-export function HeroDesktop({ image }: Props) {
+export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
+  const screens = Grid.useBreakpoint();
+  const isSmall = !screens.md;
+
   return (
-    <div
-      style={{
-        background: "var(--venue-card-bg)",
-        borderRadius: 16,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 28,
-        width: "100%",
-        minHeight: 240,
-        padding: 24,
-        marginBottom: 16,
-      }}
-    >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <Typography.Title
-          level={2}
-          style={{ margin: 0, fontSize: 36, lineHeight: 1.12 }}
-        >
-          One Pass. 100+ Perks Across Ahangama.
-        </Typography.Title>
-
-        <Typography.Text
-          type="secondary"
-          style={{
-            display: "block",
-            marginTop: 10,
-            fontSize: 16,
-            lineHeight: 1.45,
-            fontWeight: 600,
-          }}
-        >
-          Instant perks at cafés, stays, surf & wellness.
-        </Typography.Text>
-
-        <Typography.Text
-          type="secondary"
-          style={{
-            display: "block",
-            marginTop: 8,
-            fontSize: 12,
-            lineHeight: "16px",
-            opacity: 0.75,
-          }}
-        >
-          Used by 2,000+ travellers • Works instantly via QR
-        </Typography.Text>
-
-        <Typography.Text
-          type="secondary"
-          style={{
-            display: "block",
-            marginTop: 6,
-            fontSize: 12,
-            lineHeight: "16px",
-            opacity: 0.75,
-            whiteSpace: "normal",
-            overflowWrap: "anywhere",
-          }}
-        >
-          10–20% off • Free items • Upgrades
-        </Typography.Text>
-
-        <div
-          style={{ marginTop: 18, display: "flex", flexDirection: "column" }}
-        >
-          <ConfigProvider
-            theme={{
-              token: {
-                colorPrimary: "var(--pass-primary)",
-                colorPrimaryHover: "var(--pass-primary-hover)",
-                colorPrimaryActive: "var(--pass-primary-active)",
-              },
-            }}
-          >
-            <a
-              href="https://pass.ahangama.com"
-              target="_blank"
-              rel="noreferrer"
-              style={{ display: "inline-block", width: "fit-content" }}
-            >
-              <Button
-                type="primary"
-                size="large"
-                style={{
-                  height: 46,
-                  padding: "0 20px",
-                  borderRadius: 14,
-                  fontWeight: 700,
-                  boxShadow: "0 10px 22px rgba(0,0,0,0.12)",
-                  transition: "transform 140ms ease, box-shadow 140ms ease",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 14px 26px rgba(0,0,0,0.14)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = "translateY(0px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 10px 22px rgba(0,0,0,0.12)";
-                }}
-              >
-                Get Your Pass
-              </Button>
-            </a>
-          </ConfigProvider>
-        </div>
-      </div>
-      <div
+    <div style={{ width: "100%", marginBottom: 12 }}>
+      <Card
         style={{
-          flex: "0 0 420px",
-          display: "flex",
-          justifyContent: "flex-end",
+          borderRadius: 16,
+          border: "1px solid rgba(0,0,0,0.06)",
+          background:
+            "radial-gradient(900px circle at 50% 0%, color-mix(in srgb, var(--pass-primary) 14%, rgba(255,255,255,0)) 0%, rgba(255,255,255,0) 55%), linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,245,240,0.92))",
+          boxShadow: "0 16px 38px rgba(0,0,0,0.06)",
+        }}
+        styles={{
+          body: {
+            padding: isSmall ? "22px 16px 16px" : "30px 26px 20px",
+          },
         }}
       >
-        {image ? (
-          <img
-            src={image}
-            alt="Hero"
+        <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
+          <Typography.Title
+            level={1}
             style={{
-              width: "100%",
-              height: 240,
-              objectFit: "cover",
-              borderRadius: 16,
-              display: "block",
+              margin: 0,
+              fontSize: isSmall ? 26 : 34,
+              lineHeight: 1.05,
+              letterSpacing: -0.4,
             }}
-          />
-        ) : null}
-      </div>
+          >
+            Ahangama Pass — save instantly at 100+ venues.
+          </Typography.Title>
+
+          <Typography.Text
+            type="secondary"
+            style={{
+              display: "block",
+              marginTop: 8,
+              fontSize: isSmall ? 13 : 14,
+              lineHeight: 1.5,
+              fontWeight: 650,
+              opacity: 0.9,
+            }}
+          >
+            Cafés, stays, surf & wellness. Show your pass, get the perk —
+            instantly.
+          </Typography.Text>
+
+          <Typography.Text
+            type="secondary"
+            style={{
+              display: "block",
+              marginTop: 6,
+              fontSize: 11,
+              opacity: 0.8,
+            }}
+          >
+            2,000+ travellers · Apple Wallet & Google Wallet
+          </Typography.Text>
+
+          <div style={{ marginTop: isSmall ? 12 : 14 }}></div>
+
+          <div style={{ marginTop: isSmall ? 14 : 16 }}>
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "var(--pass-primary)",
+                  colorPrimaryHover: "var(--pass-primary-hover)",
+                  colorPrimaryActive: "var(--pass-primary-active)",
+                },
+              }}
+            >
+              <Space
+                size={10}
+                direction={isSmall ? "vertical" : "horizontal"}
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                <Button
+                  type="primary"
+                  size="middle"
+                  onClick={onPrimaryClick}
+                  style={{
+                    height: 42,
+                    borderRadius: 999,
+                    padding: "0 18px",
+                    fontWeight: 850,
+                    boxShadow: "0 12px 26px rgba(0,0,0,0.14)",
+                    width: isSmall ? "100%" : "fit-content",
+                  }}
+                >
+                  Get Ahangama Pass
+                </Button>
+
+                <Button
+                  type="default"
+                  size="middle"
+                  onClick={onSecondaryClick}
+                  style={{
+                    height: 42,
+                    borderRadius: 999,
+                    padding: "0 18px",
+                    fontWeight: 800,
+                    background: "rgba(255,255,255,0.70)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    boxShadow: "0 10px 22px rgba(0,0,0,0.08)",
+                    width: isSmall ? "100%" : "fit-content",
+                  }}
+                >
+                  See what’s included
+                </Button>
+              </Space>
+            </ConfigProvider>
+
+            <div style={{ marginTop: 6 }}>
+              <Typography.Text type="secondary" style={{ fontSize: 11 }}>
+                ✓ Takes 30 seconds · Instant access
+              </Typography.Text>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: isSmall ? 12 : 14,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+                flexWrap: "wrap",
+                padding: "8px 12px",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.72)",
+                border: "1px solid rgba(0,0,0,0.06)",
+                boxShadow: "0 10px 22px rgba(0,0,0,0.06)",
+              }}
+            >
+              {[
+                "🔒 Secure checkout",
+                "⚡ Instant delivery",
+                "💳 Apple/Google Wallet ready",
+              ].map((label, idx, arr) => (
+                <span
+                  key={label}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  <Typography.Text type="secondary" style={{ fontSize: 11 }}>
+                    {label}
+                  </Typography.Text>
+                  {idx < arr.length - 1 ? (
+                    <span aria-hidden style={{ opacity: 0.35 }}>
+                      •
+                    </span>
+                  ) : null}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Card>
     </div>
   );
+}
+
+export function HeroDesktop(props: Props) {
+  return <HeroAhangamaPass {...props} />;
 }

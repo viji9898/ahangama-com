@@ -130,11 +130,11 @@ function getRatingBadge(venue: Venue): string | null {
 }
 
 function formatDistance(distanceKm: number): string {
-  if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m from you`;
-  return `${distanceKm.toFixed(1)} km from you`;
+  if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m away`;
+  return `${distanceKm.toFixed(1)} km away`;
 }
 
-function getMapHref(venue: Venue): string | null {
+function getDirectionsHref(venue: Venue): string | null {
   const mapUrl = typeof venue.mapUrl === "string" ? venue.mapUrl.trim() : "";
   if (mapUrl) return mapUrl;
 
@@ -142,8 +142,8 @@ function getMapHref(venue: Venue): string | null {
   const lng = toNumber(venue.position?.lng ?? venue.lng);
   if (lat == null || lng == null) return null;
 
-  const query = `${lat},${lng}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  const destination = `${lat},${lng}`;
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
 }
 
 export function HomeVenueCardMobile({
@@ -156,7 +156,7 @@ export function HomeVenueCardMobile({
 }: Props) {
   const [partnerTooltipOpen, setPartnerTooltipOpen] = useState(false);
 
-  const mapHref = getMapHref(venue);
+  const directionsHref = getDirectionsHref(venue);
 
   const isPassPartner =
     venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
@@ -300,68 +300,48 @@ export function HomeVenueCardMobile({
           ) : null}
         </div>
 
-        {venue.area || distanceKm != null || mapHref != null ? (
+        {venue.area || distanceKm != null || directionsHref != null ? (
           <div
             style={{
               marginTop: 6,
               fontSize: 12,
               color: "#666",
               display: "flex",
-              flexDirection: "column",
-              gap: 4,
+              justifyContent: "space-between",
+              gap: 10,
             }}
           >
-            {venue.area || mapHref != null ? (
-              <span
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: 10,
-                  minWidth: 0,
-                }}
-              >
-                {venue.area ? (
-                  <span
-                    style={{
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      minWidth: 0,
-                      flex: 1,
-                    }}
-                  >
-                    {`📍 ${venue.area}`}
-                  </span>
-                ) : (
-                  <span style={{ flex: 1 }} />
-                )}
-
-                {mapHref != null ? (
-                  <a
-                    href={mapHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    style={{
-                      color: "var(--pass-primary)",
-                      fontWeight: 800,
-                      textDecoration: "none",
-                      whiteSpace: "nowrap",
-                      flex: "0 0 auto",
-                    }}
-                    aria-label={`Open map for ${venue.name}`}
-                    title={mapHref}
-                  >
-                    Map
-                  </a>
+            <span
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {venue.area ? `📍 ${venue.area}` : ""}
+            </span>
+            {distanceKm != null || directionsHref != null ? (
+              <span style={{ whiteSpace: "nowrap", opacity: 0.9 }}>
+                {distanceKm != null ? formatDistance(distanceKm) : null}
+                {directionsHref != null ? (
+                  <>
+                    {distanceKm != null ? " · " : ""}
+                    <a
+                      href={directionsHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        color: "var(--pass-primary)",
+                        fontWeight: 800,
+                        textDecoration: "none",
+                      }}
+                      aria-label={`Open directions to ${venue.name}`}
+                    >
+                      Directions
+                    </a>
+                  </>
                 ) : null}
-              </span>
-            ) : null}
-
-            {distanceKm != null ? (
-              <span style={{ opacity: 0.9, whiteSpace: "nowrap" }}>
-                {formatDistance(distanceKm)}
               </span>
             ) : null}
           </div>

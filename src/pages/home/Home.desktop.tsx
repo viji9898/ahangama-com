@@ -1,5 +1,5 @@
 import { Alert, Col, Empty, Row, Spin, Typography } from "antd";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
@@ -8,75 +8,55 @@ import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
 import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
+import type { Venue } from "../../types/venue";
 
-type SectionKey = "most-popular" | "best-discounts" | "beach-road" | "wellness";
+type SectionKey =
+  | "staff-picks"
+  | "near-you"
+  | "post-surf-fuel"
+  | "laptop-friendly"
+  | "sunset-spots"
+  | "wellness-reset";
 
-function toNumber(value: unknown): number | null {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string") {
-    const parsed = Number.parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
+type LatLng = { lat: number; lng: number };
+
+function getDistanceFromLatLonInKm(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
-function getReviewsCount(v: { reviews?: unknown }): number {
-  const n = toNumber(v.reviews);
-  return n != null ? Math.round(n) : 0;
+function venueHaystack(v: Venue): string {
+  return [
+    v.name,
+    v.area,
+    v.excerpt,
+    v.cardPerk,
+    ...(v.categories ?? []),
+    ...(v.bestFor ?? []),
+    ...(v.tags ?? []),
+  ]
+    .filter((x): x is string => Boolean(x))
+    .join(" ")
+    .toLowerCase();
 }
 
-function formatOfferLabel(offer: unknown): string | null {
-  if (!offer || typeof offer !== "object") return null;
-  const rec = offer as Record<string, unknown>;
-  if (typeof rec.label === "string" && rec.label.trim())
-    return rec.label.trim();
-  if (typeof rec.type === "string" && rec.type.trim()) return rec.type.trim();
-  return null;
-}
-
-function discountPercentFromValue(discount: unknown): number | null {
-  if (discount == null) return null;
-  if (typeof discount === "number" && Number.isFinite(discount)) {
-    if (discount > 0 && discount < 1) return Math.round(discount * 100);
-    if (discount >= 1) return Math.round(discount);
-    return null;
-  }
-  if (typeof discount === "string") {
-    const raw = discount.trim();
-    if (!raw) return null;
-    const match = raw.match(/(\d+(?:\.\d+)?)\s*%/);
-    if (match?.[1]) {
-      const parsed = Number.parseFloat(match[1]);
-      return Number.isFinite(parsed) ? Math.round(parsed) : null;
-    }
-    const parsed = Number.parseFloat(raw);
-    if (!Number.isFinite(parsed)) return null;
-    if (parsed > 0 && parsed < 1) return Math.round(parsed * 100);
-    if (parsed >= 1) return Math.round(parsed);
-    return null;
-  }
-  return null;
-}
-
-function maxPercentOfferScore(v: {
-  discount?: unknown;
-  offers?: unknown[];
-}): number {
-  const percents: number[] = [];
-  const discountPct = discountPercentFromValue(v.discount);
-  if (discountPct != null) percents.push(discountPct);
-
-  for (const offer of v.offers ?? []) {
-    const label = typeof offer === "string" ? offer : formatOfferLabel(offer);
-    if (!label) continue;
-    const match = label.match(/(\d+(?:\.\d+)?)\s*%/);
-    if (match?.[1]) {
-      const parsed = Number.parseFloat(match[1]);
-      if (Number.isFinite(parsed)) percents.push(Math.round(parsed));
-    }
-  }
-
-  return percents.length ? Math.max(...percents) : 0;
+function matchesAnyKeyword(v: Venue, keywords: string[]): boolean {
+  const haystack = venueHaystack(v);
+  return keywords.some((k) => haystack.includes(k));
 }
 
 export default function HomeDesktop() {
@@ -87,7 +67,7 @@ export default function HomeDesktop() {
 
   const [searchText, setSearchText] = useState("");
   const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
-  const viewAllRef = useRef<HTMLDivElement | null>(null);
+  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
 
   const { venues, loading, error } = useVenues({
     destinationSlug,
@@ -99,6 +79,21 @@ export default function HomeDesktop() {
   useEffect(() => {
     setSearchText((prev) => (prev === qParam ? prev : qParam));
   }, [qParam]);
+
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+        });
+      },
+      () => {},
+      { enableHighAccuracy: false, timeout: 8000 },
+    );
+  }, []);
 
   const filteredVenues = useMemo(() => {
     const q = searchText.trim().toLowerCase();
@@ -126,90 +121,132 @@ export default function HomeDesktop() {
   const sections = useMemo(() => {
     const base = filteredVenues;
 
-    const mostPopularAll = base
-      .slice()
-      .sort((a, b) => getReviewsCount(b) - getReviewsCount(a));
-    const mostPopular = mostPopularAll.slice(0, 8);
+    const staffPicksAll = base.filter((v) =>
+      matchesAnyKeyword(v, [
+        "staff pick",
+        "staff picks",
+        "editor pick",
+        "editor's pick",
+        "editors pick",
+        "recommended",
+        "must try",
+        "must-try",
+      ]),
+    );
 
-    const bestDiscountsAll = base
-      .slice()
-      .map((v) => ({ v, score: maxPercentOfferScore(v) }))
-      .filter((x) => x.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map((x) => x.v);
-    const bestDiscounts = bestDiscountsAll.slice(0, 8);
+    const nearYouAll = !userLocation
+      ? ([] as Venue[])
+      : base
+          .map((v) => {
+            const pos =
+              v.position?.lat != null && v.position?.lng != null
+                ? v.position
+                : v.lat != null && v.lng != null
+                  ? { lat: v.lat, lng: v.lng }
+                  : null;
+            const distance =
+              pos != null
+                ? getDistanceFromLatLonInKm(
+                    userLocation.lat,
+                    userLocation.lng,
+                    pos.lat,
+                    pos.lng,
+                  )
+                : null;
+            return { v, distance };
+          })
+          .filter((x) => x.distance != null)
+          .sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0))
+          .map((x) => x.v);
 
-    const beachRoadAll = base.filter((v) => {
-      const area = (v.area ?? "").toString().toLowerCase();
-      return (
-        area.includes("matara road") ||
-        area.includes("beach road") ||
-        area.includes("beach")
-      );
-    });
-    const beachRoad = beachRoadAll.slice(0, 8);
+    const postSurfFuelAll = base.filter((v) =>
+      matchesAnyKeyword(v, [
+        "cafe",
+        "coffee",
+        "restaurant",
+        "food",
+        "eat",
+        "breakfast",
+        "brunch",
+        "smoothie",
+        "juice",
+        "bowl",
+        "bakery",
+      ]),
+    );
 
-    const wellnessAll = base.filter((v) => {
+    const laptopFriendlyAll = base.filter((v) =>
+      matchesAnyKeyword(v, [
+        "laptop",
+        "wifi",
+        "wi-fi",
+        "co-working",
+        "coworking",
+        "workspace",
+        "remote work",
+        "work-friendly",
+      ]),
+    );
+
+    const sunsetSpotsAll = base.filter((v) =>
+      matchesAnyKeyword(v, [
+        "sunset",
+        "view",
+        "rooftop",
+        "ocean",
+        "beach",
+        "bar",
+        "cocktail",
+      ]),
+    );
+
+    const wellnessResetAll = base.filter((v) => {
       const cats = (v.categories ?? []).map((c) => String(c).toLowerCase());
-      return cats.some(
-        (c) => c.includes("experiences") || c.includes("wellness"),
+      const tags = (v.tags ?? []).map((t) => String(t).toLowerCase());
+      return (
+        cats.some((c) => c.includes("experiences") || c.includes("wellness")) ||
+        tags.some(
+          (t) =>
+            t.includes("wellness") ||
+            t.includes("spa") ||
+            t.includes("yoga") ||
+            t.includes("massage"),
+        )
       );
     });
-    const wellness = wellnessAll.slice(0, 8);
 
     return {
-      mostPopular,
-      mostPopularAll,
-      bestDiscounts,
-      bestDiscountsAll,
-      beachRoad,
-      beachRoadAll,
-      wellness,
-      wellnessAll,
+      staffPicksAll,
+      nearYouAll,
+      postSurfFuelAll,
+      laptopFriendlyAll,
+      sunsetSpotsAll,
+      wellnessResetAll,
     };
-  }, [filteredVenues]);
+  }, [filteredVenues, userLocation]);
 
   const handleViewAll = (key: SectionKey) => {
-    setViewAllSection(key);
-    requestAnimationFrame(() => {
-      viewAllRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    });
+    setViewAllSection((prev) => (prev === key ? null : key));
   };
 
-  const viewAllVenues = (() => {
-    switch (viewAllSection) {
-      case "most-popular":
-        return { title: "⭐ Most Popular", venues: sections.mostPopularAll };
-      case "best-discounts":
-        return {
-          title: "🔥 Best Discounts",
-          venues: sections.bestDiscountsAll,
-        };
-      case "beach-road":
-        return { title: "🏝️ Beach Road Picks", venues: sections.beachRoadAll };
-      case "wellness":
-        return {
-          title: "🌿 Wellness Favourites",
-          venues: sections.wellnessAll,
-        };
-      default:
-        return null;
-    }
-  })();
-
   const Section = ({
+    sectionKey,
     title,
-    venues,
-    onViewAll,
+    venuesAll,
+    collapsedCount,
   }: {
+    sectionKey: SectionKey;
     title: string;
-    venues: typeof filteredVenues;
-    onViewAll: () => void;
+    venuesAll: typeof filteredVenues;
+    collapsedCount: number;
   }) => {
-    if (!venues.length) return null;
+    if (!venuesAll.length) return null;
+
+    const expanded = viewAllSection === sectionKey;
+    const canToggle = venuesAll.length > collapsedCount;
+    const visibleVenues =
+      expanded || !canToggle ? venuesAll : venuesAll.slice(0, collapsedCount);
+
     return (
       <div style={{ marginTop: 18 }}>
         <div
@@ -224,16 +261,18 @@ export default function HomeDesktop() {
           <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
             {title}
           </div>
-          <Typography.Link
-            onClick={onViewAll}
-            style={{ fontWeight: 800, fontSize: 12 }}
-          >
-            View All
-          </Typography.Link>
+          {canToggle ? (
+            <Typography.Link
+              onClick={() => handleViewAll(sectionKey)}
+              style={{ fontWeight: 800, fontSize: 12 }}
+            >
+              {expanded ? "Hide" : "View All"}
+            </Typography.Link>
+          ) : null}
         </div>
 
         <Row gutter={[12, 18]} justify="start">
-          {venues.slice(0, 8).map((v) => (
+          {visibleVenues.map((v) => (
             <Col
               key={String(v.id)}
               xs={24}
@@ -256,7 +295,20 @@ export default function HomeDesktop() {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-      <HeroDesktop image="https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/hero-2.jpg" />
+      <HeroDesktop
+        onPrimaryClick={() => {
+          window.open(
+            "https://pass.ahangama.com",
+            "_blank",
+            "noopener,noreferrer",
+          );
+        }}
+        onSecondaryClick={() => {
+          document
+            .getElementById("included")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }}
+      />
 
       <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
@@ -273,12 +325,14 @@ export default function HomeDesktop() {
         />
       </div>
 
-      {!loading && !error && venues.length > 0 ? (
-        <VenueFiltersDesktop
-          searchText={searchText}
-          onSearchTextChange={setSearchText}
-        />
-      ) : null}
+      <div id="included">
+        {!loading && !error && venues.length > 0 ? (
+          <VenueFiltersDesktop
+            searchText={searchText}
+            onSearchTextChange={setSearchText}
+          />
+        ) : null}
+      </div>
 
       <div style={{ marginTop: 12 }}>
         <SavingsSummary />
@@ -320,67 +374,41 @@ export default function HomeDesktop() {
         {!loading && !error && filteredVenues.length > 0 ? (
           <>
             <Section
-              title="⭐ Most Popular"
-              venues={sections.mostPopular}
-              onViewAll={() => handleViewAll("most-popular")}
+              sectionKey="staff-picks"
+              title="✨ Staff Picks"
+              venuesAll={sections.staffPicksAll}
+              collapsedCount={4}
             />
             <Section
-              title="🔥 Best Discounts"
-              venues={sections.bestDiscounts}
-              onViewAll={() => handleViewAll("best-discounts")}
+              sectionKey="near-you"
+              title="📍 Near You"
+              venuesAll={sections.nearYouAll}
+              collapsedCount={6}
             />
             <Section
-              title="🏝️ Beach Road Picks"
-              venues={sections.beachRoad}
-              onViewAll={() => handleViewAll("beach-road")}
+              sectionKey="post-surf-fuel"
+              title="🏄 Post-Surf Fuel"
+              venuesAll={sections.postSurfFuelAll}
+              collapsedCount={6}
             />
             <Section
-              title="🌿 Wellness Favourites"
-              venues={sections.wellness}
-              onViewAll={() => handleViewAll("wellness")}
+              sectionKey="laptop-friendly"
+              title="💻 Laptop Friendly"
+              venuesAll={sections.laptopFriendlyAll}
+              collapsedCount={6}
             />
-
-            {viewAllVenues ? (
-              <div ref={viewAllRef} style={{ marginTop: 22 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    marginBottom: 8,
-                  }}
-                >
-                  <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
-                    {viewAllVenues.title}
-                  </div>
-                  <Typography.Link
-                    onClick={() => setViewAllSection(null)}
-                    style={{ fontWeight: 800, fontSize: 12, color: "#666" }}
-                  >
-                    Hide
-                  </Typography.Link>
-                </div>
-                <Row gutter={[12, 18]} justify="start">
-                  {viewAllVenues.venues.map((v) => (
-                    <Col
-                      key={String(v.id)}
-                      xs={24}
-                      sm={12}
-                      md={12}
-                      lg={6}
-                      style={{ display: "flex", justifyContent: "flex-start" }}
-                    >
-                      <VenueCard
-                        venue={v}
-                        variant="desktop"
-                        cardStyle={{ width: 250, height: 340 }}
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            ) : null}
+            <Section
+              sectionKey="sunset-spots"
+              title="🌅 Sunset Spots"
+              venuesAll={sections.sunsetSpotsAll}
+              collapsedCount={4}
+            />
+            <Section
+              sectionKey="wellness-reset"
+              title="🌿 Wellness Reset"
+              venuesAll={sections.wellnessResetAll}
+              collapsedCount={4}
+            />
           </>
         ) : null}
       </div>

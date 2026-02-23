@@ -10,6 +10,9 @@ type Props = {
 };
 
 export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
+  const backgroundImageUrl =
+    "https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/desktop_free_guide_whatsApp_v2.jpg";
+
   const resolvedGuideUrl =
     guideUrl ??
     "https://wa.me/94777908790?text=" +
@@ -24,11 +27,15 @@ export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
       style={{
         borderRadius: 18,
         border: "1px solid rgba(0,0,0,0.05)",
-        background:
-          "linear-gradient(180deg, rgba(255,255,255,0.95), rgba(248,245,240,0.95))",
+        backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.69), rgba(248,245,240,0.69)), url(${backgroundImageUrl})`,
+        backgroundSize: "cover, cover",
+        backgroundPosition: "center, center",
+        backgroundRepeat: "no-repeat, no-repeat",
         boxShadow: "0 14px 34px rgba(0,0,0,0.06)",
       }}
-      styles={{ body: { padding: 18 } }}
+      styles={{
+        body: { padding: 18, position: "relative", overflow: "hidden" },
+      }}
     >
       {/* HEADER ROW */}
       <div
@@ -136,6 +143,7 @@ export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
       {/* Supporting line */}
       <Paragraph
         style={{
+          marginLeft: "clamp(0px, 6vw, 56px)",
           marginBottom: 18,
           fontSize: 14,
           lineHeight: 1.5,
@@ -155,87 +163,124 @@ export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
           },
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: 14,
-            flexWrap: "wrap",
-          }}
-        >
-          <div style={{ flex: "1 1 320px", minWidth: 260 }}>
-            <Button
-              type="default"
-              size="large"
-              onClick={onGuideClick}
-              block
-              style={{
-                borderRadius: 999,
-                height: 48,
-                fontWeight: 800,
-                fontSize: 15,
-                background:
-                  "color-mix(in srgb, var(--pass-primary) 12%, #ffffff)",
-                border: "1px solid rgba(0,0,0,0.08)",
-                color: "var(--pass-primary)",
-                boxShadow: "0 10px 24px rgba(0,0,0,0.10)",
-                transition: "transform 0.15s ease, box-shadow 0.15s ease",
-              }}
-              icon={buttonIcon}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow =
-                  "0 14px 30px rgba(0,0,0,0.16)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow =
-                  "0 10px 24px rgba(0,0,0,0.10)";
-              }}
-            >
-              Get Guide via WhatsApp
-            </Button>
-
-            <div style={{ marginTop: 8 }}>
-              <Text type="secondary" style={{ fontSize: 11, opacity: 0.75 }}>
-                No spam • one message
-              </Text>
-            </div>
-          </div>
-
+        <div style={{ marginLeft: "clamp(0px, 6vw, 56px)" }}>
           <div
             style={{
-              flex: "0 0 auto",
               display: "flex",
               alignItems: "center",
-              gap: 10,
+              justifyContent: "space-between",
+              gap: 14,
+              flexWrap: "wrap",
             }}
           >
-            <Text type="secondary" style={{ fontSize: 12, opacity: 0.75 }}>
-              Scan for guide <span aria-hidden>→</span>
-            </Text>
+            <div style={{ flex: "1 1 320px", minWidth: 260 }}>
+              <Button
+                type="default"
+                size="large"
+                onClick={onGuideClick}
+                style={{
+                  borderRadius: 999,
+                  height: 48,
+                  width: "50%",
+                  fontWeight: 800,
+                  fontSize: 13,
+                  paddingInline: 18,
+
+                  background:
+                    "color-mix(in srgb, var(--pass-primary) 12%, #ffffff)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  color: "var(--pass-primary)",
+                  boxShadow: "0 10px 24px rgba(0,0,0,0.10)",
+                  transition: "transform 0.15s ease, box-shadow 0.15s ease",
+                }}
+                icon={buttonIcon}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 14px 30px rgba(0,0,0,0.16)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 10px 24px rgba(0,0,0,0.10)";
+                }}
+              >
+                Get Guide via WhatsApp
+              </Button>
+
+              <div style={{ marginTop: 8 }}>
+                <Text type="secondary" style={{ fontSize: 11, opacity: 0.75 }}>
+                  No spam • one message
+                </Text>
+              </div>
+            </div>
+
             <div
               style={{
-                width: 108,
-                height: 108,
-                borderRadius: 14,
-                background: "rgba(255,255,255,0.85)",
-                border: "1px solid rgba(0,0,0,0.08)",
+                flex: "0 0 auto",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 10px 22px rgba(0,0,0,0.06)",
+                gap: 10,
+                position: "absolute",
+                top: "calc(50% + 35px)",
+                left: "calc(75% + 100px)",
+                transform: "translate(-50%, -50%)",
+                pointerEvents: "none",
               }}
             >
-              <QRCodeSVG
-                value={resolvedGuideUrl}
-                size={92}
-                bgColor="#ffffff"
-                fgColor="#1A1A1A"
-                level="M"
-                includeMargin={false}
-              />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <div
+                  style={{
+                    width: 108,
+                    height: 108,
+                    borderRadius: 14,
+                    background: "rgba(255,255,255,0.85)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 10px 22px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  <QRCodeSVG
+                    value={resolvedGuideUrl}
+                    size={92}
+                    bgColor="#ffffff"
+                    fgColor="#1A1A1A"
+                    level="M"
+                    includeMargin={false}
+                  />
+                </div>
+
+                <Text
+                  type="secondary"
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 900,
+                    opacity: 0.95,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "6px 10px",
+                    borderRadius: 999,
+                    background: "rgba(255,255,255,0.75)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <span style={{ fontWeight: 950 }}>Scan</span>
+                  <span style={{ opacity: 0.9, fontWeight: 800 }}>
+                    for the guide
+                  </span>
+                </Text>
+              </div>
             </div>
           </div>
         </div>
