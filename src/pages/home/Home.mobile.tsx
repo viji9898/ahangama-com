@@ -51,11 +51,13 @@ export function HeroBannerMobile({ imageUrl }: { imageUrl: string }) {
 type GetPassBarProps = {
   href?: string;
   visible?: boolean;
+  onPurchase?: () => void;
 };
 
 export function GetPassBarMobile({
   href = "https://pass.ahangama.com",
   visible = false,
+  onPurchase,
 }: GetPassBarProps) {
   return (
     <div
@@ -95,18 +97,22 @@ export function GetPassBarMobile({
               textOverflow: "ellipsis",
             }}
           >
-            Get Pass — from $18
+            Save at 100+ venues
           </div>
         </div>
 
-        <a
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
           className="ahg-mobile-cta-button"
+          onClick={() => {
+            if (onPurchase) return onPurchase();
+            window.open(href, "_blank", "noopener,noreferrer");
+          }}
+          style={{ border: "none", cursor: "pointer" }}
+          aria-label="Get Your Pass"
         >
-          Get Pass
-        </a>
+          Get Your Pass ($18)
+        </button>
       </div>
     </div>
   );
@@ -728,6 +734,7 @@ function maxPercentOfferScore(v: {
 export default function HomeMobile() {
   const params = useParams();
   const destinationSlug = String(params.destinationSlug || "ahangama");
+  const passUrl = "https://pass.ahangama.com";
 
   const [searchParams] = useSearchParams();
 
@@ -766,20 +773,12 @@ export default function HomeMobile() {
   }, []);
 
   useEffect(() => {
-    const heroEl = heroRef.current;
-    if (!heroEl || typeof IntersectionObserver === "undefined") return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const scrolledPastHero =
-          !entry.isIntersecting && entry.boundingClientRect.bottom <= 0;
-        setCtaVisible(scrolledPastHero);
-      },
-      { threshold: 0.01 },
-    );
-
-    observer.observe(heroEl);
-    return () => observer.disconnect();
+    const onScroll = () => {
+      setCtaVisible(window.scrollY > 150);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const filteredVenues = useMemo(() => {
@@ -937,11 +936,18 @@ export default function HomeMobile() {
       <div ref={heroRef}>
         <HomeHeroMobile
           imageUrl="https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/hero_banner_mobile.jpg"
+          passUrl={passUrl}
           onSeeAllOffers={handleSeeAllOffers}
         />
       </div>
 
-      <GetPassBarMobile visible={ctaVisible} />
+      <GetPassBarMobile
+        visible={ctaVisible}
+        href={passUrl}
+        onPurchase={() => {
+          window.open(passUrl, "_blank", "noopener,noreferrer");
+        }}
+      />
 
       <VenueSearchAndCategoriesMobile
         search={search}
