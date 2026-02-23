@@ -3,6 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { HomeHeroMobile } from "../../components/HomeHero.Mobile";
 import { SavingsBreakdownMobile } from "../../components/SavingsBreakdown.Mobile";
 import { HomeVenueCardMobile } from "../../components/HomeVenueCard.Mobile";
+import { SocialProofMobile } from "../../components/SocialProof.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
@@ -1053,6 +1054,10 @@ export default function HomeMobile() {
                 />
               </div>
             ) : null}
+
+            <div style={{ marginTop: 14 }}>
+              <SocialProofMobile />
+            </div>
 
             <div style={{ marginTop: 14 }}>
               <FooterDesktop />
