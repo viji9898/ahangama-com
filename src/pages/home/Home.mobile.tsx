@@ -590,12 +590,14 @@ type VenueSectionCarouselProps = {
   title: string;
   venues: Venue[];
   onViewAll?: () => void;
+  userLocation?: LatLng | null;
 };
 
 export function VenueSectionCarouselMobile({
   title,
   venues,
   onViewAll,
+  userLocation = null,
 }: VenueSectionCarouselProps) {
   if (!venues.length) return null;
 
@@ -643,18 +645,45 @@ export function VenueSectionCarouselMobile({
         }}
       >
         {venues.map((v) => (
-          <VenueCarouselCardMobile key={String(v.id)} venue={v} />
+          <VenueCarouselCardMobile
+            key={String(v.id)}
+            venue={v}
+            userLocation={userLocation}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function VenueCarouselCardMobile({ venue }: { venue: Venue }) {
+function VenueCarouselCardMobile({
+  venue,
+  userLocation,
+}: {
+  venue: Venue;
+  userLocation: LatLng | null;
+}) {
+  const distanceKm = (() => {
+    const pos =
+      venue.position?.lat != null && venue.position?.lng != null
+        ? venue.position
+        : venue.lat != null && venue.lng != null
+          ? { lat: venue.lat, lng: venue.lng }
+          : null;
+    if (!userLocation || !pos) return null;
+    return getDistanceFromLatLonInKm(
+      userLocation.lat,
+      userLocation.lng,
+      pos.lat,
+      pos.lng,
+    );
+  })();
+
   return (
     <HomeVenueCardMobile
       venue={venue}
       variant="carousel"
+      distanceKm={distanceKm}
       style={{
         flex: "0 0 260px",
         border: "1px solid rgba(0,0,0,0.04)",
@@ -1008,21 +1037,25 @@ export default function HomeMobile() {
               title="⭐ Crowd Favourites"
               venues={sections.mostPopular}
               onViewAll={() => handleViewAll("most-popular")}
+              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🔥 Best Value This Week"
               venues={sections.bestDiscounts}
               onViewAll={() => handleViewAll("best-discounts")}
+              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🏝️ On the Beach Favourites"
               venues={sections.beachRoad}
               onViewAll={() => handleViewAll("beach-road")}
+              userLocation={userLocation}
             />
             <VenueSectionCarouselMobile
               title="🌿 Wellness Reset Spots"
               venues={sections.wellness}
               onViewAll={() => handleViewAll("wellness")}
+              userLocation={userLocation}
             />
 
             {viewAllVenues ? (
