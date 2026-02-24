@@ -120,6 +120,31 @@ export default function HomeDesktop() {
     return base;
   }, [venues, searchText]);
 
+  const distanceById = useMemo(() => {
+    const map = new Map<string, number>();
+    if (!userLocation) return map;
+
+    for (const v of filteredVenues) {
+      const pos =
+        v.position?.lat != null && v.position?.lng != null
+          ? v.position
+          : v.lat != null && v.lng != null
+            ? { lat: v.lat, lng: v.lng }
+            : null;
+      if (!pos) continue;
+      const distanceKm = getDistanceFromLatLonInKm(
+        userLocation.lat,
+        userLocation.lng,
+        pos.lat,
+        pos.lng,
+      );
+      if (!Number.isFinite(distanceKm)) continue;
+      map.set(String(v.id), distanceKm);
+    }
+
+    return map;
+  }, [filteredVenues, userLocation]);
+
   const sections = useMemo(() => {
     const base = filteredVenues;
 
@@ -286,6 +311,7 @@ export default function HomeDesktop() {
               <VenueCard
                 venue={v}
                 variant="desktop"
+                distanceKm={distanceById.get(String(v.id)) ?? null}
                 cardStyle={{ width: 250, height: 340 }}
               />
             </Col>

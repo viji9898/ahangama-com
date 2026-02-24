@@ -7,7 +7,14 @@ type Props = {
   venue: Venue;
   variant?: "default" | "desktop";
   cardStyle?: CSSProperties;
+  distanceKm?: number | null;
 };
+
+function formatDistance(distanceKm: number): string {
+  if (!Number.isFinite(distanceKm) || distanceKm < 0) return "";
+  if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m`;
+  return `${distanceKm.toFixed(1)} km`;
+}
 
 function formatOfferLabel(offer: unknown): string | null {
   if (!offer || typeof offer !== "object") return null;
@@ -100,7 +107,12 @@ function getPrimaryRibbonText(venue: Venue): string {
   return "PASS PERK";
 }
 
-export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
+export function VenueCard({
+  venue,
+  variant = "default",
+  cardStyle,
+  distanceKm = null,
+}: Props) {
   const actions: ReactNode[] = [];
 
   const discountLabel = formatDiscountLabel(venue.discount);
@@ -133,6 +145,8 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
   const isPassPartner =
     venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
   const discountBadgeText = discountLabel ? ribbonText : null;
+  const distanceText =
+    distanceKm != null ? formatDistance(distanceKm) : "";
 
   const desktopCoverHeightPx =
     variant === "desktop"
@@ -345,7 +359,14 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
                   {ratingLine}
                 </div>
               ) : null}
-              {venue.area ? <div>📍 {venue.area}</div> : null}
+              {venue.area ? (
+                <div>
+                  📍 {venue.area}
+                  {distanceText ? (
+                    <span style={{ opacity: 0.8 }}> · {distanceText}</span>
+                  ) : null}
+                </div>
+              ) : null}
               {priceLevel ? <div>💰 {priceLevel}</div> : null}
             </div>
 
@@ -474,7 +495,10 @@ export function VenueCard({ venue, variant = "default", cardStyle }: Props) {
           ) : null}
 
           {venue.area ? (
-            <Typography.Text type="secondary">📍 {venue.area}</Typography.Text>
+            <Typography.Text type="secondary">
+              📍 {venue.area}
+              {distanceText ? ` · ${distanceText}` : ""}
+            </Typography.Text>
           ) : null}
 
           {priceLevel ? (
