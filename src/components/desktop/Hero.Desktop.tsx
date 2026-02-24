@@ -25,7 +25,7 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
         }}
         styles={{
           body: {
-            padding: isSmall ? "22px 16px 16px" : "30px 26px 20px",
+            padding: isSmall ? "20px 16px 14px" : "28px 26px 18px",
           },
         }}
       >
@@ -43,10 +43,23 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
           </Typography.Title>
 
           <Typography.Text
+            style={{
+              display: "block",
+              marginTop: 6,
+              fontSize: isSmall ? 13 : 14,
+              lineHeight: 1.45,
+              fontWeight: 700,
+              opacity: 0.92,
+            }}
+          >
+            Unlock the best of Ahangama.
+          </Typography.Text>
+
+          <Typography.Text
             type="secondary"
             style={{
               display: "block",
-              marginTop: 8,
+              marginTop: 6,
               fontSize: isSmall ? 13 : 14,
               lineHeight: 1.5,
               fontWeight: 650,
@@ -61,7 +74,7 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
             type="secondary"
             style={{
               display: "block",
-              marginTop: 6,
+              marginTop: 5,
               fontSize: 11,
               opacity: 0.8,
             }}
@@ -69,9 +82,7 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
             2,000+ travellers · Apple Wallet & Google Wallet
           </Typography.Text>
 
-          <div style={{ marginTop: isSmall ? 12 : 14 }}></div>
-
-          <div style={{ marginTop: isSmall ? 14 : 16 }}>
+          <div style={{ marginTop: isSmall ? 12 : 14 }}>
             <ConfigProvider
               theme={{
                 token: {
