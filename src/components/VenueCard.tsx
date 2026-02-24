@@ -72,22 +72,6 @@ function formatDiscountLabel(discount: Venue["discount"]): string | null {
 
 const numberFormatter = new Intl.NumberFormat("en-US");
 
-function getPriceLevelLabel(venue: Venue): string | null {
-  const explicit = (venue as unknown as { priceLevel?: unknown }).priceLevel;
-  if (typeof explicit === "string" && explicit.trim()) return explicit.trim();
-
-  const tags = (venue.tags ?? []).map((t) => String(t).toLowerCase());
-  if (tags.some((t) => t.includes("$$$"))) return "$$$";
-  if (tags.some((t) => t.includes("$$"))) return "$$";
-  if (tags.some((t) => t.includes("$"))) return "$";
-  if (tags.some((t) => t.includes("budget") || t.includes("cheap"))) return "$";
-  if (tags.some((t) => t.includes("mid") || t.includes("mid-range")))
-    return "$$";
-  if (tags.some((t) => t.includes("premium") || t.includes("luxury")))
-    return "$$$";
-  return null;
-}
-
 function getPrimaryRibbonText(venue: Venue): string {
   const discountLabel = formatDiscountLabel(venue.discount);
   if (discountLabel) {
@@ -141,7 +125,6 @@ export function VenueCard({
       ? `⭐ ${parsed.toFixed(1)} (${numberFormatter.format(reviewsCount)} reviews)`
       : `⭐ ${parsed.toFixed(1)}`;
   })();
-  const priceLevel = getPriceLevelLabel(venue);
   const isPassPartner =
     venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
   const discountBadgeText = discountLabel ? ribbonText : null;
@@ -371,7 +354,6 @@ export function VenueCard({
                   ) : null}
                 </div>
               ) : null}
-              {priceLevel ? <div>💰 {priceLevel}</div> : null}
             </div>
 
             {excerptLine ? (
@@ -511,10 +493,6 @@ export function VenueCard({
               📍 {venue.area}
               {distanceText ? ` · ${distanceText}` : ""}
             </Typography.Text>
-          ) : null}
-
-          {priceLevel ? (
-            <Typography.Text type="secondary">💰 {priceLevel}</Typography.Text>
           ) : null}
 
           {venue.categories?.length ? (
