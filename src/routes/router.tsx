@@ -16,6 +16,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/partners",
+    element: (
+      <AppShell>
+        <HomePage />
+      </AppShell>
+    ),
+  },
+  {
     path: "/partnership",
     element: (
       <AppShell>
