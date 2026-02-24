@@ -5,6 +5,7 @@ import PartnersPage from "../pages/partners";
 import PartnerSignupSuccessPage from "../pages/partners/success";
 import NotFoundPage from "../pages/not-found";
 import { AppShell } from "../app/AppShell";
+import { PartnerSignupShell } from "../app/PartnerSignupShell";
 
 export const router = createBrowserRouter([
   {
@@ -34,17 +35,17 @@ export const router = createBrowserRouter([
   {
     path: "/partner-signup",
     element: (
-      <AppShell>
+      <PartnerSignupShell>
         <PartnersPage />
-      </AppShell>
+      </PartnerSignupShell>
     ),
   },
   {
     path: "/partner-signup/success",
     element: (
-      <AppShell>
+      <PartnerSignupShell>
         <PartnerSignupSuccessPage />
-      </AppShell>
+      </PartnerSignupShell>
     ),
   },
   {
