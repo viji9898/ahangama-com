@@ -61,7 +61,7 @@ export default function PartnershipDesktop() {
 
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         <Col xs={24} md={12}>
-          <Card title="Partner with us">
+          <Card title="Partner Sign-up">
             <Typography.Paragraph type="secondary" style={{ marginTop: 0 }}>
               Tell us about your venue or offer. We’ll get back to you.
             </Typography.Paragraph>

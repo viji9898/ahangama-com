@@ -11,7 +11,7 @@ import {
 import { WhatsAppOutlined } from "@ant-design/icons";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { GetPassStickyCta } from "../components/GetPassStickyCta";
 import { useIsMobile } from "../hooks/useIsMobile";
 
@@ -71,9 +71,16 @@ export function AppShell({ children }: Props) {
             borderBottom: "1px solid rgba(0,0,0,0.06)",
           }}
         >
-          <div style={{ color: "rgba(0,0,0,0.88)", fontWeight: 700 }}>
+          <Link
+            to="/"
+            style={{
+              color: "rgba(0,0,0,0.88)",
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
             Ahangama
-          </div>
+          </Link>
 
           <Space size={10} align="center">
             <Button icon={<WhatsAppOutlined />} onClick={handleHelpClick}>

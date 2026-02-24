@@ -4,11 +4,6 @@ import addToGoogleWallet from "../../assets/add_to_google_wallet.png";
 
 export function FooterDesktop() {
   const year = new Date().getFullYear();
-  const passBaseUrl = "https://pass.ahangama.com";
-  const faqUrl = `${passBaseUrl}/faq`;
-  const refundPolicyUrl = `${passBaseUrl}/refund-policy`;
-  const termsUrl = `${passBaseUrl}/terms`;
-  const privacyUrl = `${passBaseUrl}/privacy`;
 
   const SectionTitle = ({ children }: { children: string }) => (
     <Typography.Text
@@ -207,7 +202,7 @@ export function FooterDesktop() {
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <SectionTitle>Quick Links</SectionTitle>
             <Space direction="vertical" size={6} style={{ width: "100%" }}>
-              <ItemLink href="/partner-signup">Partner with us</ItemLink>
+              <ItemLink href="/partner-signup">Partner Signup</ItemLink>
             </Space>
           </Space>
         </Col>
@@ -216,18 +211,10 @@ export function FooterDesktop() {
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <SectionTitle>Legal</SectionTitle>
             <Space direction="vertical" size={6} style={{ width: "100%" }}>
-              <ItemLink href={termsUrl} external>
-                Terms
-              </ItemLink>
-              <ItemLink href={privacyUrl} external>
-                Privacy
-              </ItemLink>
-              <ItemLink href={faqUrl} external>
-                FAQ
-              </ItemLink>
-              <ItemLink href={refundPolicyUrl} external>
-                Refund Policy
-              </ItemLink>
+              <ItemLink href="/legal#terms">Terms</ItemLink>
+              <ItemLink href="/legal#privacy">Privacy</ItemLink>
+              <ItemLink href="/legal#faq">FAQ</ItemLink>
+              <ItemLink href="/legal#refund-policy">Refund Policy</ItemLink>
             </Space>
           </Space>
         </Col>
