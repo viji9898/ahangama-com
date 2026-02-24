@@ -16,7 +16,9 @@ export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
   const resolvedGuideUrl =
     guideUrl ??
     "https://wa.me/94777908790?text=" +
-      encodeURIComponent("Hi! I'd like the free Ahangama guide via WhatsApp.");
+      encodeURIComponent(
+        "Hi! When the guide is available, I'd like the free Ahangama guide via WhatsApp.",
+      );
 
   const buttonIcon: ReactNode = (
     <span style={{ fontSize: 14, marginRight: 6 }}>💬</span>
@@ -93,7 +95,7 @@ export function FreeGuideCtaDesktop({ onGuideClick, guideUrl }: Props) {
               lineHeight: 1.2,
             }}
           >
-            2026 Insider Guide to Ahangama
+            2026 Insider Guide to Ahangama (COMMING SOON)
           </Title>
 
           <Text
