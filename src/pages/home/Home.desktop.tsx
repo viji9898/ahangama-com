@@ -6,6 +6,7 @@ import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
 import { HowItWorks } from "../../components/desktop/HowItWorks.Desktop";
 import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
+import { SocialProofBannerDesktop } from "../../components/desktop/SocialProofBanner.Desktop";
 import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import { useVenues } from "../../hooks/useVenues";
@@ -313,6 +314,10 @@ export default function HomeDesktop() {
 
       <div style={{ marginBottom: 12 }}>
         <HowItWorks />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
+        <SocialProofBannerDesktop />
       </div>
 
       <div style={{ marginBottom: 12 }}>
