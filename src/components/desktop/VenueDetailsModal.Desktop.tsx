@@ -127,6 +127,13 @@ export function VenueDetailsModalDesktop({
       ? venue.logo.trim()
       : null;
 
+  const bannerUrl =
+    typeof venue.image === "string" && venue.image.trim()
+      ? venue.image.trim()
+      : typeof venue.ogImage === "string" && venue.ogImage.trim()
+        ? venue.ogImage.trim()
+        : null;
+
   const [tagsExpanded, setTagsExpanded] = useState(false);
   const [whyExpanded, setWhyExpanded] = useState(false);
   const dividerStyle = { margin: "12px 0" };
@@ -193,114 +200,154 @@ export function VenueDetailsModalDesktop({
       width={720}
       style={{ maxHeight: "80vh" }}
       styles={{
+        header: {
+          padding: 0,
+        },
         body: {
-          maxHeight: "calc(80vh - 140px)",
+          maxHeight: "calc(80vh - 260px)",
           overflowY: "auto",
         },
       }}
       title={
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            {logoUrl ? (
-              <div
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: token.borderRadiusLG,
-                  overflow: "hidden",
-                  border: `1px solid ${token.colorBorderSecondary}`,
-                  background: token.colorFillSecondary,
-                  flex: "0 0 auto",
-                }}
-              >
-                <img
-                  src={logoUrl}
-                  alt={`${venue.name} logo`}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                  loading="lazy"
-                />
-              </div>
-            ) : null}
-            <span>
-              {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
-              {venue.name}
-            </span>
-          </div>
-          {discountPercent != null ? (
+        <div style={{ width: "100%" }}>
+          {bannerUrl ? (
             <div
               style={{
-                marginTop: 8,
-                padding: "10px 12px",
-                background: token.colorFillTertiary,
-                border: `1px solid ${token.colorBorderSecondary}`,
-                borderRadius: token.borderRadiusLG,
+                width: "100%",
+                height: isSmall ? 140 : 180,
+                overflow: "hidden",
+                background: token.colorFillSecondary,
+                borderTopLeftRadius: token.borderRadiusLG,
+                borderTopRightRadius: token.borderRadiusLG,
               }}
             >
-              <div
+              <img
+                src={bannerUrl}
+                alt={`${venue.name} banner`}
                 style={{
-                  display: "flex",
-                  flexDirection: isSmall ? "column" : "row",
-                  gap: 10,
-                  alignItems: "stretch",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
                 }}
-              >
-                <div
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 10,
-                  }}
-                >
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    With Pass
-                  </Typography.Text>
-                  <Typography.Text strong style={{ fontSize: 12 }}>
-                    {discountPercent}% off
-                  </Typography.Text>
-                </div>
-
-                <div
-                  aria-hidden="true"
-                  style={
-                    isSmall
-                      ? {
-                          height: 1,
-                          width: "100%",
-                          background: token.colorSplit,
-                        }
-                      : {
-                          width: 1,
-                          background: token.colorSplit,
-                        }
-                  }
-                />
-
-                <div
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 10,
-                  }}
-                >
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                    Without Pass
-                  </Typography.Text>
-                  <Typography.Text strong style={{ fontSize: 12 }}>
-                    Full price
-                  </Typography.Text>
-                </div>
-              </div>
+                loading="lazy"
+              />
             </div>
           ) : null}
+
+          <div
+            style={{ padding: isSmall ? "12px 16px 10px" : "14px 24px 12px" }}
+          >
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                {logoUrl ? (
+                  <div
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: token.borderRadiusLG,
+                      overflow: "hidden",
+                      border: `1px solid ${token.colorBorderSecondary}`,
+                      background: token.colorFillSecondary,
+                      flex: "0 0 auto",
+                    }}
+                  >
+                    <img
+                      src={logoUrl}
+                      alt={`${venue.name} logo`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                      loading="lazy"
+                    />
+                  </div>
+                ) : null}
+                <span>
+                  {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
+                  {venue.name}
+                </span>
+              </div>
+              {discountPercent != null ? (
+                <div
+                  style={{
+                    marginTop: 8,
+                    padding: "10px 12px",
+                    background: token.colorFillTertiary,
+                    border: `1px solid ${token.colorBorderSecondary}`,
+                    borderRadius: token.borderRadiusLG,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: isSmall ? "column" : "row",
+                      gap: 10,
+                      alignItems: "stretch",
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 10,
+                      }}
+                    >
+                      <Typography.Text
+                        type="secondary"
+                        style={{ fontSize: 12 }}
+                      >
+                        With Pass
+                      </Typography.Text>
+                      <Typography.Text strong style={{ fontSize: 12 }}>
+                        {discountPercent}% off
+                      </Typography.Text>
+                    </div>
+
+                    <div
+                      aria-hidden="true"
+                      style={
+                        isSmall
+                          ? {
+                              height: 1,
+                              width: "100%",
+                              background: token.colorSplit,
+                            }
+                          : {
+                              width: 1,
+                              background: token.colorSplit,
+                            }
+                      }
+                    />
+
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 10,
+                      }}
+                    >
+                      <Typography.Text
+                        type="secondary"
+                        style={{ fontSize: 12 }}
+                      >
+                        Without Pass
+                      </Typography.Text>
+                      <Typography.Text strong style={{ fontSize: 12 }}>
+                        Full price
+                      </Typography.Text>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
       }
     >
