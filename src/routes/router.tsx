@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/home";
 import PartnershipPage from "../pages/partnership";
 import PartnersPage from "../pages/partners";
+import PartnerSignupSuccessPage from "../pages/partners/success";
 import NotFoundPage from "../pages/not-found";
 import { AppShell } from "../app/AppShell";
 
@@ -27,6 +28,14 @@ export const router = createBrowserRouter([
     element: (
       <AppShell>
         <PartnersPage />
+      </AppShell>
+    ),
+  },
+  {
+    path: "/partner-signup/success",
+    element: (
+      <AppShell>
+        <PartnerSignupSuccessPage />
       </AppShell>
     ),
   },
