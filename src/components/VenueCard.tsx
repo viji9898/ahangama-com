@@ -145,8 +145,12 @@ export function VenueCard({
   const isPassPartner =
     venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
   const discountBadgeText = discountLabel ? ribbonText : null;
-  const distanceText =
-    distanceKm != null ? formatDistance(distanceKm) : "";
+  const distanceText = distanceKm != null ? formatDistance(distanceKm) : "";
+
+  const instagramUrl =
+    typeof venue.instagramUrl === "string" && venue.instagramUrl.trim()
+      ? venue.instagramUrl.trim()
+      : null;
 
   const desktopCoverHeightPx =
     variant === "desktop"
@@ -434,7 +438,12 @@ export function VenueCard({
 
           <div style={{ display: "flex", gap: 0 }}>
             <Button
-              style={{ flex: 1, borderRadius: 0, margin: 0 }}
+              style={{
+                flex: 1,
+                borderRadius: 0,
+                borderBottomLeftRadius: 14,
+                margin: 0,
+              }}
               icon={<EnvironmentOutlined />}
               disabled={!venue.mapUrl}
               onClick={() => {
@@ -445,13 +454,16 @@ export function VenueCard({
               Google Maps
             </Button>
             <Button
-              style={{ flex: 1, borderRadius: 0, margin: 0 }}
+              style={{
+                flex: 1,
+                borderRadius: 0,
+                borderBottomRightRadius: 14,
+                margin: 0,
+              }}
               icon={<InstagramOutlined />}
-              disabled={!venue.instagramUrl}
               onClick={() => {
-                if (!venue.instagramUrl) return;
                 window.open(
-                  venue.instagramUrl,
+                  instagramUrl ?? "https://instagram.com/",
                   "_blank",
                   "noopener,noreferrer",
                 );
