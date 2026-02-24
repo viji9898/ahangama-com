@@ -11,12 +11,26 @@ exports.handler = async (event) => {
   try {
     const formData = JSON.parse(event.body || "{}");
 
+    const confirmRepresentVenue = Boolean(formData.confirmRepresentVenue);
+    const agreeToTerms = Boolean(formData.agreeToTerms);
+    const understandNoFees = Boolean(formData.understandNoFees);
+
     // Input validation
     if (!formData.venueName || !formData.email || !formData.contactName) {
       return {
         statusCode: 400,
         body: JSON.stringify({
           error: "Missing required fields: venueName, email, contactName",
+        }),
+      };
+    }
+
+    if (!confirmRepresentVenue || !agreeToTerms || !understandNoFees) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          error:
+            "Missing required confirmations: confirmRepresentVenue, agreeToTerms, understandNoFees",
         }),
       };
     }
@@ -29,7 +43,7 @@ exports.handler = async (event) => {
       <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
         <h2>🤝 New Partner Sign-Up - ${formData.venueName}</h2>
         <div style="background: #f0f8ff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-          <strong style="color: #1890ff;">✅ VENUE NOW LIVE AS PARTNER</strong>
+          <strong style="color: #1890ff;">🕒 APPLICATION RECEIVED (PENDING REVIEW)</strong>
         </div>
         
         <h3>📍 Venue Details</h3>
@@ -64,13 +78,6 @@ exports.handler = async (event) => {
         
         <h3>🎁 Customer Offer</h3>
         ${
-          formData.offerType
-            ? `<p><strong>Offer Type:</strong> ${JSON.stringify(
-                formData.offerType,
-              )}</p>`
-            : ""
-        }
-        ${
           formData.offerDescription
             ? `<p><strong>Offer Description:</strong> ${formData.offerDescription}</p>`
             : ""
@@ -94,8 +101,12 @@ exports.handler = async (event) => {
         }
         
         <h3>✅ Agreements</h3>
-        <p><strong>Agreed to Terms:</strong> ${
-          formData.agreeToTerms ? "Yes" : "No"
+        <p><strong>I confirm I represent this venue:</strong> ${
+          confirmRepresentVenue ? "Yes" : "No"
+        }</p>
+        <p><strong>I agree to the Partner Terms:</strong> ${agreeToTerms ? "Yes" : "No"}</p>
+        <p><strong>I understand there are no commissions or fees:</strong> ${
+          understandNoFees ? "Yes" : "No"
         }</p>
         <p><strong>Marketing Consent:</strong> ${
           formData.agreeToMarketing ? "Yes" : "No"
@@ -113,10 +124,16 @@ exports.handler = async (event) => {
         
         <p>Dear ${formData.venueName || formData.contactName},</p>
         
-        <p>Thank you for signing up to the <strong>Ahangama Pass Partner Program</strong>.<br>
-        Your venue is now <strong>live as an Ahangama Pass partner</strong>, and we're excited to have you on board.</p>
-        
-        <p>By submitting the partner form, you've confirmed your participation and agreement to the program terms outlined below.</p>
+        <p>Thank you for signing up to the <strong>Ahangama Pass Partner Program</strong>.</p>
+
+        <p>We’ve received your application and will review your listing. You’ll receive a confirmation within <strong>48 hours</strong>.</p>
+
+        <h2>What happens next?</h2>
+        <ol>
+          <li>We review your listing</li>
+          <li>You receive confirmation within 48 hours</li>
+          <li>You go live on Ahangama.com</li>
+        </ol>
         
         <hr style="border: 1px solid #e0e0e0; margin: 30px 0;">
         
@@ -154,15 +171,6 @@ exports.handler = async (event) => {
 
         <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #d9d9d9;">
           <h4>Your Specific Offer Details:</h4>
-          ${
-            formData.offerType
-              ? `<p><strong>Offer Type:</strong> ${
-                  Array.isArray(formData.offerType)
-                    ? formData.offerType.join(", ")
-                    : formData.offerType
-                }</p>`
-              : ""
-          }
           ${
             formData.offerDescription
               ? `<p><strong>Offer Description:</strong> ${formData.offerDescription}</p>`
