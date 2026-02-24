@@ -25,6 +25,8 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PartnerTrustBar } from "./PartnerTrustBar";
+import addToAppleWalletImg from "../../assets/add_to_apple_wallet.png";
+import addToGoogleWalletImg from "../../assets/add_to_google_wallet.png";
 
 const VENUE_TYPE_OPTIONS = [
   "Food & Beverage",
@@ -713,6 +715,57 @@ export function PartnerSignupForm() {
                           redemption
                         </li>
                       </ul>
+
+                      <div style={{ marginTop: 10, marginBottom: 16 }}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: 12,
+                            flexWrap: "wrap",
+                            marginBottom: 10,
+                          }}
+                        >
+                          <img
+                            src={addToAppleWalletImg}
+                            alt="Add to Apple Wallet"
+                            loading="lazy"
+                            style={{
+                              height: 50,
+                              width: "auto",
+                              display: "block",
+                            }}
+                          />
+                          <img
+                            src={addToGoogleWalletImg}
+                            alt="Add to Google Wallet"
+                            loading="lazy"
+                            style={{
+                              height: 50,
+                              width: "auto",
+                              display: "block",
+                            }}
+                          />
+                        </div>
+
+                        <Typography.Text type="secondary">
+                          Example (Apple Wallet pass)
+                        </Typography.Text>
+                        <img
+                          src="https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/sample_pass_active.jpeg"
+                          alt="Sample Ahangama Pass (Apple Wallet)"
+                          loading="lazy"
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            maxWidth: 360,
+                            margin: "10px auto 0",
+                            borderRadius: token.borderRadiusLG,
+                            border: `1px solid ${token.colorBorderSecondary}`,
+                            background: token.colorBgContainer,
+                          }}
+                        />
+                      </div>
 
                       <Typography.Paragraph style={{ marginBottom: 0 }}>
                         The redemption process is designed to be simple and
