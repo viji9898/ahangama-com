@@ -133,7 +133,8 @@ export function VenueSearchAndCategoriesMobile({
     <div
       style={{
         padding: 12,
-        background: "#FBF6F1",
+        background: "#fff",
+        borderBottom: "1px solid rgba(0,0,0,0.06)",
         position: "sticky",
         top: 0,
         zIndex: 10,
@@ -309,7 +310,8 @@ export function VenueListingCardMobile({
             <div
               id={`expand-details-${String(venue.id)}`}
               style={{
-                background: "#FBF6F1",
+                background: "#fff",
+                border: "1px solid rgba(0,0,0,0.06)",
                 borderRadius: 12,
                 marginTop: 0,
                 padding: "16px 14px",
@@ -960,12 +962,6 @@ export default function HomeMobile() {
         maxWidth: 600,
         margin: "0 auto",
         padding: 0,
-
-        backgroundImage:
-          "url('https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/hero_mobile_background.jpg')",
-        backgroundRepeat: "repeat-y",
-        backgroundSize: "100% auto",
-        backgroundPosition: "top center",
         minHeight: "100vh",
         position: "relative",
       }}
@@ -1004,104 +1000,109 @@ export default function HomeMobile() {
 
         <FreeGuideWhatsAppCtaMobile />
 
-        {error ? (
-          <div
-            style={{
-              background: "#FBF6F1",
-              borderRadius: 16,
-              padding: 12,
-              color: "#7A1F1F",
-              boxShadow: "0 1px 8px rgba(79,111,134,0.07)",
-            }}
-          >
-            Could not load venues: {error}
-          </div>
-        ) : null}
+        <div style={{ background: "var(--venue-listing-bg)" }}>
+          {error ? (
+            <div
+              style={{
+                background: "#fff",
+                border: "1px solid rgba(0,0,0,0.06)",
+                borderRadius: 16,
+                padding: 12,
+                color: "#7A1F1F",
+                boxShadow: "0 1px 8px rgba(79,111,134,0.07)",
+              }}
+            >
+              Could not load venues: {error}
+            </div>
+          ) : null}
 
-        {loading ? (
-          <div style={{ padding: 36, textAlign: "center", color: "#666" }}>
-            Loading venues…
-          </div>
-        ) : null}
+          {loading ? (
+            <div style={{ padding: 36, textAlign: "center", color: "#666" }}>
+              Loading venues…
+            </div>
+          ) : null}
 
-        {!loading && !error && filteredVenues.length === 0 ? (
-          <div style={{ color: "#888", textAlign: "center", marginTop: 40 }}>
-            No venues found.
-          </div>
-        ) : null}
+          {!loading && !error && filteredVenues.length === 0 ? (
+            <div style={{ color: "#888", textAlign: "center", marginTop: 40 }}>
+              No venues found.
+            </div>
+          ) : null}
 
-        {!loading && !error && filteredVenues.length > 0 ? (
-          <>
-            <div ref={offersTopRef} />
-            <VenueSectionCarouselMobile
-              title="⭐ Crowd Favourites"
-              venues={sections.mostPopular}
-              onViewAll={() => handleViewAll("most-popular")}
-            />
-            <VenueSectionCarouselMobile
-              title="🔥 Best Value This Week"
-              venues={sections.bestDiscounts}
-              onViewAll={() => handleViewAll("best-discounts")}
-            />
-            <VenueSectionCarouselMobile
-              title="🏝️ On the Beach Favourites"
-              venues={sections.beachRoad}
-              onViewAll={() => handleViewAll("beach-road")}
-            />
-            <VenueSectionCarouselMobile
-              title="🌿 Wellness Reset Spots"
-              venues={sections.wellness}
-              onViewAll={() => handleViewAll("wellness")}
-            />
+          {!loading && !error && filteredVenues.length > 0 ? (
+            <>
+              <div ref={offersTopRef} />
+              <VenueSectionCarouselMobile
+                title="⭐ Crowd Favourites"
+                venues={sections.mostPopular}
+                onViewAll={() => handleViewAll("most-popular")}
+              />
+              <VenueSectionCarouselMobile
+                title="🔥 Best Value This Week"
+                venues={sections.bestDiscounts}
+                onViewAll={() => handleViewAll("best-discounts")}
+              />
+              <VenueSectionCarouselMobile
+                title="🏝️ On the Beach Favourites"
+                venues={sections.beachRoad}
+                onViewAll={() => handleViewAll("beach-road")}
+              />
+              <VenueSectionCarouselMobile
+                title="🌿 Wellness Reset Spots"
+                venues={sections.wellness}
+                onViewAll={() => handleViewAll("wellness")}
+              />
 
-            {viewAllVenues ? (
-              <div ref={viewAllRef} style={{ marginTop: 18 }}>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    padding: "0 8px",
-                    marginBottom: 10,
-                  }}
-                >
-                  <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
-                    {viewAllVenues.title}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setViewAllSection(null)}
+              {viewAllVenues ? (
+                <div ref={viewAllRef} style={{ marginTop: 18 }}>
+                  <div
                     style={{
-                      border: "none",
-                      background: "transparent",
-                      color: "#666",
-                      fontWeight: 800,
-                      fontSize: 12,
-                      padding: 0,
-                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      padding: "0 8px",
+                      marginBottom: 10,
                     }}
                   >
-                    Hide
-                  </button>
+                    <div
+                      style={{ fontWeight: 900, fontSize: 16, color: "#222" }}
+                    >
+                      {viewAllVenues.title}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setViewAllSection(null)}
+                      style={{
+                        border: "none",
+                        background: "transparent",
+                        color: "#666",
+                        fontWeight: 800,
+                        fontSize: 12,
+                        padding: 0,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Hide
+                    </button>
+                  </div>
+
+                  <VenueListMobile
+                    venues={viewAllVenues.venues}
+                    userLocation={userLocation}
+                  />
                 </div>
+              ) : null}
 
-                <VenueListMobile
-                  venues={viewAllVenues.venues}
-                  userLocation={userLocation}
-                />
+              <div style={{ marginTop: 14 }}>
+                <SocialProofMobile />
               </div>
-            ) : null}
 
-            <div style={{ marginTop: 14 }}>
-              <SocialProofMobile />
-            </div>
-
-            <div style={{ marginTop: 14 }}>
-              <FooterDesktop />
-            </div>
-          </>
-        ) : null}
+              <div style={{ marginTop: 14 }}>
+                <FooterDesktop />
+              </div>
+            </>
+          ) : null}
+        </div>
       </div>
     </div>
   );
