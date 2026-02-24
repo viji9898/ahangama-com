@@ -15,8 +15,11 @@ import {
 } from "antd";
 import {
   InstagramOutlined,
+  LineChartOutlined,
   MailOutlined,
   PhoneOutlined,
+  TeamOutlined,
+  DollarCircleOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -36,11 +39,20 @@ const VENUE_TYPE_OPTIONS = [
   "Other",
 ] as const;
 
-const LOCATION_OPTIONS = [
-  "Ahangama",
-  "Kabalana",
-  "Midigama",
-  "Other",
+const LOCATION_OPTIONS = ["Ahangama", "Kabalana", "Midigama", "Other"] as const;
+
+const OFFER_PRESETS = [
+  { label: "10% Off", description: "10% off total bill" },
+  { label: "15% Off", description: "15% off total bill" },
+  { label: "Buy 1 Get 1", description: "Buy 1 get 1 free" },
+  { label: "Free Welcome Drink", description: "Free welcome drink" },
+  {
+    label: "Late Checkout",
+    description: "Late checkout (subject to availability)",
+  },
+  { label: "Free Dessert", description: "Free dessert" },
+  { label: "Complimentary Item", description: "Complimentary item" },
+  { label: "Upgrade", description: "Room upgrade (subject to availability)" },
 ] as const;
 
 function VenueTypePills({
@@ -141,6 +153,9 @@ export function PartnerSignupForm() {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [selectedOfferPresets, setSelectedOfferPresets] = useState<string[]>(
+    [],
+  );
   const [api, contextHolder] = message.useMessage();
   const selectedLocation = Form.useWatch("location", form);
 
@@ -332,21 +347,70 @@ export function PartnerSignupForm() {
 
             <Divider titlePlacement="start">2. Customer Offer</Divider>
 
-            <Form.Item
-              label="Offer Type"
-              name="offerType"
-              rules={[{ required: true, message: "Please select offer type" }]}
-            >
-              <Checkbox.Group>
-                <Space direction="vertical">
-                  <Checkbox value="percentage">Percentage discount</Checkbox>
-                  <Checkbox value="fixed">Fixed offer</Checkbox>
-                  <Checkbox value="complimentary">
-                    Complimentary item / upgrade
-                  </Checkbox>
+            <div style={{ marginTop: -6, marginBottom: 14 }}>
+              <Typography.Text strong>Quick presets</Typography.Text>
+              <div style={{ marginTop: 10 }}>
+                <Space size={[8, 8]} wrap>
+                  {OFFER_PRESETS.map((preset) => {
+                    const selected = selectedOfferPresets.includes(
+                      preset.label,
+                    );
+
+                    return (
+                      <Button
+                        key={preset.label}
+                        size="small"
+                        shape="round"
+                        onClick={() => {
+                          const nextSelected = selected
+                            ? selectedOfferPresets.filter(
+                                (v) => v !== preset.label,
+                              )
+                            : Array.from(
+                                new Set([
+                                  ...selectedOfferPresets,
+                                  preset.label,
+                                ]),
+                              );
+
+                          setSelectedOfferPresets(nextSelected);
+
+                          if (nextSelected.length > 0) {
+                            const nextDescription = nextSelected
+                              .map(
+                                (label) =>
+                                  OFFER_PRESETS.find((p) => p.label === label)
+                                    ?.description,
+                              )
+                              .filter(Boolean)
+                              .join(", ");
+
+                            form.setFieldsValue({
+                              offerDescription: nextDescription,
+                            });
+                          }
+                        }}
+                        style={{
+                          borderColor: selected
+                            ? "var(--pass-primary)"
+                            : token.colorBorderSecondary,
+                          background: selected
+                            ? "var(--pass-primary)"
+                            : token.colorBgContainer,
+                          color: selected ? "#ffffff" : token.colorText,
+                          fontWeight: 600,
+                          height: 28,
+                          paddingInline: 12,
+                          fontSize: 13,
+                        }}
+                      >
+                        {preset.label}
+                      </Button>
+                    );
+                  })}
                 </Space>
-              </Checkbox.Group>
-            </Form.Item>
+              </div>
+            </div>
 
             <Form.Item
               label="Describe the offer clearly (shown to customers)"
@@ -357,6 +421,22 @@ export function PartnerSignupForm() {
             >
               <Input.TextArea
                 rows={3}
+                onChange={(event) => {
+                  if (selectedOfferPresets.length === 0) return;
+
+                  const generated = selectedOfferPresets
+                    .map(
+                      (label) =>
+                        OFFER_PRESETS.find((p) => p.label === label)
+                          ?.description,
+                    )
+                    .filter(Boolean)
+                    .join(", ");
+
+                  if (generated && event.target.value !== generated) {
+                    setSelectedOfferPresets([]);
+                  }
+                }}
                 placeholder="e.g., '10% off total bill', 'Buy 2 get 1 free on mains', 'Complimentary welcome drink'"
               />
             </Form.Item>
@@ -381,6 +461,36 @@ export function PartnerSignupForm() {
                 </Space>
               </Checkbox.Group>
             </Form.Item>
+
+            <Card
+              size="small"
+              style={{
+                marginBottom: 16,
+                border: `1px solid ${token.colorBorderSecondary}`,
+                background:
+                  "color-mix(in srgb, var(--pass-primary) 4%, #ffffff)",
+              }}
+            >
+              <Space size={8} align="center">
+                <LineChartOutlined style={{ color: "var(--pass-primary)" }} />
+                <Typography.Text strong>💡 ROI highlight:</Typography.Text>
+              </Space>
+
+              <Typography.Paragraph style={{ marginTop: 10, marginBottom: 0 }}>
+                <Space direction="vertical" size={6}>
+                  <Typography.Text>
+                    <TeamOutlined style={{ marginRight: 8 }} />
+                    👥 If just <strong>2</strong> pass holders visit per day and
+                    spend <DollarCircleOutlined style={{ marginRight: 6 }} />
+                    💵 <strong>$15</strong> each,
+                  </Typography.Text>
+                  <Typography.Text>
+                    that&apos;s <strong>$900/month</strong> 📈 in additional
+                    revenue.
+                  </Typography.Text>
+                </Space>
+              </Typography.Paragraph>
+            </Card>
 
             <Divider titlePlacement="start">
               3. How Guests Redeem the Offer
