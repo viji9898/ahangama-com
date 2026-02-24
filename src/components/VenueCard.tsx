@@ -1,7 +1,9 @@
 import { EnvironmentOutlined, InstagramOutlined } from "@ant-design/icons";
 import { Button, Card, Space, Tag, Tooltip, Typography } from "antd";
+import { useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import type { Venue } from "../types/venue";
+import { VenueDetailsModalDesktop } from "./desktop/VenueDetailsModal.Desktop";
 
 type Props = {
   venue: Venue;
@@ -99,6 +101,8 @@ export function VenueCard({
 }: Props) {
   const actions: ReactNode[] = [];
 
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
   const discountLabel = formatDiscountLabel(venue.discount);
   const ribbonText = getPrimaryRibbonText(venue);
   const ratingLine = (() => {
@@ -134,6 +138,31 @@ export function VenueCard({
     typeof venue.instagramUrl === "string" && venue.instagramUrl.trim()
       ? venue.instagramUrl.trim()
       : null;
+
+  const mapsUrl =
+    typeof venue.mapUrl === "string" && venue.mapUrl.trim()
+      ? venue.mapUrl.trim()
+      : null;
+
+  const whatsappUrl = useMemo(() => {
+    const raw = typeof venue.whatsapp === "string" ? venue.whatsapp.trim() : "";
+    if (!raw) return null;
+    if (/^https?:\/\//i.test(raw)) return raw;
+
+    const digits = raw.replace(/\D/g, "");
+    if (!digits) return null;
+    return `https://wa.me/${digits}`;
+  }, [venue.whatsapp]);
+
+  const offerLabels = useMemo(() => {
+    if (!Array.isArray(venue.offers)) return [];
+    return venue.offers
+      .map(formatOfferLabel)
+      .filter((x): x is string => Boolean(x));
+  }, [venue.offers]);
+
+  const openDetails = () => setIsDetailsOpen(true);
+  const closeDetails = () => setIsDetailsOpen(false);
 
   const desktopCoverHeightPx =
     variant === "desktop"
@@ -217,7 +246,19 @@ export function VenueCard({
       }
       cover={
         hasDesktopCoverImage ? (
-          <div style={{ position: "relative" }}>
+          <div
+            style={{ position: "relative", cursor: "pointer" }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Open details for ${venue.name}`}
+            onClick={openDetails}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openDetails();
+              }
+            }}
+          >
             <img
               src={String(venue.image || venue.logo)}
               alt={venue.name}
@@ -242,6 +283,17 @@ export function VenueCard({
               flex: 1,
               minHeight: 0,
               overflow: "hidden",
+              cursor: "pointer",
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`Open details for ${venue.name}`}
+            onClick={openDetails}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openDetails();
+              }
             }}
           >
             <div
@@ -456,54 +508,83 @@ export function VenueCard({
           </div>
         </>
       ) : (
-        <Space direction="vertical" size={10} style={{ width: "100%" }}>
-          <Space size={8} wrap>
-            <Typography.Text strong>{venue.name}</Typography.Text>
-            <Tooltip
-              title="Verified partner. Discount guaranteed with valid Ahangama Pass."
-              trigger={["hover", "click"]}
-              placement="top"
-              overlayStyle={{ maxWidth: 240 }}
-            >
-              <Tag
-                color="green"
-                style={{ margin: 0, cursor: "pointer" }}
-                role="button"
-                tabIndex={0}
-                aria-label="Pass Partner verification"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    (e.currentTarget as unknown as HTMLElement).click();
-                  }
-                }}
+        <div
+          style={{ cursor: "pointer" }}
+          role="button"
+          tabIndex={0}
+          aria-label={`Open details for ${venue.name}`}
+          onClick={openDetails}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openDetails();
+            }
+          }}
+        >
+          <Space direction="vertical" size={10} style={{ width: "100%" }}>
+            <Space size={8} wrap>
+              <Typography.Text strong>{venue.name}</Typography.Text>
+              <Tooltip
+                title="Verified partner. Discount guaranteed with valid Ahangama Pass."
+                trigger={["hover", "click"]}
+                placement="top"
+                overlayStyle={{ maxWidth: 240 }}
               >
-                Pass Partner
-              </Tag>
-            </Tooltip>
-            <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
-          </Space>
-
-          {ratingLine ? (
-            <Typography.Text type="secondary">{ratingLine}</Typography.Text>
-          ) : null}
-
-          {venue.area ? (
-            <Typography.Text type="secondary">
-              📍 {venue.area}
-              {distanceText ? ` · ${distanceText}` : ""}
-            </Typography.Text>
-          ) : null}
-
-          {venue.categories?.length ? (
-            <Space size={6} wrap>
-              {venue.categories.map((c) => (
-                <Tag key={c}>{c}</Tag>
-              ))}
+                <Tag
+                  color="green"
+                  style={{ margin: 0, cursor: "pointer" }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Pass Partner verification"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      (e.currentTarget as unknown as HTMLElement).click();
+                    }
+                  }}
+                >
+                  Pass Partner
+                </Tag>
+              </Tooltip>
+              <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
             </Space>
-          ) : null}
-        </Space>
+
+            {ratingLine ? (
+              <Typography.Text type="secondary">{ratingLine}</Typography.Text>
+            ) : null}
+
+            {venue.area ? (
+              <Typography.Text type="secondary">
+                📍 {venue.area}
+                {distanceText ? ` · ${distanceText}` : ""}
+              </Typography.Text>
+            ) : null}
+
+            {venue.categories?.length ? (
+              <Space size={6} wrap>
+                {venue.categories.map((c) => (
+                  <Tag key={c}>{c}</Tag>
+                ))}
+              </Space>
+            ) : null}
+          </Space>
+        </div>
       )}
+
+      <VenueDetailsModalDesktop
+        open={isDetailsOpen}
+        onClose={closeDetails}
+        venue={venue}
+        distanceText={distanceText}
+        ratingLine={ratingLine}
+        discountLabel={discountLabel}
+        excerptLine={excerptLine}
+        offerLabels={offerLabels}
+        mapsUrl={mapsUrl}
+        instagramUrl={instagramUrl}
+        whatsappUrl={whatsappUrl}
+        isPassPartner={isPassPartner}
+      />
     </Card>
   );
 }
