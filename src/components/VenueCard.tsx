@@ -451,7 +451,7 @@ export function VenueCard({
                 window.open(venue.mapUrl, "_blank", "noopener,noreferrer");
               }}
             >
-              Google Maps
+              Maps
             </Button>
             <Button
               style={{
