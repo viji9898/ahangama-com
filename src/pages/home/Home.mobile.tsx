@@ -982,10 +982,10 @@ export default function HomeMobile() {
         }}
       />
 
-      <VenueSearchAndCategoriesMobile
+      {/* <VenueSearchAndCategoriesMobile
         search={search}
         onSearchChange={setSearch}
-      />
+      /> */}
 
       <div
         className="ahg-mobile-cta-safe"
