@@ -61,37 +61,55 @@ export function PartnerSignupForm() {
   return (
     <>
       {contextHolder}
-      <Card>
-        <div style={{ textAlign: "center", marginBottom: 24 }}>
-          <Typography.Title level={2} style={{ marginBottom: 8 }}>
-            Ahangama Pass — Partner Sign-Up
-          </Typography.Title>
-          <Typography.Paragraph style={{ marginTop: 0 }}>
-            <Typography.Text type="secondary">
-              A simple sign-up to join the Ahangama Pass destination network.
-            </Typography.Text>
-          </Typography.Paragraph>
-          <div
-            style={{
-              background: token.colorInfoBg,
-              border: `1px solid ${token.colorInfoBorder}`,
-              padding: 14,
-              borderRadius: token.borderRadiusLG,
-            }}
-          >
-            <Typography.Text strong style={{ color: token.colorPrimary }}>
-              ✓ By submitting this form, your venue will go live as an Ahangama
-              Pass partner and agree to the terms outlined below.
-            </Typography.Text>
-          </div>
-        </div>
-
-        <Form
-          form={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          size="large"
+      <Space direction="vertical" size="large" style={{ width: "100%" }}>
+        <Card
+          style={{
+            background: token.colorFillAlter,
+            border: `1px solid ${token.colorBorderSecondary}`,
+          }}
         >
+          <div style={{ textAlign: "center" }}>
+            <Typography.Title level={1} style={{ marginBottom: 8 }}>
+              Join 100+ Venues Growing With Ahangama Pass
+            </Typography.Title>
+            <Typography.Paragraph style={{ marginTop: 0, marginBottom: 16 }}>
+              <Typography.Text type="secondary" style={{ fontSize: 16 }}>
+                Zero commission. Free marketing. Verified pass holders sent to
+                your venue.
+              </Typography.Text>
+            </Typography.Paragraph>
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Space
+                size={[16, 8]}
+                wrap
+                style={{ justifyContent: "center" }}
+              >
+                <Typography.Text strong>✔ 100+ venues live</Typography.Text>
+                <Typography.Text strong>
+                  ✔ 1,000+ active pass holders
+                </Typography.Text>
+                <Typography.Text strong>✔ 0% commission model</Typography.Text>
+                <Typography.Text strong>
+                  ✔ Featured on Ahangama.com
+                </Typography.Text>
+              </Space>
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleSubmit}
+            size="large"
+          >
           <Divider titlePlacement="start">1. Venue Details</Divider>
 
           <Form.Item
@@ -389,8 +407,9 @@ export function PartnerSignupForm() {
             }}
           >
             <Typography.Text strong style={{ color: token.colorPrimary }}>
-              By submitting this form, your venue will go live as an Ahangama
-              Pass partner.
+              By submitting this form, you confirm you’re authorized to
+              represent this venue, agree to the Ahangama Pass Partner Terms,
+              and your venue will go live as an Ahangama Pass partner.
             </Typography.Text>
           </div>
 
@@ -438,7 +457,8 @@ export function PartnerSignupForm() {
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+        </Card>
+      </Space>
     </>
   );
 }
