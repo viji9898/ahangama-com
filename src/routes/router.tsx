@@ -3,6 +3,7 @@ import HomePage from "../pages/home";
 import PartnershipPage from "../pages/partnership";
 import PartnersPage from "../pages/partners";
 import PartnerSignupSuccessPage from "../pages/partners/success";
+import LegalPage from "../pages/legal";
 import NotFoundPage from "../pages/not-found";
 import { AppShell } from "../app/AppShell";
 import { PartnerSignupShell } from "../app/PartnerSignupShell";
@@ -29,6 +30,14 @@ export const router = createBrowserRouter([
     element: (
       <AppShell>
         <PartnershipPage />
+      </AppShell>
+    ),
+  },
+  {
+    path: "/legal",
+    element: (
+      <AppShell>
+        <LegalPage />
       </AppShell>
     ),
   },

@@ -180,22 +180,6 @@ export function FooterDesktop() {
               flexWrap: "wrap",
             }}
           >
-            <Typography.Link
-              href={faqUrl}
-              target="_blank"
-              rel="noreferrer"
-              style={{ fontSize: 12 }}
-            >
-              FAQ
-            </Typography.Link>
-            <Typography.Link
-              href={refundPolicyUrl}
-              target="_blank"
-              rel="noreferrer"
-              style={{ fontSize: 12 }}
-            >
-              Refund Policy
-            </Typography.Link>
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>
               🔒 Secured by Stripe
             </Typography.Text>
@@ -223,11 +207,6 @@ export function FooterDesktop() {
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <SectionTitle>Quick Links</SectionTitle>
             <Space direction="vertical" size={6} style={{ width: "100%" }}>
-              <ItemLink href="?q=cafe">Best Cafés</ItemLink>
-              <ItemLink href="?q=surf">Best Surf Spots</ItemLink>
-              <ItemLink href="https://pass.ahangama.com" external>
-                How it works
-              </ItemLink>
               <ItemLink href="/partner-signup">Partner with us</ItemLink>
             </Space>
           </Space>
@@ -242,6 +221,12 @@ export function FooterDesktop() {
               </ItemLink>
               <ItemLink href={privacyUrl} external>
                 Privacy
+              </ItemLink>
+              <ItemLink href={faqUrl} external>
+                FAQ
+              </ItemLink>
+              <ItemLink href={refundPolicyUrl} external>
+                Refund Policy
               </ItemLink>
             </Space>
           </Space>
