@@ -173,7 +173,9 @@ export function PartnerSignupForm() {
   const offerDescription = Form.useWatch("offerDescription", form);
   const offerAppliesTo = Form.useWatch("offerAppliesTo", form);
 
+  const confirmRepresentVenue = Form.useWatch("confirmRepresentVenue", form);
   const agreeToTerms = Form.useWatch("agreeToTerms", form);
+  const understandNoFees = Form.useWatch("understandNoFees", form);
 
   const venueComplete =
     typeof venueName === "string" &&
@@ -203,7 +205,9 @@ export function PartnerSignupForm() {
     visitedPanelKeys.includes("redemption") &&
     visitedPanelKeys.includes("marketing");
 
-  const termsComplete = Boolean(agreeToTerms);
+  const termsComplete = Boolean(
+    confirmRepresentVenue && agreeToTerms && understandNoFees,
+  );
 
   const currentStep = !venueComplete
     ? 0
@@ -785,29 +789,14 @@ export function PartnerSignupForm() {
                         </ul>
                       </div>
 
-                      <div
-                        style={{
-                          background: token.colorInfoBg,
-                          border: `1px solid ${token.colorInfoBorder}`,
-                          padding: 14,
-                          borderRadius: token.borderRadiusLG,
-                          marginBottom: 14,
-                        }}
-                      >
-                        <Typography.Text
-                          strong
-                          style={{ color: token.colorPrimary }}
-                        >
-                          By submitting this form, you confirm you’re authorized
-                          to represent this venue, agree to the Ahangama Pass
-                          Partner Terms, and your venue will go live as an
-                          Ahangama Pass partner.
-                        </Typography.Text>
-                      </div>
+                      <Typography.Title level={4} style={{ marginTop: 0 }}>
+                        Before You Go Live
+                      </Typography.Title>
 
                       <Form.Item
-                        name="agreeToTerms"
+                        name="confirmRepresentVenue"
                         valuePropName="checked"
+                        style={{ marginBottom: 8 }}
                         rules={[
                           {
                             validator: (_, value) =>
@@ -815,7 +804,51 @@ export function PartnerSignupForm() {
                                 ? Promise.resolve()
                                 : Promise.reject(
                                     new Error(
-                                      "Please confirm your authorization and agreement",
+                                      "Please confirm you represent this venue",
+                                    ),
+                                  ),
+                          },
+                        ]}
+                      >
+                        <Checkbox style={{ fontSize: 16 }}>
+                          <strong>I confirm I represent this venue</strong>
+                        </Checkbox>
+                      </Form.Item>
+
+                      <Form.Item
+                        name="agreeToTerms"
+                        valuePropName="checked"
+                        style={{ marginBottom: 8 }}
+                        rules={[
+                          {
+                            validator: (_, value) =>
+                              value
+                                ? Promise.resolve()
+                                : Promise.reject(
+                                    new Error(
+                                      "Please agree to the Partner Terms",
+                                    ),
+                                  ),
+                          },
+                        ]}
+                      >
+                        <Checkbox style={{ fontSize: 16 }}>
+                          <strong>I agree to the Partner Terms</strong>
+                        </Checkbox>
+                      </Form.Item>
+
+                      <Form.Item
+                        name="understandNoFees"
+                        valuePropName="checked"
+                        style={{ marginBottom: 8 }}
+                        rules={[
+                          {
+                            validator: (_, value) =>
+                              value
+                                ? Promise.resolve()
+                                : Promise.reject(
+                                    new Error(
+                                      "Please confirm you understand there are no commissions or fees",
                                     ),
                                   ),
                           },
@@ -823,13 +856,21 @@ export function PartnerSignupForm() {
                       >
                         <Checkbox style={{ fontSize: 16 }}>
                           <strong>
-                            I confirm that I am authorized to represent this
-                            venue and agree to the Ahangama Pass Partner Terms.
-                            By submitting this form, my venue will go live as an
-                            Ahangama Pass partner.
+                            I understand there are no commissions or fees
                           </strong>
                         </Checkbox>
                       </Form.Item>
+
+                      <div style={{ marginTop: 12, marginBottom: 18 }}>
+                        <Typography.Text strong>
+                          What happens next?
+                        </Typography.Text>
+                        <ol style={{ marginTop: 10, marginBottom: 0 }}>
+                          <li>We review your listing</li>
+                          <li>You receive confirmation within 48 hours</li>
+                          <li>You go live on Ahangama.com</li>
+                        </ol>
+                      </div>
 
                       <Form.Item
                         name="agreeToMarketing"
