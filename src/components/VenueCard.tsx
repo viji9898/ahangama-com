@@ -576,8 +576,6 @@ export function VenueCard({
         onClose={closeDetails}
         venue={venue}
         distanceText={distanceText}
-        ratingLine={ratingLine}
-        discountLabel={discountLabel}
         excerptLine={excerptLine}
         offerLabels={offerLabels}
         mapsUrl={mapsUrl}
