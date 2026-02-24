@@ -4,6 +4,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
+import { HowItWorks } from "../../components/desktop/HowItWorks.Desktop";
 import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
 import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
@@ -311,6 +312,10 @@ export default function HomeDesktop() {
       />
 
       <div style={{ marginBottom: 12 }}>
+        <HowItWorks />
+      </div>
+
+      <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
           onGuideClick={() => {
             const text = encodeURIComponent(
@@ -325,6 +330,10 @@ export default function HomeDesktop() {
         />
       </div>
 
+      <div style={{ marginTop: 12 }}>
+        <SavingsSummary />
+      </div>
+
       <div id="included">
         {!loading && !error && venues.length > 0 ? (
           <VenueFiltersDesktop
@@ -332,10 +341,6 @@ export default function HomeDesktop() {
             onSearchTextChange={setSearchText}
           />
         ) : null}
-      </div>
-
-      <div style={{ marginTop: 12 }}>
-        <SavingsSummary />
       </div>
 
       <div style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}>

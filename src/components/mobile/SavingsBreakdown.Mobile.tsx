@@ -115,7 +115,7 @@ export function SavingsBreakdownMobile() {
               letterSpacing: -0.1,
             }}
           >
-            You could save $85 in 14 days
+            You could save $85 in 15 days
           </div>
           <div
             style={{
