@@ -16,9 +16,7 @@ export function PartnerSignupShell({ children }: Props) {
 
   const whatsappUrl = useMemo(() => {
     const phone = "94777908790";
-    const text = encodeURIComponent(
-      "Hi, I need with the partner sgn up form.",
-    );
+    const text = encodeURIComponent("Hi, I need with the partner sgn up form.");
     return `https://wa.me/${phone}?text=${text}`;
   }, []);
 
