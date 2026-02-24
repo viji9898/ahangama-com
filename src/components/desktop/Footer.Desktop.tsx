@@ -70,17 +70,48 @@ export function FooterDesktop() {
             padding: 12,
           }}
         >
-          <Typography.Text
-            strong
+          <div
             style={{
-              display: "block",
-              fontSize: 12,
-              letterSpacing: 0.2,
-              textTransform: "uppercase",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 10,
             }}
           >
-            How It Works
-          </Typography.Text>
+            <Typography.Text
+              strong
+              style={{
+                display: "block",
+                fontSize: 12,
+                letterSpacing: 0.2,
+                textTransform: "uppercase",
+              }}
+            >
+              How It Works
+            </Typography.Text>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={addToAppleWallet}
+                alt="Add to Apple Wallet"
+                style={{ height: 30, width: "auto", display: "block" }}
+                loading="lazy"
+              />
+              <img
+                src={addToGoogleWallet}
+                alt="Add to Google Wallet"
+                style={{ height: 30, width: "auto", display: "block" }}
+                loading="lazy"
+              />
+            </div>
+          </div>
 
           <div
             style={{
@@ -168,31 +199,6 @@ export function FooterDesktop() {
             <Typography.Text type="secondary" style={{ fontSize: 12 }}>
               🔒 Secured by Stripe
             </Typography.Text>
-          </div>
-
-          <div
-            style={{
-              marginTop: 10,
-
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 10,
-              flexWrap: "wrap",
-            }}
-          >
-            <img
-              src={addToAppleWallet}
-              alt="Add to Apple Wallet"
-              style={{ height: 28, width: "auto", display: "block" }}
-              loading="lazy"
-            />
-            <img
-              src={addToGoogleWallet}
-              alt="Add to Google Wallet"
-              style={{ height: 28, width: "auto", display: "block" }}
-              loading="lazy"
-            />
           </div>
         </div>
       </div>
