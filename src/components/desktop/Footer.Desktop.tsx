@@ -251,7 +251,7 @@ export function FooterDesktop() {
           <Space direction="vertical" size={8} style={{ width: "100%" }}>
             <SectionTitle>Contact</SectionTitle>
             <Space direction="vertical" size={6} style={{ width: "100%" }}>
-              <ItemLink href="#">Email</ItemLink>
+              <ItemLink href="mailto:team@ahangama.com">Email</ItemLink>
               <ItemLink
                 href="https://www.instagram.com/ahangama.pass/"
                 external
