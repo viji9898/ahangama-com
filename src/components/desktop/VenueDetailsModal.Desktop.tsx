@@ -28,6 +28,8 @@ type Props = {
 const numberFormatter = new Intl.NumberFormat("en-US");
 
 function getRatingDisplay(venue: Venue): {
+  stars: number;
+  reviews: number;
   text: string;
   isTopRated: boolean;
 } | null {
@@ -55,6 +57,8 @@ function getRatingDisplay(venue: Venue): {
 
   const isTopRated = stars >= 4.8 && reviews >= 20;
   return {
+    stars,
+    reviews,
     text: `⭐ ${stars.toFixed(1)} • ${numberFormatter.format(reviews)} reviews`,
     isTopRated,
   };
@@ -121,6 +125,9 @@ export function VenueDetailsModalDesktop({
   const { token } = theme.useToken();
   const screens = Grid.useBreakpoint();
   const isSmall = !screens.md;
+
+  const distance =
+    distanceText && distanceText.trim() ? distanceText.trim() : "";
 
   const logoUrl =
     typeof venue.logo === "string" && venue.logo.trim()
@@ -265,10 +272,54 @@ export function VenueDetailsModalDesktop({
                     />
                   </div>
                 ) : null}
-                <span>
-                  {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
-                  {venue.name}
-                </span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <span>
+                    {venue.emoji?.length ? `${venue.emoji[0]} ` : ""}
+                    {venue.name}
+                  </span>
+
+                  {venue.area || rating || distance ? (
+                    <Typography.Text
+                      type="secondary"
+                      style={{ marginTop: 4, fontSize: 12, lineHeight: "16px" }}
+                    >
+                      {[
+                        venue.area ? (
+                          <span key="area">{venue.area}</span>
+                        ) : null,
+                        rating ? (
+                          <span key="stars">⭐ {rating.stars.toFixed(1)}</span>
+                        ) : null,
+                        rating ? (
+                          <span key="reviews">
+                            {numberFormatter.format(rating.reviews)} Google
+                            reviews
+                          </span>
+                        ) : null,
+                        distance ? (
+                          <span key="distance">{distance}</span>
+                        ) : null,
+                      ]
+                        .filter(Boolean)
+                        .map((item, index, arr) => (
+                          <span key={(item as any).key ?? index}>
+                            {item}
+                            {index < arr.length - 1 ? (
+                              <span
+                                aria-hidden="true"
+                                style={{
+                                  margin: "0 8px",
+                                  color: token.colorTextTertiary,
+                                }}
+                              >
+                                ·
+                              </span>
+                            ) : null}
+                          </span>
+                        ))}
+                    </Typography.Text>
+                  ) : null}
+                </div>
               </div>
               {discountPercent != null ? (
                 <div
@@ -460,28 +511,6 @@ export function VenueDetailsModalDesktop({
           </Space>
 
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
-            {venue.area ? (
-              <Typography.Text type="secondary">
-                📍 {venue.area}
-                {distanceText ? ` · ${distanceText}` : ""}
-              </Typography.Text>
-            ) : null}
-
-            {rating ? (
-              <Typography.Text
-                type="secondary"
-                style={{ fontSize: 13, fontWeight: 600 }}
-              >
-                {rating.text}
-                {rating.isTopRated ? (
-                  <span style={{ fontWeight: 600 }}>
-                    {" "}
-                    · Top-rated in Ahangama
-                  </span>
-                ) : null}
-              </Typography.Text>
-            ) : null}
-
             {venue.categories?.length ? (
               <div>
                 <Typography.Text strong>Categories</Typography.Text>

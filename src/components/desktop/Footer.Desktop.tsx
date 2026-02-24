@@ -195,7 +195,7 @@ export function FooterDesktop() {
               <ItemLink href="https://pass.ahangama.com" external>
                 How it works
               </ItemLink>
-              <ItemLink href="/partnership">Partner with us</ItemLink>
+              <ItemLink href="/partner-signup">Partner with us</ItemLink>
             </Space>
           </Space>
         </Col>
