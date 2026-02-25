@@ -3,14 +3,12 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
 import { FreeGuideWhatsAppCtaMobile } from "../../components/mobile/FreeGuideWhatsAppCta.Mobile";
 import { SavingsBreakdownMobile } from "../../components/mobile/SavingsBreakdown.Mobile";
-import { VenueFiltersMobile } from "../../components/mobile/VenueFilters.Mobile";
 import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
 import { SocialProofMobile } from "../../components/mobile/SocialProof.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
 import {
-  applyVenueListQuery,
   filterVenues,
   parseVenueListQuery,
 } from "../../utils/venueList";
@@ -702,7 +700,7 @@ export default function HomeMobile() {
   const destinationSlug = String(params.destinationSlug || "ahangama");
   const passUrl = "https://pass.ahangama.com";
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = useMemo(
     () => parseVenueListQuery(searchParams),
     [searchParams],
@@ -773,8 +771,6 @@ export default function HomeMobile() {
     return map;
   }, [filteredVenues, userLocation]);
 
-  const nearestAvailable = userLocation != null && distanceById.size > 0;
-
   const handleSeeAllOffers = () => {
     requestAnimationFrame(() => {
       offersTopRef.current?.scrollIntoView({
@@ -807,16 +803,6 @@ export default function HomeMobile() {
         href={passUrl}
         onPurchase={() => {
           window.open(passUrl, "_blank", "noopener,noreferrer");
-        }}
-      />
-
-      <VenueFiltersMobile
-        value={query}
-        nearestAvailable={nearestAvailable}
-        onChange={(next) => {
-          setSearchParams(applyVenueListQuery(searchParams, next), {
-            replace: true,
-          });
         }}
       />
 
