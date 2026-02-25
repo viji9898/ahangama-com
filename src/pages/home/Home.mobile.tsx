@@ -1,17 +1,20 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import { Link, useParams } from "react-router-dom";
 import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
 import { FreeGuideWhatsAppCtaMobile } from "../../components/mobile/FreeGuideWhatsAppCta.Mobile";
-import { SavingsBreakdownMobile } from "../../components/mobile/SavingsBreakdown.Mobile";
 import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
-import { SocialProofMobile } from "../../components/mobile/SocialProof.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
+import { EDITORIAL_TAGS } from "../../config/editorialTags";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
-import {
-  filterVenues,
-  parseVenueListQuery,
-} from "../../utils/venueList";
+import { hasEditorialTag } from "../../utils/venueEditorial";
+import { sortVenues } from "../../utils/venueList";
 
 export type LatLng = { lat: number; lng: number };
 
@@ -700,11 +703,8 @@ export default function HomeMobile() {
   const destinationSlug = String(params.destinationSlug || "ahangama");
   const passUrl = "https://pass.ahangama.com";
 
-  const [searchParams] = useSearchParams();
-  const query = useMemo(
-    () => parseVenueListQuery(searchParams),
-    [searchParams],
-  );
+  const [passOnly, setPassOnly] = useState(false);
+  const [editorialTag, setEditorialTag] = useState<string>("");
 
   const [ctaVisible, setCtaVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
@@ -724,10 +724,36 @@ export default function HomeMobile() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const filteredVenues = useMemo(
-    () => filterVenues(venues, query),
-    [venues, query],
-  );
+  const sortedVenues = useMemo(() => sortVenues(venues, "curated"), [venues]);
+
+  const visibleVenues = useMemo(() => {
+    let list = sortedVenues;
+    if (passOnly) list = list.filter((v) => Boolean(v.isPassVenue));
+    if (editorialTag)
+      list = list.filter((v) => hasEditorialTag(v, editorialTag));
+    return list;
+  }, [sortedVenues, passOnly, editorialTag]);
+
+  const buildVenuesHref = (overrides: Record<string, string>) => {
+    const p = new URLSearchParams({ destinationSlug, sort: "curated" });
+    for (const [k, v] of Object.entries(overrides)) p.set(k, v);
+    return `/venues?${p.toString()}`;
+  };
+
+  const pillStyle = (active: boolean): CSSProperties => ({
+    whiteSpace: "nowrap",
+    borderRadius: 999,
+    padding: "8px 12px",
+    fontSize: 13,
+    fontWeight: 850,
+    border: active
+      ? "1px solid rgba(0,0,0,0.16)"
+      : "1px solid rgba(0,0,0,0.08)",
+    background: active ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.78)",
+    color: "#222",
+    cursor: "pointer",
+    flex: "0 0 auto",
+  });
 
   const handleSeeAllOffers = () => {
     requestAnimationFrame(() => {
@@ -773,9 +799,83 @@ export default function HomeMobile() {
           padding: 0,
         }}
       >
-        <SavingsBreakdownMobile />
-
         <FreeGuideWhatsAppCtaMobile />
+
+        <div style={{ padding: "0 8px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              overflowX: "auto",
+              WebkitOverflowScrolling: "touch",
+              padding: "8px 0",
+            }}
+            aria-label="Venue filters"
+          >
+            <button
+              type="button"
+              onClick={() => setPassOnly((v) => !v)}
+              style={pillStyle(passOnly)}
+              aria-pressed={passOnly}
+            >
+              Ahangama Pass
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setEditorialTag("")}
+              style={pillStyle(!editorialTag)}
+              aria-pressed={!editorialTag}
+            >
+              All
+            </button>
+
+            {EDITORIAL_TAGS.slice(0, 12).map((tag) => {
+              const active = editorialTag === tag;
+              return (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => setEditorialTag(active ? "" : tag)}
+                  style={pillStyle(active)}
+                  aria-pressed={active}
+                >
+                  {tag}
+                </button>
+              );
+            })}
+
+            <Link
+              to={buildVenuesHref({
+                ...(passOnly ? { pass: "1" } : {}),
+                ...(editorialTag ? { tag: editorialTag } : {}),
+              })}
+              style={{ textDecoration: "none", flex: "0 0 auto" }}
+            >
+              <div style={pillStyle(false)}>View all</div>
+            </Link>
+          </div>
+
+          {editorialTag ? (
+            <div
+              style={{
+                marginTop: 6,
+                border: "1px solid rgba(0,0,0,0.06)",
+                background: "rgba(255,255,255,0.92)",
+                borderRadius: 12,
+                padding: 10,
+              }}
+              aria-live="polite"
+            >
+              <div style={{ fontWeight: 900, fontSize: 12, color: "#222" }}>
+                Editorial tag: {editorialTag}
+              </div>
+              <div style={{ marginTop: 2, fontSize: 12, color: "#666" }}>
+                Curated by Ahangama. Showing venues that match this vibe.
+              </div>
+            </div>
+          ) : null}
+        </div>
 
         <div style={{ background: "var(--venue-listing-bg)" }}>
           {error ? (
@@ -799,24 +899,28 @@ export default function HomeMobile() {
             </div>
           ) : null}
 
-          {!loading && !error && filteredVenues.length === 0 ? (
+          {!loading && !error && visibleVenues.length === 0 ? (
             <div style={{ color: "#888", textAlign: "center", marginTop: 40 }}>
               No venues found.
             </div>
           ) : null}
 
-          {!loading && !error && filteredVenues.length > 0 ? (
+          {!loading && !error && visibleVenues.length > 0 ? (
             <>
               <div ref={offersTopRef} />
-              <div style={{ marginTop: 14 }}>
-                <SocialProofMobile />
-              </div>
 
-              <div style={{ marginTop: 14 }}>
-                <FooterDesktop />
+              <div style={{ padding: "10px 8px 14px" }}>
+                {visibleVenues.map((v) => (
+                  <div key={String(v.id)} style={{ marginBottom: 10 }}>
+                    <HomeVenueCardMobile venue={v} variant="list" />
+                  </div>
+                ))}
               </div>
             </>
           ) : null}
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <FooterDesktop />
         </div>
       </div>
     </div>
