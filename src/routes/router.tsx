@@ -6,48 +6,48 @@ import PartnersPage from "../pages/partners";
 import PartnerSignupSuccessPage from "../pages/partners/success";
 import LegalPage from "../pages/legal";
 import NotFoundPage from "../pages/not-found";
-import { AppShell } from "../app/AppShell";
+import { ResponsiveAppShell } from "../app/ResponsiveAppShell";
 import { PartnerSignupShell } from "../app/PartnerSignupShell";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <HomePage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
     path: "/venues",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <VenuesPage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
     path: "/partners",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <HomePage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
     path: "/partnership",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <PartnershipPage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
     path: "/legal",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <LegalPage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
@@ -69,17 +69,17 @@ export const router = createBrowserRouter([
   {
     path: "/destinations/:destinationSlug",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <HomePage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
   {
     path: "*",
     element: (
-      <AppShell>
+      <ResponsiveAppShell>
         <NotFoundPage />
-      </AppShell>
+      </ResponsiveAppShell>
     ),
   },
 ]);

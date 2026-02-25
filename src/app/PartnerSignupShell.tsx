@@ -14,6 +14,8 @@ export function PartnerSignupShell({ children }: Props) {
   const isMobile = useIsMobile();
   const [helpOpen, setHelpOpen] = useState(false);
 
+  const headerHeightPx = 64;
+
   const whatsappUrl = useMemo(() => {
     const phone = "94777908790";
     const text = encodeURIComponent("Hi, I need with the partner sgn up form.");
@@ -30,7 +32,12 @@ export function PartnerSignupShell({ children }: Props) {
   }
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout
+      style={{
+        minHeight: "100vh",
+        ["--app-shell-header-height" as any]: `${headerHeightPx}px`,
+      }}
+    >
       <Layout.Header
         style={{
           display: "flex",

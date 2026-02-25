@@ -25,6 +25,8 @@ export function AppShell({ children }: Props) {
   const isMobile = useIsMobile();
   const [helpOpen, setHelpOpen] = useState(false);
 
+  const headerHeightPx = 64;
+
   const whatsappUrl = useMemo(() => {
     const phone = "94777908790";
     const text = encodeURIComponent("Hi, I need help with the Ahangama Pass.");
@@ -58,7 +60,12 @@ export function AppShell({ children }: Props) {
         },
       }}
     >
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout
+        style={{
+          minHeight: "100vh",
+          ["--app-shell-header-height" as any]: `${headerHeightPx}px`,
+        }}
+      >
         <Layout.Header
           style={{
             display: "flex",

@@ -16,8 +16,6 @@ import { useVenues } from "../../hooks/useVenues";
 import { hasEditorialTag } from "../../utils/venueEditorial";
 import { sortVenues } from "../../utils/venueList";
 
-const APP_SHELL_HEADER_HEIGHT_PX = 64;
-
 export type LatLng = { lat: number; lng: number };
 
 export function getDistanceFromLatLonInKm(
@@ -145,7 +143,7 @@ export function VenueSearchAndCategoriesMobile({
         background: "#fff",
         borderBottom: "1px solid rgba(0,0,0,0.06)",
         position: "sticky",
-        top: APP_SHELL_HEADER_HEIGHT_PX,
+        top: "var(--app-shell-header-height)",
         zIndex: 10,
       }}
     >
@@ -808,7 +806,7 @@ export default function HomeMobile() {
         <div
           style={{
             position: "sticky",
-            top: APP_SHELL_HEADER_HEIGHT_PX,
+            top: "var(--app-shell-header-height)",
             zIndex: 20,
             background: "var(--venue-listing-bg)",
             borderBottom: "1px solid rgba(0,0,0,0.06)",
