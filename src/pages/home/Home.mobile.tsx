@@ -597,6 +597,7 @@ export function TopRatedCafesMobile({ venues }: { venues: Venue[] }) {
 
 type VenueSectionCarouselProps = {
   title: string;
+  subtitle?: string;
   venues: Venue[];
   viewAllHref?: string;
   userLocation?: LatLng | null;
@@ -604,6 +605,7 @@ type VenueSectionCarouselProps = {
 
 export function VenueSectionCarouselMobile({
   title,
+  subtitle,
   venues,
   viewAllHref,
   userLocation = null,
@@ -623,8 +625,15 @@ export function VenueSectionCarouselMobile({
           marginBottom: 10,
         }}
       >
-        <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
-          {title}
+        <div>
+          <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
+            {title}
+          </div>
+          {subtitle ? (
+            <div style={{ marginTop: 2, fontSize: 12, color: "#666" }}>
+              {subtitle}
+            </div>
+          ) : null}
         </div>
         {viewAllHref ? (
           <Link
@@ -726,6 +735,8 @@ export default function HomeMobile() {
 
   const sortedVenues = useMemo(() => sortVenues(venues, "curated"), [venues]);
 
+  const homeEditorialTags = useMemo(() => EDITORIAL_TAGS.slice(0, 15), []);
+
   const visibleVenues = useMemo(() => {
     let list = sortedVenues;
     if (passOnly) list = list.filter((v) => Boolean(v.isPassVenue));
@@ -733,6 +744,16 @@ export default function HomeMobile() {
       list = list.filter((v) => hasEditorialTag(v, editorialTag));
     return list;
   }, [sortedVenues, passOnly, editorialTag]);
+
+  const visibleVenuesByTag = useMemo(() => {
+    const tagList = editorialTag ? [editorialTag] : homeEditorialTags;
+    return tagList.map((tag) => {
+      let list = sortedVenues;
+      if (passOnly) list = list.filter((v) => Boolean(v.isPassVenue));
+      list = list.filter((v) => hasEditorialTag(v, tag));
+      return { tag, venues: list };
+    });
+  }, [sortedVenues, passOnly, editorialTag, homeEditorialTags]);
 
   const buildVenuesHref = (overrides: Record<string, string>) => {
     const p = new URLSearchParams({ destinationSlug, sort: "curated" });
@@ -830,7 +851,7 @@ export default function HomeMobile() {
               All
             </button>
 
-            {EDITORIAL_TAGS.slice(0, 12).map((tag) => {
+            {homeEditorialTags.map((tag) => {
               const active = editorialTag === tag;
               return (
                 <button
@@ -909,13 +930,18 @@ export default function HomeMobile() {
             <>
               <div ref={offersTopRef} />
 
-              <div style={{ padding: "10px 8px 14px" }}>
-                {visibleVenues.map((v) => (
-                  <div key={String(v.id)} style={{ marginBottom: 10 }}>
-                    <HomeVenueCardMobile venue={v} variant="list" />
-                  </div>
-                ))}
-              </div>
+              {visibleVenuesByTag.map(({ tag, venues: taggedVenues }) => (
+                <VenueSectionCarouselMobile
+                  key={tag}
+                  title={tag}
+                  subtitle="Curated by Ahangama. Venues that match this vibe."
+                  venues={taggedVenues}
+                  viewAllHref={buildVenuesHref({
+                    ...(passOnly ? { pass: "1" } : {}),
+                    ...(tag ? { tag } : {}),
+                  })}
+                />
+              ))}
             </>
           ) : null}
         </div>
