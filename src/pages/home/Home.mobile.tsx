@@ -706,7 +706,6 @@ export default function HomeMobile() {
     [searchParams],
   );
 
-  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const offersTopRef = useRef<HTMLDivElement | null>(null);
@@ -715,21 +714,6 @@ export default function HomeMobile() {
     destinationSlug,
     liveOnly: true,
   });
-
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 10000 },
-    );
-  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -744,32 +728,6 @@ export default function HomeMobile() {
     () => filterVenues(venues, query),
     [venues, query],
   );
-
-  const distanceById = useMemo(() => {
-    const map = new Map<string, number>();
-    if (!userLocation) return map;
-
-    for (const v of filteredVenues) {
-      const pos =
-        v.position?.lat != null && v.position?.lng != null
-          ? v.position
-          : v.lat != null && v.lng != null
-            ? { lat: v.lat, lng: v.lng }
-            : null;
-      if (!pos) continue;
-
-      const distanceKm = getDistanceFromLatLonInKm(
-        userLocation.lat,
-        userLocation.lng,
-        pos.lat,
-        pos.lng,
-      );
-      if (!Number.isFinite(distanceKm)) continue;
-      map.set(String(v.id), distanceKm);
-    }
-
-    return map;
-  }, [filteredVenues, userLocation]);
 
   const handleSeeAllOffers = () => {
     requestAnimationFrame(() => {

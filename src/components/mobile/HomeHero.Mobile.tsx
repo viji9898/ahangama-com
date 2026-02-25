@@ -39,7 +39,7 @@ export function HomeHeroMobile({ ...props }: Props) {
               color: "#1E1E1E",
             }}
           >
-            Ahanagama Guide 2026
+            Ahangama Guide 2026
           </Title>
 
           <Text
