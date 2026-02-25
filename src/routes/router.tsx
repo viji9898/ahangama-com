@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/home";
+import VenuesPage from "../pages/venues";
 import PartnershipPage from "../pages/partnership";
 import PartnersPage from "../pages/partners";
 import PartnerSignupSuccessPage from "../pages/partners/success";
@@ -14,6 +15,14 @@ export const router = createBrowserRouter([
     element: (
       <AppShell>
         <HomePage />
+      </AppShell>
+    ),
+  },
+  {
+    path: "/venues",
+    element: (
+      <AppShell>
+        <VenuesPage />
       </AppShell>
     ),
   },

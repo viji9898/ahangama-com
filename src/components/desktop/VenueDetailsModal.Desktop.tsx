@@ -145,7 +145,9 @@ export function VenueDetailsModalDesktop({
   const [whyExpanded, setWhyExpanded] = useState(false);
   const dividerStyle = { margin: "12px 0" };
 
-  const discountPercent = getDiscountPercent(venue.discount);
+  const discountPercent = isPassPartner
+    ? getDiscountPercent(venue.discount)
+    : null;
   const offerScope =
     discountPercent != null ? toOfferScope(offerLabels[0] ?? null, venue) : "";
   const typicalSavingRange = { min: 5, max: 15 };
@@ -153,7 +155,9 @@ export function VenueDetailsModalDesktop({
   const howToClaimText =
     venue.howToClaim && String(venue.howToClaim).trim()
       ? String(venue.howToClaim).trim()
-      : "Show your Ahangama Pass at checkout.";
+      : isPassPartner
+        ? "Show your Ahangama Pass at checkout."
+        : "Check with the venue for current offers and booking details.";
 
   const whyCopy =
     venue.excerpt && String(venue.excerpt).trim()
@@ -426,9 +430,11 @@ export function VenueDetailsModalDesktop({
             <Typography.Text type="secondary" style={{ display: "block" }}>
               ✅ Takes 5 seconds
             </Typography.Text>
-            <Typography.Text type="secondary" style={{ display: "block" }}>
-              ✅ Instant discount
-            </Typography.Text>
+            {isPassPartner ? (
+              <Typography.Text type="secondary" style={{ display: "block" }}>
+                ✅ Instant discount
+              </Typography.Text>
+            ) : null}
           </div>
         </div>
 
@@ -479,7 +485,7 @@ export function VenueDetailsModalDesktop({
           }}
         >
           <Space direction="vertical" size={16} style={{ width: "100%" }}>
-            {offerLabels.length ? (
+            {isPassPartner && offerLabels.length ? (
               <div>
                 <Typography.Text strong>Offers</Typography.Text>
                 <div style={{ marginTop: 6 }}>

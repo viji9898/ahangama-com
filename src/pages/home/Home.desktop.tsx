@@ -1,24 +1,18 @@
-import { Alert, Col, Empty, Row, Spin, Typography } from "antd";
+import { Alert, Col, Collapse, Empty, Row, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SavingsSummary } from "../../components/SavingsSummary";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
 import { HowItWorks } from "../../components/desktop/HowItWorks.Desktop";
 import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
+import { PassExplainerDesktop } from "../../components/desktop/PassExplainer.Desktop";
 import { SocialProofBannerDesktop } from "../../components/desktop/SocialProofBanner.Desktop";
-import { VenueFiltersDesktop } from "../../components/desktop/VenueFilters.Desktop";
 import { VenueCard } from "../../components/VenueCard";
+import { EDITORIAL_TAGS } from "../../config/editorialTags";
 import { useVenues } from "../../hooks/useVenues";
-import type { Venue } from "../../types/venue";
-
-type SectionKey =
-  | "staff-picks"
-  | "near-you"
-  | "post-surf-fuel"
-  | "laptop-friendly"
-  | "sunset-spots"
-  | "wellness-reset";
+import { hasEditorialTag } from "../../utils/venueEditorial";
+import { sortVenues } from "../../utils/venueList";
 
 type LatLng = { lat: number; lng: number };
 
@@ -41,46 +35,18 @@ function getDistanceFromLatLonInKm(
   return R * c;
 }
 
-function venueHaystack(v: Venue): string {
-  return [
-    v.name,
-    v.area,
-    v.excerpt,
-    v.cardPerk,
-    ...(v.categories ?? []),
-    ...(v.bestFor ?? []),
-    ...(v.tags ?? []),
-  ]
-    .filter((x): x is string => Boolean(x))
-    .join(" ")
-    .toLowerCase();
-}
-
-function matchesAnyKeyword(v: Venue, keywords: string[]): boolean {
-  const haystack = venueHaystack(v);
-  return keywords.some((k) => haystack.includes(k));
-}
-
 export default function HomeDesktop() {
   const params = useParams();
   const destinationSlug = String(params.destinationSlug || "ahangama");
 
-  const [searchParams] = useSearchParams();
-
-  const [searchText, setSearchText] = useState("");
-  const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
   const [userLocation, setUserLocation] = useState<LatLng | null>(null);
+  const [passOnly, setPassOnly] = useState(false);
+  const [editorialTag, setEditorialTag] = useState<string>("");
 
   const { venues, loading, error } = useVenues({
     destinationSlug,
     liveOnly: true,
   });
-
-  // Enables footer "Best Cafés" / "Best Surf Spots" quick links via ?q=
-  const qParam = searchParams.get("q") ?? "";
-  useEffect(() => {
-    setSearchText((prev) => (prev === qParam ? prev : qParam));
-  }, [qParam]);
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -93,38 +59,15 @@ export default function HomeDesktop() {
         });
       },
       () => {},
-      { enableHighAccuracy: false, timeout: 8000 },
+      { enableHighAccuracy: true, timeout: 10000 },
     );
   }, []);
-
-  const filteredVenues = useMemo(() => {
-    const q = searchText.trim().toLowerCase();
-
-    const base = venues.filter((v) => {
-      if (!q) return true;
-
-      const haystack = [
-        v.name,
-        v.area,
-        v.excerpt,
-        ...(v.categories ?? []),
-        ...(v.bestFor ?? []),
-        ...(v.tags ?? []),
-      ]
-        .filter((x): x is string => Boolean(x))
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(q);
-    });
-    return base;
-  }, [venues, searchText]);
 
   const distanceById = useMemo(() => {
     const map = new Map<string, number>();
     if (!userLocation) return map;
 
-    for (const v of filteredVenues) {
+    for (const v of venues) {
       const pos =
         v.position?.lat != null && v.position?.lng != null
           ? v.position
@@ -132,6 +75,7 @@ export default function HomeDesktop() {
             ? { lat: v.lat, lng: v.lng }
             : null;
       if (!pos) continue;
+
       const distanceKm = getDistanceFromLatLonInKm(
         userLocation.lat,
         userLocation.lng,
@@ -143,182 +87,25 @@ export default function HomeDesktop() {
     }
 
     return map;
-  }, [filteredVenues, userLocation]);
+  }, [venues, userLocation]);
 
-  const sections = useMemo(() => {
-    const base = filteredVenues;
+  const sortedVenues = useMemo(
+    () => sortVenues(venues, "curated", distanceById),
+    [venues, distanceById],
+  );
 
-    const staffPicksAll = base.filter((v) =>
-      matchesAnyKeyword(v, [
-        "staff pick",
-        "staff picks",
-        "editor pick",
-        "editor's pick",
-        "editors pick",
-        "recommended",
-        "must try",
-        "must-try",
-      ]),
-    );
+  const visibleVenues = useMemo(() => {
+    let list = sortedVenues;
+    if (passOnly) list = list.filter((v) => Boolean(v.isPassVenue));
+    if (editorialTag)
+      list = list.filter((v) => hasEditorialTag(v, editorialTag));
+    return list;
+  }, [sortedVenues, passOnly, editorialTag]);
 
-    const nearYouAll = !userLocation
-      ? ([] as Venue[])
-      : base
-          .map((v) => {
-            const pos =
-              v.position?.lat != null && v.position?.lng != null
-                ? v.position
-                : v.lat != null && v.lng != null
-                  ? { lat: v.lat, lng: v.lng }
-                  : null;
-            const distance =
-              pos != null
-                ? getDistanceFromLatLonInKm(
-                    userLocation.lat,
-                    userLocation.lng,
-                    pos.lat,
-                    pos.lng,
-                  )
-                : null;
-            return { v, distance };
-          })
-          .filter((x) => x.distance != null)
-          .sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0))
-          .map((x) => x.v);
-
-    const postSurfFuelAll = base.filter((v) =>
-      matchesAnyKeyword(v, [
-        "cafe",
-        "coffee",
-        "restaurant",
-        "food",
-        "eat",
-        "breakfast",
-        "brunch",
-        "smoothie",
-        "juice",
-        "bowl",
-        "bakery",
-      ]),
-    );
-
-    const laptopFriendlyAll = base.filter((v) =>
-      matchesAnyKeyword(v, [
-        "laptop",
-        "wifi",
-        "wi-fi",
-        "co-working",
-        "coworking",
-        "workspace",
-        "remote work",
-        "work-friendly",
-      ]),
-    );
-
-    const sunsetSpotsAll = base.filter((v) =>
-      matchesAnyKeyword(v, [
-        "sunset",
-        "view",
-        "rooftop",
-        "ocean",
-        "beach",
-        "bar",
-        "cocktail",
-      ]),
-    );
-
-    const wellnessResetAll = base.filter((v) => {
-      const cats = (v.categories ?? []).map((c) => String(c).toLowerCase());
-      const tags = (v.tags ?? []).map((t) => String(t).toLowerCase());
-      return (
-        cats.some((c) => c.includes("experiences") || c.includes("wellness")) ||
-        tags.some(
-          (t) =>
-            t.includes("wellness") ||
-            t.includes("spa") ||
-            t.includes("yoga") ||
-            t.includes("massage"),
-        )
-      );
-    });
-
-    return {
-      staffPicksAll,
-      nearYouAll,
-      postSurfFuelAll,
-      laptopFriendlyAll,
-      sunsetSpotsAll,
-      wellnessResetAll,
-    };
-  }, [filteredVenues, userLocation]);
-
-  const handleViewAll = (key: SectionKey) => {
-    setViewAllSection((prev) => (prev === key ? null : key));
-  };
-
-  const Section = ({
-    sectionKey,
-    title,
-    venuesAll,
-    collapsedCount,
-  }: {
-    sectionKey: SectionKey;
-    title: string;
-    venuesAll: typeof filteredVenues;
-    collapsedCount: number;
-  }) => {
-    if (!venuesAll.length) return null;
-
-    const expanded = viewAllSection === sectionKey;
-    const canToggle = venuesAll.length > collapsedCount;
-    const visibleVenues =
-      expanded || !canToggle ? venuesAll : venuesAll.slice(0, collapsedCount);
-
-    return (
-      <div style={{ marginTop: 18 }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "space-between",
-            gap: 12,
-            marginBottom: 8,
-          }}
-        >
-          <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
-            {title}
-          </div>
-          {canToggle ? (
-            <Typography.Link
-              onClick={() => handleViewAll(sectionKey)}
-              style={{ fontWeight: 800, fontSize: 12 }}
-            >
-              {expanded ? "Hide" : "View All"}
-            </Typography.Link>
-          ) : null}
-        </div>
-
-        <Row gutter={[12, 18]} justify="start">
-          {visibleVenues.map((v) => (
-            <Col
-              key={String(v.id)}
-              xs={24}
-              sm={12}
-              md={12}
-              lg={6}
-              style={{ display: "flex", justifyContent: "flex-start" }}
-            >
-              <VenueCard
-                venue={v}
-                variant="desktop"
-                distanceKm={distanceById.get(String(v.id)) ?? null}
-                cardStyle={{ width: 250, height: 340 }}
-              />
-            </Col>
-          ))}
-        </Row>
-      </div>
-    );
+  const buildVenuesHref = (overrides: Record<string, string>) => {
+    const p = new URLSearchParams({ destinationSlug, sort: "curated" });
+    for (const [k, v] of Object.entries(overrides)) p.set(k, v);
+    return `/venues?${p.toString()}`;
   };
 
   return (
@@ -339,14 +126,6 @@ export default function HomeDesktop() {
       />
 
       <div style={{ marginBottom: 12 }}>
-        <HowItWorks />
-      </div>
-
-      <div style={{ marginBottom: 12 }}>
-        <SocialProofBannerDesktop />
-      </div>
-
-      <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
           onGuideClick={() => {
             const text = encodeURIComponent(
@@ -362,19 +141,54 @@ export default function HomeDesktop() {
       </div>
 
       <div style={{ marginTop: 12 }}>
-        <SavingsSummary />
-      </div>
+        <div
+          style={{
+            background: "var(--venue-card-bg)",
+            borderRadius: 16,
+            border: "1px solid rgba(0,0,0,0.06)",
+            overflow: "hidden",
+          }}
+        >
+          <Collapse
+            defaultActiveKey={["what-is-pass"]}
+            ghost
+            bordered={false}
+            expandIconPosition="end"
+            items={[
+              {
+                key: "what-is-pass",
+                label: (
+                  <span style={{ fontWeight: 900, fontSize: 14 }}>
+                    What is the Ahangama Pass ?
+                  </span>
+                ),
+                children: (
+                  <div style={{ paddingBottom: 4 }}>
+                    <div style={{ marginBottom: 12 }}>
+                      <PassExplainerDesktop />
+                    </div>
 
-      <div id="included">
-        {!loading && !error && venues.length > 0 ? (
-          <VenueFiltersDesktop
-            searchText={searchText}
-            onSearchTextChange={setSearchText}
+                    <div style={{ marginBottom: 12 }}>
+                      <SavingsSummary />
+                    </div>
+
+                    <div style={{ marginBottom: 12 }}>
+                      <HowItWorks />
+                    </div>
+
+                    <SocialProofBannerDesktop />
+                  </div>
+                ),
+              },
+            ]}
           />
-        ) : null}
+        </div>
       </div>
 
-      <div style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}>
+      <div
+        id="included"
+        style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}
+      >
         {error ? (
           <Alert
             type="error"
@@ -400,51 +214,150 @@ export default function HomeDesktop() {
           <Empty description="No venues found" />
         ) : null}
 
-        {!loading &&
-        !error &&
-        venues.length > 0 &&
-        filteredVenues.length === 0 ? (
-          <Empty description="No venues match your filters" />
-        ) : null}
-
-        {!loading && !error && filteredVenues.length > 0 ? (
+        {!loading && !error && venues.length > 0 ? (
           <>
-            <Section
-              sectionKey="staff-picks"
-              title="✨ Staff Picks"
-              venuesAll={sections.staffPicksAll}
-              collapsedCount={4}
-            />
-            <Section
-              sectionKey="near-you"
-              title="📍 Near You"
-              venuesAll={sections.nearYouAll}
-              collapsedCount={6}
-            />
-            <Section
-              sectionKey="post-surf-fuel"
-              title="🏄 Post-Surf Fuel"
-              venuesAll={sections.postSurfFuelAll}
-              collapsedCount={6}
-            />
-            <Section
-              sectionKey="laptop-friendly"
-              title="💻 Laptop Friendly"
-              venuesAll={sections.laptopFriendlyAll}
-              collapsedCount={6}
-            />
-            <Section
-              sectionKey="sunset-spots"
-              title="🌅 Sunset Spots"
-              venuesAll={sections.sunsetSpotsAll}
-              collapsedCount={4}
-            />
-            <Section
-              sectionKey="wellness-reset"
-              title="🌿 Wellness Reset"
-              venuesAll={sections.wellnessResetAll}
-              collapsedCount={4}
-            />
+            <div style={{ marginTop: 18 }}>
+              <div style={{ marginBottom: 10 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 8,
+                    flexWrap: "wrap",
+                    alignItems: "center",
+                  }}
+                >
+                  <Tag
+                    style={{
+                      marginInlineEnd: 0,
+                      fontWeight: 800,
+                      borderRadius: 999,
+                      padding: "2px 12px",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      cursor: "default",
+                    }}
+                  >
+                    Ahangama Pass
+                    <Switch
+                      checked={passOnly}
+                      onChange={setPassOnly}
+                      size="small"
+                      aria-label="Toggle: show Ahangama Pass venues only"
+                    />
+                  </Tag>
+
+                  <Tag.CheckableTag
+                    checked={!editorialTag}
+                    onChange={() => setEditorialTag("")}
+                    style={{
+                      fontWeight: 800,
+                      borderRadius: 999,
+                      padding: "4px 12px",
+                      marginInlineEnd: 0,
+                    }}
+                  >
+                    All
+                  </Tag.CheckableTag>
+
+                  {EDITORIAL_TAGS.slice(0, 12).map((tag) => {
+                    const active = editorialTag === tag;
+                    return (
+                      <Tag.CheckableTag
+                        key={tag}
+                        checked={active}
+                        onChange={() => setEditorialTag(active ? "" : tag)}
+                        style={{
+                          fontWeight: 800,
+                          borderRadius: 999,
+                          padding: "4px 12px",
+                          marginInlineEnd: 0,
+                        }}
+                      >
+                        {tag}
+                      </Tag.CheckableTag>
+                    );
+                  })}
+
+                  <Link
+                    to={buildVenuesHref({
+                      ...(passOnly ? { pass: "1" } : {}),
+                      ...(editorialTag ? { tag: editorialTag } : {}),
+                    })}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Tag
+                      style={{
+                        marginInlineEnd: 0,
+                        fontWeight: 800,
+                        borderRadius: 999,
+                        padding: "2px 12px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      View all
+                    </Tag>
+                  </Link>
+                </div>
+
+                {editorialTag ? (
+                  <div
+                    style={{
+                      marginTop: 8,
+                      border: "1px solid rgba(0,0,0,0.06)",
+                      background: "rgba(255,255,255,0.92)",
+                      borderRadius: 12,
+                      padding: 10,
+                    }}
+                    aria-live="polite"
+                  >
+                    <div
+                      style={{ fontWeight: 900, fontSize: 12, color: "#222" }}
+                    >
+                      Editorial tag: {editorialTag}
+                    </div>
+                    <div style={{ marginTop: 2, fontSize: 12, color: "#666" }}>
+                      Curated by Ahangama. Showing venues that match this vibe.
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
+              {visibleVenues.length === 0 ? (
+                <Empty
+                  description={
+                    passOnly && editorialTag
+                      ? "No pass venues found for this editorial tag"
+                      : passOnly
+                        ? "No pass venues found"
+                        : editorialTag
+                          ? "No venues found for this editorial tag"
+                          : "No venues found"
+                  }
+                />
+              ) : (
+                <Row gutter={[12, 18]} justify="start">
+                  {visibleVenues.map((v) => (
+                    <Col
+                      key={String(v.id)}
+                      xs={24}
+                      sm={12}
+                      md={12}
+                      lg={8}
+                      xl={6}
+                      style={{ display: "flex", justifyContent: "flex-start" }}
+                    >
+                      <VenueCard
+                        venue={v}
+                        variant="desktop"
+                        distanceKm={distanceById.get(String(v.id)) ?? null}
+                        cardStyle={{ width: 250, height: 340 }}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </div>
           </>
         ) : null}
       </div>

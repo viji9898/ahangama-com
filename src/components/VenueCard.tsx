@@ -103,8 +103,14 @@ export function VenueCard({
 
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  const discountLabel = formatDiscountLabel(venue.discount);
-  const ribbonText = getPrimaryRibbonText(venue);
+  const isPassPartner = Boolean(venue.isPassVenue);
+  const passVenueBorder = isPassPartner
+    ? "1px solid color-mix(in srgb, var(--pass-primary) 28%, rgba(0,0,0,0.08))"
+    : undefined;
+  const discountLabel = isPassPartner
+    ? formatDiscountLabel(venue.discount)
+    : null;
+  const ribbonText = isPassPartner ? getPrimaryRibbonText(venue) : null;
   const ratingLine = (() => {
     const parsed =
       typeof venue.stars === "number"
@@ -129,10 +135,18 @@ export function VenueCard({
       ? `⭐ ${parsed.toFixed(1)} (${numberFormatter.format(reviewsCount)} reviews)`
       : `⭐ ${parsed.toFixed(1)}`;
   })();
-  const isPassPartner =
-    venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
-  const discountBadgeText = discountLabel ? ribbonText : null;
+  const discountBadgeText = discountLabel && ribbonText ? ribbonText : null;
   const distanceText = distanceKm != null ? formatDistance(distanceKm) : "";
+
+  const powerBackup = venue.powerBackup;
+  const powerBackupLabel =
+    powerBackup === "generator"
+      ? "⚡ Generator"
+      : powerBackup === "inverter"
+        ? "⚡ Inverter"
+        : powerBackup === "none"
+          ? "⚡ No backup"
+          : null;
 
   const instagramUrl =
     typeof venue.instagramUrl === "string" && venue.instagramUrl.trim()
@@ -178,7 +192,9 @@ export function VenueCard({
   const excerptLine =
     venue.excerpt != null && String(venue.excerpt).trim() !== ""
       ? String(venue.excerpt)
-      : venue.cardPerk != null && String(venue.cardPerk).trim() !== ""
+      : isPassPartner &&
+          venue.cardPerk != null &&
+          String(venue.cardPerk).trim() !== ""
         ? String(venue.cardPerk)
         : null;
 
@@ -223,12 +239,16 @@ export function VenueCard({
           ? {
               ...cardStyle,
               background: "var(--venue-card-bg)",
+              border: passVenueBorder,
               borderRadius: 14,
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
             }
-          : cardStyle
+          : {
+              ...(cardStyle ?? {}),
+              ...(passVenueBorder ? { border: passVenueBorder } : null),
+            }
       }
       styles={
         variant === "desktop"
@@ -270,6 +290,25 @@ export function VenueCard({
               }}
               loading="lazy"
             />
+
+            {venue.staffPick ? (
+              <div style={{ position: "absolute", top: 10, right: 10 }}>
+                <Tag
+                  style={{
+                    margin: 0,
+                    fontSize: 11,
+                    fontWeight: 900,
+                    borderRadius: 999,
+                    padding: "2px 10px",
+                    background: "rgba(255,255,255,0.82)",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    color: "#1A1A1A",
+                  }}
+                >
+                  Staff Pick
+                </Tag>
+              </div>
+            ) : null}
           </div>
         ) : undefined
       }
@@ -302,7 +341,7 @@ export function VenueCard({
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: 10,
-                minHeight: 28,
+                minHeight: discountBadgeText || isPassPartner ? 28 : 0,
               }}
             >
               <div
@@ -425,7 +464,27 @@ export function VenueCard({
               </div>
             ) : null}
 
-            {Array.isArray(venue.offers) && venue.offers.length ? (
+            {powerBackupLabel ? (
+              <div
+                style={{
+                  marginTop: 6,
+                  display: "flex",
+                  gap: 6,
+                  flexWrap: "wrap",
+                  overflow: "hidden",
+                }}
+              >
+                {powerBackupLabel ? (
+                  <Tag style={{ margin: 0, fontSize: 11 }}>
+                    {powerBackupLabel}
+                  </Tag>
+                ) : null}
+              </div>
+            ) : null}
+
+            {isPassPartner &&
+            Array.isArray(venue.offers) &&
+            venue.offers.length ? (
               <div
                 style={{
                   marginTop: 6,
@@ -524,30 +583,44 @@ export function VenueCard({
           <Space direction="vertical" size={10} style={{ width: "100%" }}>
             <Space size={8} wrap>
               <Typography.Text strong>{venue.name}</Typography.Text>
-              <Tooltip
-                title="Verified partner. Discount guaranteed with valid Ahangama Pass."
-                trigger={["hover", "click"]}
-                placement="top"
-                overlayStyle={{ maxWidth: 240 }}
-              >
-                <Tag
-                  color="green"
-                  style={{ margin: 0, cursor: "pointer" }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="Pass Partner verification"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      (e.currentTarget as unknown as HTMLElement).click();
-                    }
-                  }}
+              {isPassPartner ? (
+                <Tooltip
+                  title="Verified partner. Discount guaranteed with valid Ahangama Pass."
+                  trigger={["hover", "click"]}
+                  placement="top"
+                  overlayStyle={{ maxWidth: 240 }}
                 >
-                  Pass Partner
-                </Tag>
-              </Tooltip>
-              <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
+                  <Tag
+                    color="green"
+                    style={{ margin: 0, cursor: "pointer" }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Pass Partner verification"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        (e.currentTarget as unknown as HTMLElement).click();
+                      }
+                    }}
+                  >
+                    Pass Partner
+                  </Tag>
+                </Tooltip>
+              ) : null}
+              {ribbonText ? (
+                <Tag style={{ margin: 0, fontWeight: 800 }}>{ribbonText}</Tag>
+              ) : null}
             </Space>
+
+            {powerBackupLabel ? (
+              <Space size={6} wrap>
+                {powerBackupLabel ? (
+                  <Tag style={{ margin: 0, fontWeight: 700 }}>
+                    {powerBackupLabel}
+                  </Tag>
+                ) : null}
+              </Space>
+            ) : null}
 
             {ratingLine ? (
               <Typography.Text type="secondary">{ratingLine}</Typography.Text>

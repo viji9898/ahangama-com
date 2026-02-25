@@ -1,5 +1,7 @@
 export type VenuePosition = { lat: number; lng: number };
 
+export type PowerBackup = "generator" | "inverter" | "none" | "unknown";
+
 export type Venue = {
   id: string | number;
   destinationSlug?: string;
@@ -7,6 +9,13 @@ export type Venue = {
   slug: string;
   status?: string;
   live?: boolean;
+
+  editorialTags: string[];
+  isPassVenue: boolean;
+  staffPick: boolean;
+  priorityScore: number;
+  laptopFriendly: boolean;
+  powerBackup: PowerBackup;
 
   categories: string[];
   emoji: string[];

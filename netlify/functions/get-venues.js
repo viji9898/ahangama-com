@@ -42,36 +42,87 @@ export const handler = async (event) => {
     const liveOnly =
       qs.liveOnly === undefined ? true : String(qs.liveOnly) !== "false";
 
-    const rows = category
-      ? await sql`
-          SELECT
-            id, destination_slug, name, slug, status, live,
-            categories, emoji, stars, reviews, discount,
-            excerpt, description, best_for, tags,
-            card_perk, offers, how_to_claim, restrictions,
-            area, lat, lng, logo, image, og_image,
-            map_url, instagram_url, whatsapp,
-            updated_at, created_at
-          FROM venues
-          WHERE destination_slug = ${destinationSlug}
-            AND (${liveOnly} = false OR live = true)
-            AND ${category} = ANY(categories)
-          ORDER BY name ASC
-        `
-      : await sql`
-          SELECT
-            id, destination_slug, name, slug, status, live,
-            categories, emoji, stars, reviews, discount,
-            excerpt, description, best_for, tags,
-            card_perk, offers, how_to_claim, restrictions,
-            area, lat, lng, logo, image, og_image,
-            map_url, instagram_url, whatsapp,
-            updated_at, created_at
-          FROM venues
-          WHERE destination_slug = ${destinationSlug}
-            AND (${liveOnly} = false OR live = true)
-          ORDER BY name ASC
-        `;
+    const queryWithNewFields = async () => {
+      return category
+        ? await sql`
+            SELECT
+              id, destination_slug, name, slug, status, live,
+              categories, emoji, stars, reviews, discount,
+              excerpt, description, best_for, tags,
+              editorial_tags, is_pass_venue, staff_pick, priority_score,
+              laptop_friendly, power_backup,
+              card_perk, offers, how_to_claim, restrictions,
+              area, lat, lng, logo, image, og_image,
+              map_url, instagram_url, whatsapp,
+              updated_at, created_at
+            FROM venues
+            WHERE destination_slug = ${destinationSlug}
+              AND (${liveOnly} = false OR live = true)
+              AND ${category} = ANY(categories)
+            ORDER BY name ASC
+          `
+        : await sql`
+            SELECT
+              id, destination_slug, name, slug, status, live,
+              categories, emoji, stars, reviews, discount,
+              excerpt, description, best_for, tags,
+              editorial_tags, is_pass_venue, staff_pick, priority_score,
+              laptop_friendly, power_backup,
+              card_perk, offers, how_to_claim, restrictions,
+              area, lat, lng, logo, image, og_image,
+              map_url, instagram_url, whatsapp,
+              updated_at, created_at
+            FROM venues
+            WHERE destination_slug = ${destinationSlug}
+              AND (${liveOnly} = false OR live = true)
+            ORDER BY name ASC
+          `;
+    };
+
+    const queryLegacy = async () => {
+      return category
+        ? await sql`
+            SELECT
+              id, destination_slug, name, slug, status, live,
+              categories, emoji, stars, reviews, discount,
+              excerpt, description, best_for, tags,
+              card_perk, offers, how_to_claim, restrictions,
+              area, lat, lng, logo, image, og_image,
+              map_url, instagram_url, whatsapp,
+              updated_at, created_at
+            FROM venues
+            WHERE destination_slug = ${destinationSlug}
+              AND (${liveOnly} = false OR live = true)
+              AND ${category} = ANY(categories)
+            ORDER BY name ASC
+          `
+        : await sql`
+            SELECT
+              id, destination_slug, name, slug, status, live,
+              categories, emoji, stars, reviews, discount,
+              excerpt, description, best_for, tags,
+              card_perk, offers, how_to_claim, restrictions,
+              area, lat, lng, logo, image, og_image,
+              map_url, instagram_url, whatsapp,
+              updated_at, created_at
+            FROM venues
+            WHERE destination_slug = ${destinationSlug}
+              AND (${liveOnly} = false OR live = true)
+            ORDER BY name ASC
+          `;
+    };
+
+    let rows;
+    try {
+      rows = await queryWithNewFields();
+    } catch (err) {
+      const message = String(err?.message || "");
+      if (/column .* does not exist/i.test(message)) {
+        rows = await queryLegacy();
+      } else {
+        throw err;
+      }
+    }
 
     const venues = rows.map((r) => ({
       id: r.id,
@@ -89,6 +140,12 @@ export const handler = async (event) => {
       description: r.description,
       bestFor: r.best_for ?? [],
       tags: r.tags ?? [],
+      editorialTags: r.editorial_tags ?? [],
+      isPassVenue: r.is_pass_venue ?? false,
+      staffPick: r.staff_pick ?? false,
+      priorityScore: r.priority_score ?? 0,
+      laptopFriendly: r.laptop_friendly ?? false,
+      powerBackup: r.power_backup ?? null,
       cardPerk: r.card_perk,
       offers: r.offers ?? [],
       howToClaim: r.how_to_claim,

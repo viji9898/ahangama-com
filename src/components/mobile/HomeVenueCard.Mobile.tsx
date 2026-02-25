@@ -158,17 +158,25 @@ export function HomeVenueCardMobile({
 
   const directionsHref = getDirectionsHref(venue);
 
-  const isPassPartner =
-    venue.live === true || String(venue.status ?? "").toLowerCase() === "live";
+  const isPassPartner = Boolean(venue.isPassVenue);
+  const powerBackupLabel =
+    venue.powerBackup === "generator"
+      ? "⚡ Generator"
+      : venue.powerBackup === "inverter"
+        ? "⚡ Inverter"
+        : venue.powerBackup === "none"
+          ? "⚡ No backup"
+          : null;
 
-  const savePercent = getSavePercent(venue);
+  const savePercent = isPassPartner ? getSavePercent(venue) : null;
   const ribbonText = savePercent != null ? `SAVE ${savePercent}%` : null;
   const ratingBadge = getRatingBadge(venue);
   const emoji = getEmojiPrefix(venue);
-  const saveLine =
-    savePercent != null
+  const saveLine = isPassPartner
+    ? savePercent != null
       ? `Save ${savePercent}% with your Pass`
-      : "Save with your Pass";
+      : "Save with your Pass"
+    : null;
 
   const imageHeight = variant === "list" ? 170 : 140;
 
@@ -177,6 +185,9 @@ export function HomeVenueCardMobile({
       className="ahg-venue-card"
       style={{
         background: "#FBF6F1",
+        border: isPassPartner
+          ? "1px solid color-mix(in srgb, var(--pass-primary) 28%, rgba(0,0,0,0.08))"
+          : undefined,
         borderRadius: 18,
         boxShadow: "0 1px 8px rgba(79,111,134,0.07)",
         padding: 0,
@@ -208,29 +219,57 @@ export function HomeVenueCardMobile({
           />
         )}
 
-        {ribbonText ? (
+        {isPassPartner && ribbonText ? (
           <div style={{ position: "absolute", top: 10, left: 10 }}>
             <div className="ahg-venue-ribbon">{ribbonText}</div>
           </div>
         ) : null}
 
-        {ratingBadge ? (
+        {venue.staffPick || ratingBadge ? (
           <div
             style={{
               position: "absolute",
               top: 10,
               right: 10,
-              fontSize: 11,
-              fontWeight: 900,
-              padding: "4px 10px",
-              borderRadius: 999,
-              background: "rgba(255,255,255,0.82)",
-              border: "1px solid rgba(0,0,0,0.08)",
-              color: "#1A1A1A",
-              whiteSpace: "nowrap",
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+              alignItems: "flex-end",
             }}
           >
-            {ratingBadge}
+            {venue.staffPick ? (
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 900,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.82)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Staff Pick
+              </div>
+            ) : null}
+
+            {ratingBadge ? (
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 900,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.82)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  color: "#1A1A1A",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {ratingBadge}
+              </div>
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -300,6 +339,33 @@ export function HomeVenueCardMobile({
           ) : null}
         </div>
 
+        {powerBackupLabel ? (
+          <div
+            style={{
+              marginTop: 8,
+              display: "flex",
+              gap: 6,
+              flexWrap: "wrap",
+            }}
+          >
+            {powerBackupLabel ? (
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 800,
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.82)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  color: "#1A1A1A",
+                }}
+              >
+                {powerBackupLabel}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
+
         {venue.area || distanceKm != null || directionsHref != null ? (
           <div
             style={{
@@ -347,17 +413,19 @@ export function HomeVenueCardMobile({
           </div>
         ) : null}
 
-        <div
-          style={{
-            marginTop: 10,
-            fontSize: 14,
-            fontWeight: 900,
-            color: "#2F3E3A",
-            lineHeight: "18px",
-          }}
-        >
-          {saveLine}
-        </div>
+        {saveLine ? (
+          <div
+            style={{
+              marginTop: 10,
+              fontSize: 14,
+              fontWeight: 900,
+              color: "#2F3E3A",
+              lineHeight: "18px",
+            }}
+          >
+            {saveLine}
+          </div>
+        ) : null}
       </div>
 
       {footer}

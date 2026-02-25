@@ -1,13 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
 import { FreeGuideWhatsAppCtaMobile } from "../../components/mobile/FreeGuideWhatsAppCta.Mobile";
 import { SavingsBreakdownMobile } from "../../components/mobile/SavingsBreakdown.Mobile";
+import { VenueFiltersMobile } from "../../components/mobile/VenueFilters.Mobile";
 import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
 import { SocialProofMobile } from "../../components/mobile/SocialProof.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
+import {
+  applyVenueListQuery,
+  filterVenues,
+  parseVenueListQuery,
+} from "../../utils/venueList";
 
 export type LatLng = { lat: number; lng: number };
 
@@ -591,17 +597,18 @@ export function TopRatedCafesMobile({ venues }: { venues: Venue[] }) {
 type VenueSectionCarouselProps = {
   title: string;
   venues: Venue[];
-  onViewAll?: () => void;
+  viewAllHref?: string;
   userLocation?: LatLng | null;
 };
 
 export function VenueSectionCarouselMobile({
   title,
   venues,
-  onViewAll,
+  viewAllHref,
   userLocation = null,
 }: VenueSectionCarouselProps) {
-  if (!venues.length) return null;
+  const MIN_SECTION_ITEMS = 4;
+  if (venues.length < MIN_SECTION_ITEMS) return null;
 
   return (
     <section style={{ marginTop: 18 }}>
@@ -618,22 +625,18 @@ export function VenueSectionCarouselMobile({
         <div style={{ fontWeight: 900, fontSize: 16, color: "#222" }}>
           {title}
         </div>
-        {onViewAll ? (
-          <button
-            type="button"
-            onClick={onViewAll}
+        {viewAllHref ? (
+          <Link
+            to={viewAllHref}
             style={{
-              border: "none",
-              background: "transparent",
+              textDecoration: "none",
               color: "var(--pass-primary)",
               fontWeight: 800,
               fontSize: 12,
-              padding: 0,
-              cursor: "pointer",
             }}
           >
-            View All
-          </button>
+            View all
+          </Link>
         ) : null}
       </div>
 
@@ -694,101 +697,26 @@ function VenueCarouselCardMobile({
   );
 }
 
-type SectionKey = "most-popular" | "best-discounts" | "beach-road" | "wellness";
-
-function toNumber(value: unknown): number | null {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string") {
-    const parsed = Number.parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
-}
-
-function getReviewsCount(v: { reviews?: unknown }): number {
-  const n = toNumber(v.reviews);
-  return n != null ? Math.round(n) : 0;
-}
-
-function formatOfferLabel(offer: unknown): string | null {
-  if (!offer || typeof offer !== "object") return null;
-  const rec = offer as Record<string, unknown>;
-  if (typeof rec.label === "string" && rec.label.trim())
-    return rec.label.trim();
-  if (typeof rec.type === "string" && rec.type.trim()) return rec.type.trim();
-  return null;
-}
-
-function discountPercentFromValue(discount: unknown): number | null {
-  if (discount == null) return null;
-  if (typeof discount === "number" && Number.isFinite(discount)) {
-    if (discount > 0 && discount < 1) return Math.round(discount * 100);
-    if (discount >= 1) return Math.round(discount);
-    return null;
-  }
-  if (typeof discount === "string") {
-    const raw = discount.trim();
-    if (!raw) return null;
-    const match = raw.match(/(\d+(?:\.\d+)?)\s*%/);
-    if (match?.[1]) {
-      const parsed = Number.parseFloat(match[1]);
-      return Number.isFinite(parsed) ? Math.round(parsed) : null;
-    }
-    const parsed = Number.parseFloat(raw);
-    if (!Number.isFinite(parsed)) return null;
-    if (parsed > 0 && parsed < 1) return Math.round(parsed * 100);
-    if (parsed >= 1) return Math.round(parsed);
-    return null;
-  }
-  return null;
-}
-
-function maxPercentOfferScore(v: {
-  discount?: unknown;
-  offers?: unknown[];
-}): number {
-  const percents: number[] = [];
-  const discountPct = discountPercentFromValue(v.discount);
-  if (discountPct != null) percents.push(discountPct);
-
-  for (const offer of v.offers ?? []) {
-    const label = typeof offer === "string" ? offer : formatOfferLabel(offer);
-    if (!label) continue;
-    const match = label.match(/(\d+(?:\.\d+)?)\s*%/);
-    if (match?.[1]) {
-      const parsed = Number.parseFloat(match[1]);
-      if (Number.isFinite(parsed)) percents.push(Math.round(parsed));
-    }
-  }
-
-  return percents.length ? Math.max(...percents) : 0;
-}
-
 export default function HomeMobile() {
   const params = useParams();
   const destinationSlug = String(params.destinationSlug || "ahangama");
   const passUrl = "https://pass.ahangama.com";
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = useMemo(
+    () => parseVenueListQuery(searchParams),
+    [searchParams],
+  );
 
-  const [search, setSearch] = useState("");
   const [userLocation, setUserLocation] = useState<LatLng | null>(null);
   const [ctaVisible, setCtaVisible] = useState(false);
   const heroRef = useRef<HTMLDivElement | null>(null);
-  const viewAllRef = useRef<HTMLDivElement | null>(null);
   const offersTopRef = useRef<HTMLDivElement | null>(null);
-  const [viewAllSection, setViewAllSection] = useState<SectionKey | null>(null);
 
   const { venues, loading, error } = useVenues({
     destinationSlug,
     liveOnly: true,
   });
-
-  // Enables footer "Best Cafés" / "Best Surf Spots" quick links via ?q=
-  const qParam = searchParams.get("q") ?? "";
-  useEffect(() => {
-    setSearch((prev) => (prev === qParam ? prev : qParam));
-  }, [qParam]);
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -814,113 +742,40 @@ export default function HomeMobile() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const filteredVenues = useMemo(() => {
-    const q = search.trim().toLowerCase();
+  const filteredVenues = useMemo(
+    () => filterVenues(venues, query),
+    [venues, query],
+  );
 
-    const base = venues.filter((v) => {
-      if (!q) return true;
+  const distanceById = useMemo(() => {
+    const map = new Map<string, number>();
+    if (!userLocation) return map;
 
-      const haystack = [
-        v.name,
-        v.area,
-        v.excerpt,
-        v.cardPerk,
-        ...(v.categories ?? []),
-        ...(v.tags ?? []),
-      ]
-        .filter((x): x is string => Boolean(x))
-        .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(q);
-    });
-
-    if (!userLocation) return base;
-
-    return base
-      .map((v) => {
-        const pos =
-          v.position && v.position.lat && v.position.lng
-            ? v.position
-            : v.lat != null && v.lng != null
-              ? { lat: v.lat, lng: v.lng }
-              : null;
-        const distance =
-          pos != null
-            ? getDistanceFromLatLonInKm(
-                userLocation.lat,
-                userLocation.lng,
-                pos.lat,
-                pos.lng,
-              )
+    for (const v of filteredVenues) {
+      const pos =
+        v.position?.lat != null && v.position?.lng != null
+          ? v.position
+          : v.lat != null && v.lng != null
+            ? { lat: v.lat, lng: v.lng }
             : null;
-        return { venue: v, distance };
-      })
-      .sort((a, b) => {
-        if (a.distance === null && b.distance === null) return 0;
-        if (a.distance === null) return 1;
-        if (b.distance === null) return -1;
-        return a.distance - b.distance;
-      })
-      .map((x) => x.venue);
-  }, [venues, search, userLocation]);
+      if (!pos) continue;
 
-  const sections = useMemo(() => {
-    const base = filteredVenues;
-
-    const mostPopular = base
-      .slice()
-      .sort((a, b) => getReviewsCount(b) - getReviewsCount(a))
-      .slice(0, 8);
-
-    const bestDiscountsAll = base
-      .slice()
-      .map((v) => ({ v, score: maxPercentOfferScore(v) }))
-      .filter((x) => x.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .map((x) => x.v);
-    const bestDiscounts = bestDiscountsAll.slice(0, 8);
-
-    const beachRoadAll = base.filter((v) => {
-      const area = (v.area ?? "").toString().toLowerCase();
-      return area.includes("matara road") || area.includes("beach road");
-    });
-    const beachRoad = beachRoadAll.slice(0, 8);
-
-    const wellnessAll = base.filter((v) => {
-      const cats = (v.categories ?? []).map((c) => String(c).toLowerCase());
-      return cats.some(
-        (c) => c.includes("experiences") || c.includes("wellness"),
+      const distanceKm = getDistanceFromLatLonInKm(
+        userLocation.lat,
+        userLocation.lng,
+        pos.lat,
+        pos.lng,
       );
-    });
-    const wellness = wellnessAll.slice(0, 8);
+      if (!Number.isFinite(distanceKm)) continue;
+      map.set(String(v.id), distanceKm);
+    }
 
-    return {
-      mostPopular,
-      mostPopularAll: base
-        .slice()
-        .sort((a, b) => getReviewsCount(b) - getReviewsCount(a)),
-      bestDiscounts,
-      bestDiscountsAll,
-      beachRoad,
-      beachRoadAll,
-      wellness,
-      wellnessAll,
-    };
-  }, [filteredVenues]);
+    return map;
+  }, [filteredVenues, userLocation]);
 
-  const handleViewAll = (key: SectionKey) => {
-    setViewAllSection(key);
-    requestAnimationFrame(() => {
-      viewAllRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    });
-  };
+  const nearestAvailable = userLocation != null && distanceById.size > 0;
 
   const handleSeeAllOffers = () => {
-    setViewAllSection(null);
     requestAnimationFrame(() => {
       offersTopRef.current?.scrollIntoView({
         behavior: "smooth",
@@ -928,33 +783,6 @@ export default function HomeMobile() {
       });
     });
   };
-
-  const viewAllVenues = (() => {
-    switch (viewAllSection) {
-      case "most-popular":
-        return {
-          title: "⭐ Crowd Favourites",
-          venues: sections.mostPopularAll,
-        };
-      case "best-discounts":
-        return {
-          title: "🔥 Best Value This Week",
-          venues: sections.bestDiscountsAll,
-        };
-      case "beach-road":
-        return {
-          title: "🏝️ Beach Road Favourites",
-          venues: sections.beachRoadAll,
-        };
-      case "wellness":
-        return {
-          title: "🌿 Wellness Reset Spots",
-          venues: sections.wellnessAll,
-        };
-      default:
-        return null;
-    }
-  })();
 
   return (
     <div
@@ -982,10 +810,15 @@ export default function HomeMobile() {
         }}
       />
 
-      {/* <VenueSearchAndCategoriesMobile
-        search={search}
-        onSearchChange={setSearch}
-      /> */}
+      <VenueFiltersMobile
+        value={query}
+        nearestAvailable={nearestAvailable}
+        onChange={(next) => {
+          setSearchParams(applyVenueListQuery(searchParams, next), {
+            replace: true,
+          });
+        }}
+      />
 
       <div
         className="ahg-mobile-cta-safe"
@@ -1031,68 +864,6 @@ export default function HomeMobile() {
           {!loading && !error && filteredVenues.length > 0 ? (
             <>
               <div ref={offersTopRef} />
-              <VenueSectionCarouselMobile
-                title="⭐ Crowd Favourites"
-                venues={sections.mostPopular}
-                onViewAll={() => handleViewAll("most-popular")}
-              />
-              <VenueSectionCarouselMobile
-                title="🔥 Best Value This Week"
-                venues={sections.bestDiscounts}
-                onViewAll={() => handleViewAll("best-discounts")}
-              />
-              <VenueSectionCarouselMobile
-                title="🏝️ On the Beach Favourites"
-                venues={sections.beachRoad}
-                onViewAll={() => handleViewAll("beach-road")}
-              />
-              <VenueSectionCarouselMobile
-                title="🌿 Wellness Reset Spots"
-                venues={sections.wellness}
-                onViewAll={() => handleViewAll("wellness")}
-              />
-
-              {viewAllVenues ? (
-                <div ref={viewAllRef} style={{ marginTop: 18 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: 12,
-                      padding: "0 8px",
-                      marginBottom: 10,
-                    }}
-                  >
-                    <div
-                      style={{ fontWeight: 900, fontSize: 16, color: "#222" }}
-                    >
-                      {viewAllVenues.title}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setViewAllSection(null)}
-                      style={{
-                        border: "none",
-                        background: "transparent",
-                        color: "#666",
-                        fontWeight: 800,
-                        fontSize: 12,
-                        padding: 0,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Hide
-                    </button>
-                  </div>
-
-                  <VenueListMobile
-                    venues={viewAllVenues.venues}
-                    userLocation={userLocation}
-                  />
-                </div>
-              ) : null}
-
               <div style={{ marginTop: 14 }}>
                 <SocialProofMobile />
               </div>

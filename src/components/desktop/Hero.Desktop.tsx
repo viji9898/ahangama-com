@@ -1,11 +1,13 @@
-import { Button, Card, ConfigProvider, Grid, Space, Typography } from "antd";
+import { Card, Grid, Typography } from "antd";
+import appleWalletIconJpg from "../../assets/apple_wallet_icon.jpg";
+import googleWalletIconJpg from "../../assets/google_wallet_icon.jpg";
 
 type Props = {
   onPrimaryClick?: () => void;
   onSecondaryClick?: () => void;
 };
 
-export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
+export function HeroAhangamaPass(_props: Props) {
   const screens = Grid.useBreakpoint();
   const isSmall = !screens.md;
   const backgroundImageUrl =
@@ -39,21 +41,8 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
               letterSpacing: -0.4,
             }}
           >
-            Ahangama Pass — save instantly at 100+ venues.
+            <h1>Ahanagama Guide 2026</h1>
           </Typography.Title>
-
-          <Typography.Text
-            style={{
-              display: "block",
-              marginTop: 6,
-              fontSize: isSmall ? 13 : 14,
-              lineHeight: 1.45,
-              fontWeight: 700,
-              opacity: 0.92,
-            }}
-          >
-            Unlock the best of Ahangama.
-          </Typography.Text>
 
           <Typography.Text
             type="secondary"
@@ -70,70 +59,47 @@ export function HeroAhangamaPass({ onPrimaryClick, onSecondaryClick }: Props) {
             instantly.
           </Typography.Text>
 
-          <Typography.Text
-            type="secondary"
-            style={{
-              display: "block",
-              marginTop: 5,
-              fontSize: 11,
-              opacity: 0.8,
-            }}
-          >
-            2,000+ travellers · Apple Wallet & Google Wallet
-          </Typography.Text>
-
           <div style={{ marginTop: isSmall ? 12 : 14 }}>
-            <ConfigProvider
-              theme={{
-                token: {
-                  colorPrimary: "var(--pass-primary)",
-                  colorPrimaryHover: "var(--pass-primary-hover)",
-                  colorPrimaryActive: "var(--pass-primary-active)",
-                },
+            <Typography.Title
+              level={1}
+              style={{
+                margin: 0,
+                fontSize: isSmall ? 26 : 34,
+                lineHeight: 1.05,
+                letterSpacing: -0.4,
               }}
             >
-              <Space
-                size={10}
-                direction={isSmall ? "vertical" : "horizontal"}
-                style={{ width: "100%", justifyContent: "center" }}
-              >
-                <Button
-                  type="primary"
-                  size="middle"
-                  className="ahg-mobile-cta-button"
-                  onClick={onPrimaryClick}
+              <h2>
+                Perks & Privilages{" "}
+                <span
                   style={{
-                    width: isSmall ? "100%" : undefined,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                    background: "transparent",
+                    color: "#000",
+                    border: "2px solid #000",
+                    padding: "2px 10px",
+                    borderRadius: 10,
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  Get Ahangama Pass
-                </Button>
-
-                <Button
-                  type="default"
-                  size="middle"
-                  onClick={onSecondaryClick}
-                  style={{
-                    height: 42,
-                    borderRadius: 999,
-                    padding: "0 18px",
-                    fontWeight: 800,
-                    background: "rgba(255,255,255,0.70)",
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    boxShadow: "0 10px 22px rgba(0,0,0,0.08)",
-                    width: isSmall ? "100%" : "fit-content",
-                  }}
-                >
-                  See what’s included
-                </Button>
-              </Space>
-            </ConfigProvider>
-
-            <div style={{ marginTop: 6 }}>
-              <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-                ✓ Takes 30 seconds · Instant access
-              </Typography.Text>
-            </div>
+                  Ahangama Pass
+                  <span style={{ display: "inline-flex", gap: 6 }}>
+                    <img
+                      src={appleWalletIconJpg}
+                      alt="Apple Wallet"
+                      style={{ height: 22, width: "auto", borderRadius: 6 }}
+                    />
+                    <img
+                      src={googleWalletIconJpg}
+                      alt="Google Wallet"
+                      style={{ height: 22, width: "auto", borderRadius: 6 }}
+                    />
+                  </span>
+                </span>
+              </h2>
+            </Typography.Title>
           </div>
 
           <div

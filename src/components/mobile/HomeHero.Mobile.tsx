@@ -69,18 +69,6 @@ export function HomeHeroMobile({ ...props }: Props) {
             instantly.
           </Text>
 
-          <Text
-            style={{
-              display: "block",
-              marginTop: 6,
-              fontSize: 11,
-              opacity: 0.78,
-              color: "#1E1E1E",
-            }}
-          >
-            2,000+ travellers · Apple Wallet & Google Wallet
-          </Text>
-
           <div
             style={{
               display: "flex",

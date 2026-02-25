@@ -21,7 +21,7 @@ export function SocialProofBannerDesktop({ metrics }: Props) {
       label: "travellers already using Ahangama Pass",
     },
     {
-      value: "$58",
+      value: "$68",
       label: "average member savings in 10 days",
     },
     {
