@@ -160,16 +160,78 @@ export function PassLanding() {
     lineHeight: "18px",
   };
 
-  const exampleTrip = [
-    { label: "Coffee ×4", amountLkr: 3200 },
-    { label: "Dinner ×2", amountLkr: 5000 },
-    { label: "Surf rental", amountLkr: 3500 },
-    { label: "Yoga", amountLkr: 2500 },
-  ] as const;
+  type ExampleLineItem = {
+    label: string;
+    amountLkr: number;
+    rightText?: string;
+    url?: string;
+  };
 
-  const exampleTripTotalLkr = exampleTrip.reduce(
-    (sum, item) => sum + item.amountLkr,
-    0,
+  const example3Night = [
+    {
+      label: "Samba (3 nights)",
+      amountLkr: 7200,
+      url: "https://www.booking.com/hotel/lk/samba-ahangama.en-gb.html?aid=318615&label=New_English_EN_LK_27027142825-OOHRKEm2e9cX4E5_mJSvaAS640874803405%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atidsa-199482273865%3Alp9199150%3Ali%3Adec%3Adm%3Aag27027142825%3Acmp400679785&sid=10f134a36ba2acd9b78a81bae2a4e631&all_sr_blocks=1066331402_379037783_1_42_0%2C1066331402_379037783_1_42_0&checkin=2026-03-23&checkout=2026-03-26&dest_id=-2211655&dest_type=city&dist=0&group_adults=2&group_children=0&hapos=1&highlighted_blocks=1066331402_379037783_1_42_0%2C1066331402_379037783_1_42_0&hpos=1&matching_block_id=1066331402_379037783_1_42_0&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&show_room=1066331402&sr_order=popularity&sr_pri_blocks=1066331402_379037783_1_42_0__6801%2C1066331402_379037783_1_42_0__6801&srepoch=1772130737&srpvid=c7fb8257ba280140&type=total&ucfs=1#RD1066331402",
+    },
+    {
+      label: "Coffee at Kaffi",
+      amountLkr: 130 * 3,
+      rightText: "Save LKR 130 × 3",
+      url: "https://maps.app.goo.gl/K1S599WottPMZRd28",
+    },
+    {
+      label: "Board Hut surf hour",
+      amountLkr: 1200,
+    },
+    {
+      label: "Niya Scooter hire",
+      amountLkr: 2000,
+    },
+    {
+      label: "Free 30-minute massage",
+      amountLkr: 2500,
+    },
+  ] satisfies ReadonlyArray<ExampleLineItem>;
+
+  const example10Day = [
+    {
+      label: "Samba (3 nights)",
+      amountLkr: 7200,
+      url: "https://www.booking.com/hotel/lk/samba-ahangama.en-gb.html?aid=318615&label=New_English_EN_LK_27027142825-OOHRKEm2e9cX4E5_mJSvaAS640874803405%3Apl%3Ata%3Ap1%3Ap2%3Aac%3Aap%3Aneg%3Afi%3Atidsa-199482273865%3Alp9199150%3Ali%3Adec%3Adm%3Aag27027142825%3Acmp400679785&sid=10f134a36ba2acd9b78a81bae2a4e631&all_sr_blocks=1066331402_379037783_1_42_0%2C1066331402_379037783_1_42_0&checkin=2026-03-23&checkout=2026-03-26&dest_id=-2211655&dest_type=city&dist=0&group_adults=2&group_children=0&hapos=1&highlighted_blocks=1066331402_379037783_1_42_0%2C1066331402_379037783_1_42_0&hpos=1&matching_block_id=1066331402_379037783_1_42_0&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&show_room=1066331402&sr_order=popularity&sr_pri_blocks=1066331402_379037783_1_42_0__6801%2C1066331402_379037783_1_42_0__6801&srepoch=1772130737&srpvid=c7fb8257ba280140&type=total&ucfs=1#RD1066331402",
+    },
+    {
+      label: "Coffee at Kaffi",
+      amountLkr: 130 * 8,
+      rightText: "Save LKR 130 × 8",
+      url: "https://maps.app.goo.gl/K1S599WottPMZRd28",
+    },
+    {
+      label: "Board Hut surf hour ×3",
+      amountLkr: 1200 * 3,
+    },
+    {
+      label: "Niya Scooter hire",
+      amountLkr: 2000,
+    },
+    {
+      label: "Free 30-minute massage ×2",
+      amountLkr: 2500 * 2,
+    },
+  ] satisfies ReadonlyArray<ExampleLineItem>;
+
+  const sumExample = (items: ReadonlyArray<ExampleLineItem>) =>
+    items.reduce((sum, item) => sum + item.amountLkr, 0);
+
+  const LKR_PER_USD_APPROX = 320;
+
+  const example3NightTotal = sumExample(example3Night);
+  const example3NightTotalUsdApprox = Math.round(
+    example3NightTotal / LKR_PER_USD_APPROX,
+  );
+
+  const example10DayTotal = sumExample(example10Day);
+  const example10DayTotalUsdApprox = Math.round(
+    example10DayTotal / LKR_PER_USD_APPROX,
   );
 
   const formatLkr = (value: number) => value.toLocaleString();
@@ -203,7 +265,8 @@ export function PassLanding() {
                     lineHeight: isMobile ? "20px" : "22px",
                   }}
                 >
-                  Most travellers recover the cost in a few redemptions.
+                  Most travellers recover the cost in 3–5 redemptions at venues
+                  they’d visit anyway.
                 </Typography.Text>
                 <Typography.Paragraph
                   style={{
@@ -241,6 +304,10 @@ export function PassLanding() {
                 </Button>
               </Space>
 
+              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                Activates on first redemption • Works offline via Wallet
+              </Typography.Text>
+
               <div className={styles.heroBadges}>
                 <Tag className={styles.heroBadge}>
                   Partnered with 100+ verified venues across Ahangama.
@@ -254,75 +321,196 @@ export function PassLanding() {
       <section className={styles.sectionTight}>
         <div className={styles.container}>
           <Typography.Title level={2} style={{ marginTop: 0, marginBottom: 6 }}>
-            Example 4-Day Trip
+            Example savings
           </Typography.Title>
           <Typography.Text type="secondary" style={{ fontSize: 13 }}>
-            A simple, illustrative breakdown to make ROI tangible.
+            Two partner-based examples to make ROI tangible (conservative
+            estimates).
           </Typography.Text>
 
           <div style={{ height: 10 }} />
 
-          <Card
-            style={{
-              borderRadius: 18,
-              borderColor: token.colorBorderSecondary,
-              background: "var(--venue-card-bg)",
-            }}
-            bodyStyle={{ padding: 14 }}
-          >
-            <Space direction="vertical" size={8} style={{ width: "100%" }}>
-              {exampleTrip.map((item) => (
-                <div
-                  key={item.label}
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    justifyContent: "space-between",
-                    gap: 12,
-                    fontVariantNumeric: "tabular-nums",
-                  }}
-                >
-                  <Typography.Text style={{ color: token.colorText }}>
-                    {item.label}{" "}
-                    <span style={{ color: token.colorTextSecondary }}>→</span>
-                  </Typography.Text>
-                  <Typography.Text style={{ color: token.colorText }}>
-                    Save LKR {formatLkr(item.amountLkr)}
-                  </Typography.Text>
-                </div>
-              ))}
-
-              <div
+          <Row gutter={[14, 14]}>
+            <Col xs={24} md={12}>
+              <Card
                 style={{
-                  height: 1,
-                  background: token.colorBorderSecondary,
-                  marginTop: 4,
-                  marginBottom: 2,
+                  borderRadius: 18,
+                  borderColor: token.colorBorderSecondary,
+                  background: "var(--venue-card-bg)",
                 }}
-              />
-
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "baseline",
-                  justifyContent: "space-between",
-                  gap: 12,
-                  fontVariantNumeric: "tabular-nums",
-                }}
+                bodyStyle={{ padding: 14 }}
               >
-                <Typography.Text strong>
-                  Estimated total savings
-                </Typography.Text>
-                <Typography.Text strong>
-                  Save LKR {formatLkr(exampleTripTotalLkr)}
-                </Typography.Text>
-              </div>
+                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                  <div>
+                    <Typography.Text strong style={{ display: "block" }}>
+                      Example: 3-Night Stay in Ahangama
+                    </Typography.Text>
+                  </div>
 
-              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                Savings vary by venue and what you choose.
-              </Typography.Text>
-            </Space>
-          </Card>
+                  {example3Night.map((item) => (
+                    <div
+                      key={item.label}
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "space-between",
+                        gap: 12,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      <Typography.Text style={{ color: token.colorText }}>
+                        {item.url ? (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: token.colorLink,
+                              textDecoration: "none",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {item.label}
+                          </a>
+                        ) : (
+                          item.label
+                        )}{" "}
+                        <span style={{ color: token.colorTextSecondary }}>→</span>
+                      </Typography.Text>
+                      <Typography.Text style={{ color: token.colorText }}>
+                        {item.rightText
+                          ? item.rightText
+                          : `Save LKR ${formatLkr(item.amountLkr)}`}
+                      </Typography.Text>
+                    </div>
+                  ))}
+
+                  <div
+                    style={{
+                      height: 1,
+                      background: token.colorBorderSecondary,
+                      marginTop: 4,
+                      marginBottom: 2,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    <Typography.Text strong>Total</Typography.Text>
+                    <div style={{ textAlign: "right" }}>
+                      <Typography.Text strong style={{ display: "block" }}>
+                        LKR {formatLkr(example3NightTotal)}
+                      </Typography.Text>
+                      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                        ≈ US${example3NightTotalUsdApprox}
+                      </Typography.Text>
+                    </div>
+                  </div>
+
+                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                    Savings vary by venue and usage.
+                  </Typography.Text>
+                </Space>
+              </Card>
+            </Col>
+
+            <Col xs={24} md={12}>
+              <Card
+                style={{
+                  borderRadius: 18,
+                  borderColor: token.colorBorderSecondary,
+                  background: "var(--venue-card-bg)",
+                }}
+                bodyStyle={{ padding: 14 }}
+              >
+                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                  <div>
+                    <Typography.Text strong style={{ display: "block" }}>
+                      Example: 10-Day Trip in Ahangama
+                    </Typography.Text>
+                  </div>
+
+                  {example10Day.map((item) => (
+                    <div
+                      key={item.label}
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "space-between",
+                        gap: 12,
+                        fontVariantNumeric: "tabular-nums",
+                      }}
+                    >
+                      <Typography.Text style={{ color: token.colorText }}>
+                        {item.url ? (
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: token.colorLink,
+                              textDecoration: "none",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {item.label}
+                          </a>
+                        ) : (
+                          item.label
+                        )}{" "}
+                        <span style={{ color: token.colorTextSecondary }}>→</span>
+                      </Typography.Text>
+                      <Typography.Text style={{ color: token.colorText }}>
+                        {item.rightText
+                          ? item.rightText
+                          : `Save LKR ${formatLkr(item.amountLkr)}`}
+                      </Typography.Text>
+                    </div>
+                  ))}
+
+                  <div
+                    style={{
+                      height: 1,
+                      background: token.colorBorderSecondary,
+                      marginTop: 4,
+                      marginBottom: 2,
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    <Typography.Text strong>Total</Typography.Text>
+                    <div style={{ textAlign: "right" }}>
+                      <Typography.Text strong style={{ display: "block" }}>
+                        LKR {formatLkr(example10DayTotal)}
+                      </Typography.Text>
+                      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                        ≈ US${example10DayTotalUsdApprox}
+                      </Typography.Text>
+                    </div>
+                  </div>
+
+                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                    Savings vary by venue and usage.
+                  </Typography.Text>
+                </Space>
+              </Card>
+            </Col>
+          </Row>
         </div>
       </section>
 
@@ -354,8 +542,8 @@ export function PassLanding() {
                     Pays for itself fast
                   </Typography.Title>
                   <Typography.Text type="secondary" style={valuePropBodyStyle}>
-                    Break even in 3–5 redemptions at places you’ll already
-                    visit.
+                    Break even in a few redemptions — coffee, surf, wellness and
+                    stays add up quickly.
                   </Typography.Text>
                 </Space>
               </Card>
@@ -381,8 +569,8 @@ export function PassLanding() {
                     Only the good spots
                   </Typography.Title>
                   <Typography.Text type="secondary" style={valuePropBodyStyle}>
-                    A curated set of venues that are worth your time (and
-                    budget).
+                    Curated partners with perks shown up front — no awkward
+                    guessing at checkout.
                   </Typography.Text>
                 </Space>
               </Card>
@@ -408,7 +596,8 @@ export function PassLanding() {
                     Scan-and-save
                   </Typography.Title>
                   <Typography.Text type="secondary" style={valuePropBodyStyle}>
-                    Add to Apple/Google Wallet and redeem with a QR in seconds.
+                    No app to download — add to Apple/Google Wallet and redeem
+                    with a QR in seconds.
                   </Typography.Text>
                 </Space>
               </Card>
@@ -427,7 +616,8 @@ export function PassLanding() {
             {[
               {
                 title: "Buy",
-                detail: "Choose 15 or 30 days (one-time purchase).",
+                detail:
+                  "Choose 15 or 30 days (one-time purchase). Activates on first redemption.",
                 icon: <ShoppingOutlined aria-hidden="true" />,
               },
               {
@@ -493,6 +683,20 @@ export function PassLanding() {
                       >
                         {step.detail}
                       </Typography.Paragraph>
+
+                      {step.walletBadges ? (
+                        <Typography.Text
+                          type="secondary"
+                          style={{
+                            display: "block",
+                            marginTop: 2,
+                            fontSize: 12,
+                            lineHeight: "16px",
+                          }}
+                        >
+                          No account required.
+                        </Typography.Text>
+                      ) : null}
                     </div>
                   </div>
                 </Card>
@@ -621,7 +825,7 @@ export function PassLanding() {
               color: token.colorTextSecondary,
             }}
           >
-            A single brunch + surf rental can cover the cost of the pass.
+            One brunch + one surf rental can often cover the cost of the pass.
           </Typography.Text>
         </div>
       </section>
@@ -657,12 +861,17 @@ export function PassLanding() {
                 country: "Germany",
               },
               {
+                quote: "We saved more than the pass cost in our first week.",
+                name: "Sam",
+                country: "Singapore",
+              },
+              {
                 quote: "Wallet pass + QR was smooth. We used it almost daily.",
                 name: "Ava",
                 country: "Australia",
               },
             ].map((t) => (
-              <Col key={t.name} xs={24} md={8}>
+              <Col key={t.name} xs={24} md={12} lg={8}>
                 <Card
                   className={styles.testimonialCard}
                   style={{
@@ -704,7 +913,14 @@ export function PassLanding() {
             Pricing
           </Typography.Title>
           <Typography.Text type="secondary">
-            Pick 30 Day for the best value on most trips.
+            Pick 30 Day if you’re staying 2+ weeks — it’s the best value.
+          </Typography.Text>
+
+          <Typography.Text
+            type="secondary"
+            style={{ display: "block", fontSize: 12 }}
+          >
+            Buy now, start later: it activates on your first redemption.
           </Typography.Text>
 
           <Typography.Text
@@ -746,7 +962,7 @@ export function PassLanding() {
 
                   <Space direction="vertical" size={6}>
                     {[
-                      "Best for short stays",
+                      "Great for 1–2 week trips",
                       "Wallet pass + QR",
                       "Valid for 15 days",
                     ].map((t) => (
@@ -802,6 +1018,12 @@ export function PassLanding() {
                     >
                       That’s just $1.63 per day.
                     </Typography.Text>
+                    <Typography.Text
+                      type="secondary"
+                      style={{ fontSize: 12, display: "block" }}
+                    >
+                      Less than the cost of one sunset dinner.
+                    </Typography.Text>
                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
                       Savings vary by venue and usage.
                     </Typography.Text>
@@ -853,8 +1075,8 @@ export function PassLanding() {
                 label: "When does my Pass start?",
                 children: (
                   <Typography.Paragraph style={{ marginBottom: 0 }}>
-                    It starts immediately after purchase. You’ll see the expiry
-                    date inside your wallet pass.
+                    It activates on your first redemption — not at purchase.
+                    You’ll see the expiry date inside your wallet pass.
                   </Typography.Paragraph>
                 ),
               },
@@ -952,7 +1174,14 @@ export function PassLanding() {
                 Instant access in seconds — start saving today.
               </Typography.Text>
 
-              <div style={{ height: 14 }} />
+              <Typography.Text
+                type="secondary"
+                style={{ display: "block", marginTop: 4, fontSize: 12 }}
+              >
+                Instant access. Start using it today.
+              </Typography.Text>
+
+              <div style={{ height: 10 }} />
 
               <Button
                 type="primary"
