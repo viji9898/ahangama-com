@@ -9,7 +9,7 @@ import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
 import { PassExplainerDesktop } from "../../components/desktop/PassExplainer.Desktop";
 import { SocialProofBannerDesktop } from "../../components/desktop/SocialProofBanner.Desktop";
 import { VenueCard } from "../../components/VenueCard";
-import { EDITORIAL_TAGS } from "../../config/editorialTags";
+import { EDITORIAL_TAGS, getEditorialTagDescription } from "../../config/editorialTags";
 import { useVenues } from "../../hooks/useVenues";
 import { hasEditorialTag } from "../../utils/venueEditorial";
 import { sortVenues } from "../../utils/venueList";
@@ -317,7 +317,8 @@ export default function HomeDesktop() {
                       Editorial tag: {editorialTag}
                     </div>
                     <div style={{ marginTop: 2, fontSize: 12, color: "#666" }}>
-                      Curated by Ahangama. Showing venues that match this vibe.
+                      {getEditorialTagDescription(editorialTag) ??
+                        "Curated by Ahangama. Showing venues that match this vibe."}
                     </div>
                   </div>
                 ) : null}

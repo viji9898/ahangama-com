@@ -10,7 +10,7 @@ import { HomeHeroMobile } from "../../components/mobile/HomeHero.Mobile";
 import { FreeGuideWhatsAppCtaMobile } from "../../components/mobile/FreeGuideWhatsAppCta.Mobile";
 import { HomeVenueCardMobile } from "../../components/mobile/HomeVenueCard.Mobile";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
-import { EDITORIAL_TAGS } from "../../config/editorialTags";
+import { EDITORIAL_TAGS, getEditorialTagDescription } from "../../config/editorialTags";
 import type { Venue } from "../../types/venue";
 import { useVenues } from "../../hooks/useVenues";
 import { hasEditorialTag } from "../../utils/venueEditorial";
@@ -875,7 +875,10 @@ export default function HomeMobile() {
                 <VenueSectionCarouselMobile
                   key={tag}
                   title={tag}
-                  subtitle="Curated by Ahangama. Venues that match this vibe."
+                  subtitle={
+                    getEditorialTagDescription(tag) ??
+                    "Curated by Ahangama. Venues that match this vibe."
+                  }
                   venues={taggedVenues}
                   viewAllHref={buildVenuesHref({
                     ...(passOnly ? { pass: "1" } : {}),

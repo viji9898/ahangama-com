@@ -41,7 +41,7 @@ export function HeroAhangamaPass(_props: Props) {
               letterSpacing: -0.4,
             }}
           >
-            <h1>Ahanagama Guide 2026</h1>
+            <h1>Ahangama Guide 2026</h1>
           </Typography.Title>
 
           <Typography.Text

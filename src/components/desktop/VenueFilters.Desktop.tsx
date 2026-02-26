@@ -1,6 +1,9 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Select, Space, Tag } from "antd";
-import { EDITORIAL_TAGS } from "../../config/editorialTags";
+import {
+  EDITORIAL_TAGS,
+  getEditorialTagDescription,
+} from "../../config/editorialTags";
 import type { PowerBackup } from "../../types/venue";
 import type { VenueSortKey } from "../../utils/venueList";
 
@@ -128,7 +131,8 @@ export function VenueFiltersDesktop({
               Editorial tag: {selectedEditorialTag}
             </div>
             <div style={{ marginTop: 2, fontSize: 12, color: "#666" }}>
-              Curated by Ahangama. Showing venues that match this vibe.
+              {getEditorialTagDescription(selectedEditorialTag) ??
+                "Curated by Ahangama. Showing venues that match this vibe."}
             </div>
           </div>
         ) : null}
