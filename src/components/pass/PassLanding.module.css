@@ -82,6 +82,25 @@
     var(--venue-card-bg);
 }
 
+.heroBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.heroBadge {
+  margin-inline-end: 0;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.72);
+  background: color-mix(in srgb, var(--pass-primary) 10%, white);
+  border: 1px solid
+    color-mix(in srgb, var(--pass-primary) 14%, rgba(0, 0, 0, 0.06));
+}
+
 .section {
   padding: 28px 0;
 }
@@ -127,6 +146,19 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.walletBadges {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.walletBadgeIcon {
+  height: 36px;
+  width: auto;
+  opacity: 0.9;
 }
 
 .stepTitleIcon {

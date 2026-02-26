@@ -24,6 +24,8 @@ import {
 import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./PassLanding.module.css";
+import addToAppleWallet from "../../assets/add_to_apple_wallet.png";
+import addToGoogleWallet from "../../assets/add_to_google_wallet.png";
 import { useVenues } from "../../hooks/useVenues";
 import { sortVenues } from "../../utils/venueList";
 import type { Venue } from "../../types/venue";
@@ -158,6 +160,20 @@ export function PassLanding() {
     lineHeight: "18px",
   };
 
+  const exampleTrip = [
+    { label: "Coffee ×4", amountLkr: 3200 },
+    { label: "Dinner ×2", amountLkr: 5000 },
+    { label: "Surf rental", amountLkr: 3500 },
+    { label: "Yoga", amountLkr: 2500 },
+  ] as const;
+
+  const exampleTripTotalLkr = exampleTrip.reduce(
+    (sum, item) => sum + item.amountLkr,
+    0,
+  );
+
+  const formatLkr = (value: number) => value.toLocaleString();
+
   return (
     <div className={styles.page}>
       <header className={styles.hero}>
@@ -187,7 +203,7 @@ export function PassLanding() {
                     lineHeight: isMobile ? "20px" : "22px",
                   }}
                 >
-                  Typical travellers save LKR 25,000+ in 2 weeks
+                  Most travellers recover the cost in a few redemptions.
                 </Typography.Text>
                 <Typography.Paragraph
                   style={{
@@ -225,16 +241,90 @@ export function PassLanding() {
                 </Button>
               </Space>
 
-              <Typography.Text
-                type="secondary"
-                style={{ fontSize: 12, lineHeight: "16px" }}
-              >
-                From $29 • Used at 100+ venues • Apple/Google Wallet
-              </Typography.Text>
+              <div className={styles.heroBadges}>
+                <Tag className={styles.heroBadge}>
+                  Partnered with 100+ verified venues across Ahangama.
+                </Tag>
+              </div>
             </Space>
           </div>
         </div>
       </header>
+
+      <section className={styles.sectionTight}>
+        <div className={styles.container}>
+          <Typography.Title level={2} style={{ marginTop: 0, marginBottom: 6 }}>
+            Example 4-Day Trip
+          </Typography.Title>
+          <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+            A simple, illustrative breakdown to make ROI tangible.
+          </Typography.Text>
+
+          <div style={{ height: 10 }} />
+
+          <Card
+            style={{
+              borderRadius: 18,
+              borderColor: token.colorBorderSecondary,
+              background: "var(--venue-card-bg)",
+            }}
+            bodyStyle={{ padding: 14 }}
+          >
+            <Space direction="vertical" size={8} style={{ width: "100%" }}>
+              {exampleTrip.map((item) => (
+                <div
+                  key={item.label}
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: 12,
+                    fontVariantNumeric: "tabular-nums",
+                  }}
+                >
+                  <Typography.Text style={{ color: token.colorText }}>
+                    {item.label}{" "}
+                    <span style={{ color: token.colorTextSecondary }}>→</span>
+                  </Typography.Text>
+                  <Typography.Text style={{ color: token.colorText }}>
+                    Save LKR {formatLkr(item.amountLkr)}
+                  </Typography.Text>
+                </div>
+              ))}
+
+              <div
+                style={{
+                  height: 1,
+                  background: token.colorBorderSecondary,
+                  marginTop: 4,
+                  marginBottom: 2,
+                }}
+              />
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  fontVariantNumeric: "tabular-nums",
+                }}
+              >
+                <Typography.Text strong>
+                  Estimated total savings
+                </Typography.Text>
+                <Typography.Text strong>
+                  Save LKR {formatLkr(exampleTripTotalLkr)}
+                </Typography.Text>
+              </div>
+
+              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                Savings vary by venue and what you choose.
+              </Typography.Text>
+            </Space>
+          </Card>
+        </div>
+      </section>
 
       <section className={styles.section}>
         <div className={styles.container}>
@@ -264,8 +354,8 @@ export function PassLanding() {
                     Pays for itself fast
                   </Typography.Title>
                   <Typography.Text type="secondary" style={valuePropBodyStyle}>
-                    Break even in just a few redemptions at places you’ll
-                    actually go.
+                    Break even in 3–5 redemptions at places you’ll already
+                    visit.
                   </Typography.Text>
                 </Space>
               </Card>
@@ -344,6 +434,7 @@ export function PassLanding() {
                 title: "Add to Wallet",
                 detail: "Instant access — save it to Apple/Google Wallet.",
                 icon: <WalletOutlined aria-hidden="true" />,
+                walletBadges: true,
               },
               {
                 title: "Show QR",
@@ -373,6 +464,25 @@ export function PassLanding() {
                           {step.icon}
                         </span>
                         <Typography.Text strong>{step.title}</Typography.Text>
+                        {step.walletBadges ? (
+                          <span
+                            className={styles.walletBadges}
+                            aria-hidden="true"
+                          >
+                            <img
+                              src={addToAppleWallet}
+                              alt="add to Apple Wallet"
+                              loading="lazy"
+                              className={styles.walletBadgeIcon}
+                            />
+                            <img
+                              src={addToGoogleWallet}
+                              alt="add to Google Wallet"
+                              loading="lazy"
+                              className={styles.walletBadgeIcon}
+                            />
+                          </span>
+                        ) : null}
                       </span>
                       <Typography.Paragraph
                         style={{
@@ -397,6 +507,19 @@ export function PassLanding() {
           <Typography.Title level={2} style={{ marginTop: 0 }}>
             Featured venues
           </Typography.Title>
+
+          <Typography.Text
+            type="secondary"
+            style={{
+              display: "block",
+              marginTop: -6,
+              marginBottom: 10,
+              fontSize: 13,
+              letterSpacing: "0.01em",
+            }}
+          >
+            Cafés · Surf · Stays · Wellness · Beach bars
+          </Typography.Text>
 
           <Row gutter={[12, 12]}>
             {venuesLoading && featuredVenues.length === 0
@@ -487,6 +610,19 @@ export function PassLanding() {
           <Typography.Text className={styles.featuredGridNote}>
             + 100 more inside the Pass
           </Typography.Text>
+
+          <Typography.Text
+            style={{
+              display: "block",
+              marginTop: 6,
+              textAlign: "center",
+              fontSize: 13,
+              fontWeight: 600,
+              color: token.colorTextSecondary,
+            }}
+          >
+            A single brunch + surf rental can cover the cost of the pass.
+          </Typography.Text>
         </div>
       </section>
 
@@ -496,6 +632,13 @@ export function PassLanding() {
             <Typography.Title level={2} style={{ marginTop: 0 }}>
               What travellers say
             </Typography.Title>
+
+            <Typography.Text
+              type="secondary"
+              style={{ display: "block", fontSize: 13, marginTop: -6 }}
+            >
+              Used by travellers from the UK, Germany, Australia & beyond.
+            </Typography.Text>
           </div>
 
           <div style={{ height: 14 }} />
@@ -503,8 +646,7 @@ export function PassLanding() {
           <Row gutter={[14, 14]} justify="center">
             {[
               {
-                quote:
-                  "Paid for itself in the first few days — super easy to redeem.",
+                quote: "Super easy to redeem — we used it almost daily.",
                 name: "Maya",
                 country: "UK",
               },
@@ -565,6 +707,13 @@ export function PassLanding() {
             Pick 30 Day for the best value on most trips.
           </Typography.Text>
 
+          <Typography.Text
+            type="secondary"
+            style={{ display: "block", fontSize: 12 }}
+          >
+            Peak season pricing may change.
+          </Typography.Text>
+
           <div style={{ height: 10 }} />
 
           <Row gutter={[14, 14]}>
@@ -584,8 +733,14 @@ export function PassLanding() {
                   <div>
                     <div className={styles.price}>$29</div>
                     <div className={styles.priceSub}>One-time purchase</div>
+                    <Typography.Text
+                      type="secondary"
+                      style={{ fontSize: 12, display: "block" }}
+                    >
+                      That’s just $1.93 per day.
+                    </Typography.Text>
                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                      Typical savings: LKR 20,000+
+                      Savings vary by venue and usage.
                     </Typography.Text>
                   </div>
 
@@ -641,8 +796,14 @@ export function PassLanding() {
                   <div>
                     <div className={styles.price}>$49</div>
                     <div className={styles.priceSub}>One-time purchase</div>
+                    <Typography.Text
+                      type="secondary"
+                      style={{ fontSize: 12, display: "block" }}
+                    >
+                      That’s just $1.63 per day.
+                    </Typography.Text>
                     <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                      Typical savings: LKR 40,000+
+                      Savings vary by venue and usage.
                     </Typography.Text>
                   </div>
 
@@ -694,6 +855,16 @@ export function PassLanding() {
                   <Typography.Paragraph style={{ marginBottom: 0 }}>
                     It starts immediately after purchase. You’ll see the expiry
                     date inside your wallet pass.
+                  </Typography.Paragraph>
+                ),
+              },
+              {
+                key: "short-stay",
+                label: "Is it worth it for a short stay?",
+                children: (
+                  <Typography.Paragraph style={{ marginBottom: 0 }}>
+                    Often, yes — if you eat out, surf, and explore daily. If you
+                    mostly stay at your accommodation, you’ll redeem less.
                   </Typography.Paragraph>
                 ),
               },
