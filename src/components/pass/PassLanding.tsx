@@ -21,7 +21,7 @@ import {
   Typography,
   theme,
 } from "antd";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./PassLanding.module.css";
 import addToAppleWallet from "../../assets/add_to_apple_wallet.png";
@@ -110,6 +110,10 @@ export function PassLanding() {
   const screens = Grid.useBreakpoint();
   const location = useLocation();
 
+  const heroRef = useRef<HTMLElement | null>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const [example10Expanded, setExample10Expanded] = useState(false);
+
   const { venues, loading: venuesLoading } = useVenues({
     destinationSlug: "ahangama",
     liveOnly: true,
@@ -149,6 +153,40 @@ export function PassLanding() {
   }, []);
 
   const isMobile = !screens.md;
+
+  useEffect(() => {
+    if (!isMobile) setExample10Expanded(false);
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setShowStickyBar(false);
+      return;
+    }
+
+    const el = heroRef.current;
+    if (!el) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const onScroll = () => {
+        const rect = el.getBoundingClientRect();
+        setShowStickyBar(rect.bottom <= 0);
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyBar(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [isMobile]);
 
   const valuePropBodyStyle: React.CSSProperties = {
     display: "-webkit-box",
@@ -238,10 +276,14 @@ export function PassLanding() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.hero}>
+      <header className={styles.hero} ref={heroRef}>
         <div className={styles.container}>
           <div className={styles.heroInner}>
-            <Space direction="vertical" size={14} style={{ width: "100%" }}>
+            <Space
+              direction="vertical"
+              size={isMobile ? 10 : 14}
+              style={{ width: "100%" }}
+            >
               <div>
                 <Typography.Title
                   level={1}
@@ -249,8 +291,8 @@ export function PassLanding() {
                     margin: 0,
                     fontWeight: 900,
                     letterSpacing: "-0.02em",
-                    fontSize: isMobile ? 40 : 52,
-                    lineHeight: isMobile ? "44px" : "56px",
+                    fontSize: isMobile ? 38 : 52,
+                    lineHeight: isMobile ? "42px" : "56px",
                   }}
                 >
                   Ahangama Pass. Premium perks, instant savings.
@@ -260,7 +302,7 @@ export function PassLanding() {
                   strong
                   style={{
                     display: "block",
-                    marginTop: 8,
+                    marginTop: isMobile ? 6 : 8,
                     fontSize: isMobile ? 15 : 16,
                     lineHeight: isMobile ? "20px" : "22px",
                   }}
@@ -270,7 +312,7 @@ export function PassLanding() {
                 </Typography.Text>
                 <Typography.Paragraph
                   style={{
-                    marginTop: 10,
+                    marginTop: isMobile ? 8 : 10,
                     marginBottom: 0,
                     fontSize: isMobile ? 16 : 18,
                     lineHeight: isMobile ? "24px" : "26px",
@@ -323,7 +365,10 @@ export function PassLanding() {
           <Typography.Title level={2} style={{ marginTop: 0, marginBottom: 6 }}>
             Example savings
           </Typography.Title>
-          <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+          <Typography.Text
+            type="secondary"
+            style={{ fontSize: isMobile ? 12 : 13 }}
+          >
             Two partner-based examples to make ROI tangible (conservative
             estimates).
           </Typography.Text>
@@ -340,7 +385,11 @@ export function PassLanding() {
                 }}
                 bodyStyle={{ padding: 14 }}
               >
-                <Space direction="vertical" size={8} style={{ width: "100%" }}>
+                <Space
+                  direction="vertical"
+                  size={isMobile ? 10 : 8}
+                  style={{ width: "100%" }}
+                >
                   <div>
                     <Typography.Text strong style={{ display: "block" }}>
                       Example: 3-Night Stay in Ahangama
@@ -355,6 +404,7 @@ export function PassLanding() {
                         alignItems: "baseline",
                         justifyContent: "space-between",
                         gap: 12,
+                        paddingBlock: isMobile ? 4 : 2,
                         fontVariantNumeric: "tabular-nums",
                       }}
                     >
@@ -375,9 +425,14 @@ export function PassLanding() {
                         ) : (
                           item.label
                         )}{" "}
-                        <span style={{ color: token.colorTextSecondary }}>→</span>
+                        <span style={{ color: token.colorTextSecondary }}>
+                          →
+                        </span>
                       </Typography.Text>
-                      <Typography.Text style={{ color: token.colorText }}>
+                      <Typography.Text
+                        strong
+                        style={{ color: token.colorText }}
+                      >
                         {item.rightText
                           ? item.rightText
                           : `Save LKR ${formatLkr(item.amountLkr)}`}
@@ -408,13 +463,19 @@ export function PassLanding() {
                       <Typography.Text strong style={{ display: "block" }}>
                         LKR {formatLkr(example3NightTotal)}
                       </Typography.Text>
-                      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                      <Typography.Text
+                        type="secondary"
+                        style={{ fontSize: isMobile ? 11 : 12 }}
+                      >
                         ≈ US${example3NightTotalUsdApprox}
                       </Typography.Text>
                     </div>
                   </div>
 
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  <Typography.Text
+                    type="secondary"
+                    style={{ fontSize: isMobile ? 11 : 12 }}
+                  >
                     Savings vary by venue and usage.
                   </Typography.Text>
                 </Space>
@@ -430,59 +491,169 @@ export function PassLanding() {
                 }}
                 bodyStyle={{ padding: 14 }}
               >
-                <Space direction="vertical" size={8} style={{ width: "100%" }}>
-                  <div>
+                <Space
+                  direction="vertical"
+                  size={isMobile ? 10 : 8}
+                  style={{ width: "100%" }}
+                >
+                  <div
+                    className={isMobile ? styles.exampleToggle : undefined}
+                    role={isMobile ? "button" : undefined}
+                    tabIndex={isMobile ? 0 : undefined}
+                    aria-expanded={isMobile ? example10Expanded : undefined}
+                    onClick={
+                      isMobile
+                        ? () => setExample10Expanded((v) => !v)
+                        : undefined
+                    }
+                    onKeyDown={
+                      isMobile
+                        ? (e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              setExample10Expanded((v) => !v);
+                            }
+                          }
+                        : undefined
+                    }
+                  >
                     <Typography.Text strong style={{ display: "block" }}>
                       Example: 10-Day Trip in Ahangama
                     </Typography.Text>
+                    {isMobile ? (
+                      <RightOutlined
+                        aria-hidden="true"
+                        className={styles.exampleToggleIcon}
+                        style={{
+                          transform: example10Expanded
+                            ? "rotate(90deg)"
+                            : "rotate(0deg)",
+                        }}
+                      />
+                    ) : null}
                   </div>
 
-                  {example10Day.map((item) => (
+                  {isMobile ? (
                     <div
-                      key={item.label}
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        justifyContent: "space-between",
-                        gap: 12,
-                        fontVariantNumeric: "tabular-nums",
-                      }}
+                      className={`${styles.exampleCollapsible} ${
+                        example10Expanded ? styles.exampleCollapsibleOpen : ""
+                      }`}
                     >
-                      <Typography.Text style={{ color: token.colorText }}>
-                        {item.url ? (
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noreferrer"
+                      <div className={styles.exampleCollapsibleInner}>
+                        {example10Day.map((item) => (
+                          <div
+                            key={item.label}
                             style={{
-                              color: token.colorLink,
-                              textDecoration: "none",
-                              fontWeight: 600,
+                              display: "flex",
+                              alignItems: "baseline",
+                              justifyContent: "space-between",
+                              gap: 12,
+                              paddingBlock: 4,
+                              fontVariantNumeric: "tabular-nums",
                             }}
                           >
-                            {item.label}
-                          </a>
-                        ) : (
-                          item.label
-                        )}{" "}
-                        <span style={{ color: token.colorTextSecondary }}>→</span>
-                      </Typography.Text>
-                      <Typography.Text style={{ color: token.colorText }}>
-                        {item.rightText
-                          ? item.rightText
-                          : `Save LKR ${formatLkr(item.amountLkr)}`}
-                      </Typography.Text>
-                    </div>
-                  ))}
+                            <Typography.Text
+                              style={{ color: token.colorText }}
+                            >
+                              {item.url ? (
+                                <a
+                                  href={item.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  style={{
+                                    color: token.colorLink,
+                                    textDecoration: "none",
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  {item.label}
+                                </a>
+                              ) : (
+                                item.label
+                              )}{" "}
+                              <span
+                                style={{ color: token.colorTextSecondary }}
+                              >
+                                →
+                              </span>
+                            </Typography.Text>
+                            <Typography.Text
+                              strong
+                              style={{ color: token.colorText }}
+                            >
+                              {item.rightText
+                                ? item.rightText
+                                : `Save LKR ${formatLkr(item.amountLkr)}`}
+                            </Typography.Text>
+                          </div>
+                        ))}
 
-                  <div
-                    style={{
-                      height: 1,
-                      background: token.colorBorderSecondary,
-                      marginTop: 4,
-                      marginBottom: 2,
-                    }}
-                  />
+                        <div
+                          style={{
+                            height: 1,
+                            background: token.colorBorderSecondary,
+                            marginTop: 4,
+                            marginBottom: 2,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {example10Day.map((item) => (
+                        <div
+                          key={item.label}
+                          style={{
+                            display: "flex",
+                            alignItems: "baseline",
+                            justifyContent: "space-between",
+                            gap: 12,
+                            paddingBlock: 2,
+                            fontVariantNumeric: "tabular-nums",
+                          }}
+                        >
+                          <Typography.Text style={{ color: token.colorText }}>
+                            {item.url ? (
+                              <a
+                                href={item.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{
+                                  color: token.colorLink,
+                                  textDecoration: "none",
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {item.label}
+                              </a>
+                            ) : (
+                              item.label
+                            )}{" "}
+                            <span style={{ color: token.colorTextSecondary }}>
+                              →
+                            </span>
+                          </Typography.Text>
+                          <Typography.Text
+                            strong
+                            style={{ color: token.colorText }}
+                          >
+                            {item.rightText
+                              ? item.rightText
+                              : `Save LKR ${formatLkr(item.amountLkr)}`}
+                          </Typography.Text>
+                        </div>
+                      ))}
+
+                      <div
+                        style={{
+                          height: 1,
+                          background: token.colorBorderSecondary,
+                          marginTop: 4,
+                          marginBottom: 2,
+                        }}
+                      />
+                    </>
+                  )}
 
                   <div
                     style={{
@@ -498,13 +669,19 @@ export function PassLanding() {
                       <Typography.Text strong style={{ display: "block" }}>
                         LKR {formatLkr(example10DayTotal)}
                       </Typography.Text>
-                      <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                      <Typography.Text
+                        type="secondary"
+                        style={{ fontSize: isMobile ? 11 : 12 }}
+                      >
                         ≈ US${example10DayTotalUsdApprox}
                       </Typography.Text>
                     </div>
                   </div>
 
-                  <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                  <Typography.Text
+                    type="secondary"
+                    style={{ fontSize: isMobile ? 11 : 12 }}
+                  >
                     Savings vary by venue and usage.
                   </Typography.Text>
                 </Space>
@@ -725,7 +902,7 @@ export function PassLanding() {
             Cafés · Surf · Stays · Wellness · Beach bars
           </Typography.Text>
 
-          <Row gutter={[12, 12]}>
+          <Row gutter={isMobile ? [14, 14] : [12, 12]}>
             {venuesLoading && featuredVenues.length === 0
               ? Array.from({ length: 8 }).map((_, idx) => (
                   <Col key={idx} xs={12} md={6}>
@@ -736,7 +913,7 @@ export function PassLanding() {
                         borderRadius: 18,
                         background: "var(--venue-card-bg)",
                       }}
-                      bodyStyle={{ padding: 12 }}
+                      bodyStyle={{ padding: isMobile ? 14 : 12 }}
                     >
                       <Skeleton active title={false} paragraph={{ rows: 3 }} />
                     </Card>
@@ -752,7 +929,7 @@ export function PassLanding() {
                         borderRadius: 18,
                         background: "var(--venue-card-bg)",
                       }}
-                      bodyStyle={{ padding: 12 }}
+                      bodyStyle={{ padding: isMobile ? 14 : 12 }}
                     >
                       <Space
                         direction="vertical"
@@ -996,8 +1173,12 @@ export function PassLanding() {
                   borderRadius: 22,
                   borderColor:
                     "color-mix(in srgb, var(--pass-primary) 24%, rgba(0,0,0,0.10))",
-                  background:
-                    "color-mix(in srgb, var(--pass-primary) 6%, var(--venue-card-bg))",
+                  background: isMobile
+                    ? "color-mix(in srgb, var(--pass-primary) 8%, var(--venue-card-bg))"
+                    : "color-mix(in srgb, var(--pass-primary) 6%, var(--venue-card-bg))",
+                  boxShadow: isMobile
+                    ? "0 18px 42px rgba(0, 0, 0, 0.10)"
+                    : undefined,
                 }}
               >
                 <Space direction="vertical" size={10} style={{ width: "100%" }}>
@@ -1202,7 +1383,7 @@ export function PassLanding() {
 
       {isMobile ? <div className={styles.stickyBarSpacer} /> : null}
 
-      {isMobile ? (
+      {isMobile && showStickyBar ? (
         <div
           className={styles.stickyBar}
           role="region"
@@ -1212,10 +1393,10 @@ export function PassLanding() {
             <div className={styles.stickyBarInner}>
               <div className={styles.stickyText}>
                 <Typography.Text strong style={{ lineHeight: "18px" }}>
-                  Ahangama Pass
+                  Get the Pass — From $29
                 </Typography.Text>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                  From $29 • Instant wallet pass
+                <Typography.Text type="secondary" style={{ fontSize: 11 }}>
+                  Activates on first redemption
                 </Typography.Text>
               </div>
 
@@ -1227,6 +1408,7 @@ export function PassLanding() {
                 rel="noreferrer"
                 onClick={handleBuyClick}
                 data-testid="pass-sticky-cta"
+                className={styles.stickyButton}
               >
                 Get the Pass
               </Button>
