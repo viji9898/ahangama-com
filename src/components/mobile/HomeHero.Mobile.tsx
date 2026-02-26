@@ -1,4 +1,5 @@
-import { Typography } from "antd";
+import { WhatsAppOutlined } from "@ant-design/icons";
+import { Button, Typography } from "antd";
 import appleWalletIconJpg from "../../assets/apple_wallet_icon.jpg";
 import googleWalletIconJpg from "../../assets/google_wallet_icon.jpg";
 
@@ -10,19 +11,20 @@ type Props = {
   onSeeAllOffers?: () => void;
 };
 
-export function HomeHeroMobile({ ...props }: Props) {
-  void props;
-
-  const backgroundImageUrl =
-    "https://ahangama-pass.s3.eu-west-2.amazonaws.com/admin/hero_desktop.jpg";
+export function HomeHeroMobile({ imageUrl }: Props) {
+  const whatsappNumberE164 = "94777908790";
+  const prefilledText = "Hi! I'd like the free Ahangama guide via WhatsApp.";
+  const whatsappHref = `https://wa.me/${encodeURIComponent(whatsappNumberE164)}?text=${encodeURIComponent(
+    prefilledText,
+  )}`;
 
   return (
     <section aria-label="Ahangama Pass hero">
       <div
         style={{
-          padding: "18px 16px 12px",
+          padding: "22px 16px 16px",
           textAlign: "center",
-          backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.88), rgba(248,245,240,0.88)), url(${backgroundImageUrl})`,
+          backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.88), rgba(248,245,240,0.88)), url(${imageUrl})`,
           backgroundSize: "auto, cover",
           backgroundPosition: "center, center",
           backgroundRepeat: "no-repeat, no-repeat",
@@ -45,7 +47,7 @@ export function HomeHeroMobile({ ...props }: Props) {
           <Text
             style={{
               display: "block",
-              marginTop: 12,
+              marginTop: 14,
               fontSize: 13,
               lineHeight: 1.5,
               fontWeight: 650,
@@ -56,66 +58,21 @@ export function HomeHeroMobile({ ...props }: Props) {
             Cafés, stays, surf & wellness.
           </Text>
 
-          <div style={{ marginTop: 10 }}>
-            <Title
-              level={2}
-              style={{
-                margin: 0,
-                fontSize: 22,
-                lineHeight: 1.05,
-                letterSpacing: -0.4,
-                color: "#1E1E1E",
-              }}
-            >
-              <h2>
-                Perks & Privilages with{" "}
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    background: "transparent",
-                    color: "#000",
-                    border: "2px solid #000",
-                    padding: "2px 10px",
-                    borderRadius: 10,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Ahangama Pass
-                  <span style={{ display: "inline-flex", gap: 6 }}>
-                    <img
-                      src={appleWalletIconJpg}
-                      alt="Apple Wallet"
-                      style={{ height: 20, width: "auto", borderRadius: 6 }}
-                    />
-                    <img
-                      src={googleWalletIconJpg}
-                      alt="Google Wallet"
-                      style={{ height: 20, width: "auto", borderRadius: 6 }}
-                    />
-                  </span>
-                </span>
-              </h2>
-            </Title>
-          </div>
-
           <Text
             style={{
               display: "block",
-              marginTop: 10,
+              marginTop: 22,
               fontSize: 13,
-              lineHeight: 1.5,
+              lineHeight: 1.4,
               fontWeight: 650,
               opacity: 0.56,
               color: "#1E1E1E",
             }}
           >
-            Show your pass, get the perk — instantly.
+            Perks & Privilages with
           </Text>
 
           <div
-            aria-label="Trust indicators"
             style={{
               marginTop: 12,
               display: "flex",
@@ -127,9 +84,106 @@ export function HomeHeroMobile({ ...props }: Props) {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 8,
+                gap: 10,
+                padding: "10px 14px",
+                borderRadius: 14,
+                whiteSpace: "nowrap",
+                background: "rgba(255,255,255,0.76)",
+                border: "2px solid var(--pass-primary)",
+                color: "var(--pass-primary)",
+                boxShadow: "0 12px 26px rgba(0,0,0,0.08)",
+                maxWidth: "100%",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 18,
+                  fontWeight: 900,
+                  letterSpacing: -0.2,
+                }}
+              >
+                Ahangama Pass
+              </span>
+              <span style={{ display: "inline-flex", gap: 6 }}>
+                <img
+                  src={appleWalletIconJpg}
+                  alt="Apple Wallet"
+                  style={{ height: 20, width: "auto", borderRadius: 6 }}
+                />
+                <img
+                  src={googleWalletIconJpg}
+                  alt="Google Wallet"
+                  style={{ height: 20, width: "auto", borderRadius: 6 }}
+                />
+              </span>
+            </div>
+          </div>
+
+          <Text
+            style={{
+              display: "block",
+              marginTop: 18,
+              fontSize: 13,
+              lineHeight: 1.5,
+              fontWeight: 650,
+              opacity: 0.56,
+              color: "#1E1E1E",
+            }}
+          >
+            Show your pass, get the perk — instantly.
+          </Text>
+
+          <div
+            aria-label="CTA block"
+            style={{
+              marginTop: 18,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ width: "100%", maxWidth: 520 }}>
+              <Button
+                block
+                size="large"
+                type="default"
+                icon={<WhatsAppOutlined />}
+                onClick={() => {
+                  window.open(whatsappHref, "_blank", "noopener,noreferrer");
+                }}
+                style={{
+                  height: 52,
+                  borderRadius: 20,
+                  fontWeight: 600,
+                  fontSize: 14,
+                  paddingInline: 16,
+                  background:
+                    "color-mix(in srgb, var(--pass-primary) 12%, #ffffff)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  color: "var(--pass-primary)",
+                  boxShadow: "0 10px 24px rgba(0,0,0,0.10)",
+                }}
+              >
+                Get free guide on WhatsApp
+              </Button>
+            </div>
+          </div>
+
+          <div
+            aria-label="Trust indicators"
+            style={{
+              marginTop: 18,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
                 flexWrap: "wrap",
-                padding: "8px 12px",
+                padding: "6px 10px",
                 borderRadius: 999,
                 background: "rgba(255,255,255,0.72)",
                 border: "1px solid rgba(0,0,0,0.06)",
@@ -148,11 +202,11 @@ export function HomeHeroMobile({ ...props }: Props) {
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: 8,
+                    gap: 6,
                   }}
                 >
                   <Text
-                    style={{ fontSize: 11, opacity: 0.78, color: "#1E1E1E" }}
+                    style={{ fontSize: 9, opacity: 0.78, color: "#1E1E1E" }}
                   >
                     {label}
                   </Text>

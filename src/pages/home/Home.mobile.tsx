@@ -171,24 +171,15 @@ type VenueListProps = {
 };
 
 export function VenueListMobile({ venues, userLocation }: VenueListProps) {
-  const [expandedId, setExpandedId] = useState<string | number | null>(null);
-
   return (
     <>
-      {venues.map((venue) => {
-        const id = venue.id;
-        const expanded = expandedId === id;
-
-        return (
-          <VenueListingCardMobile
-            key={String(id)}
-            venue={venue}
-            userLocation={userLocation}
-            expanded={expanded}
-            onToggleExpanded={() => setExpandedId(expanded ? null : id)}
-          />
-        );
-      })}
+      {venues.map((venue) => (
+        <VenueListingCardMobile
+          key={String(venue.id)}
+          venue={venue}
+          userLocation={userLocation}
+        />
+      ))}
     </>
   );
 }
@@ -196,8 +187,6 @@ export function VenueListMobile({ venues, userLocation }: VenueListProps) {
 type VenueListingCardProps = {
   venue: Venue;
   userLocation: LatLng | null;
-  expanded: boolean;
-  onToggleExpanded: () => void;
 };
 
 function formatStars(stars: Venue["stars"]): string {
@@ -223,8 +212,6 @@ function formatReviews(reviews: Venue["reviews"]): number {
 export function VenueListingCardMobile({
   venue,
   userLocation,
-  expanded,
-  onToggleExpanded,
 }: VenueListingCardProps) {
   const distanceKm = (() => {
     const pos =
@@ -242,250 +229,12 @@ export function VenueListingCardMobile({
     );
   })();
 
-  const instagramHref = venue.instagramUrl || "https://instagram.com/";
-  const whatsappHref = (() => {
-    const raw = venue.whatsapp;
-    if (!raw) return "https://www.whatsapp.com/";
-    const digits = raw.replace(/[^0-9]/g, "");
-    return digits ? `https://wa.me/${digits}` : "https://www.whatsapp.com/";
-  })();
-
   return (
     <div style={{ marginBottom: 16 }}>
       <HomeVenueCardMobile
         venue={venue}
         variant="list"
         distanceKm={distanceKm}
-        footer={
-          <div style={{ display: "flex", width: "100%" }}>
-            <button
-              style={{
-                flex: 1,
-                background: "#E6DDD4",
-                color: "#4A3F36",
-                border: "none",
-                borderRadius: "0 0 0 18px",
-                fontWeight: 700,
-                fontSize: 15,
-                padding: "12px 0",
-                cursor: venue.mapUrl ? "pointer" : "not-allowed",
-                outline: "none",
-                letterSpacing: 0.2,
-                boxShadow: "0 -1px 6px rgba(79,111,134,0.04)",
-                borderRight: "1px solid #e6f0fa",
-                margin: 0,
-                opacity: venue.mapUrl ? 1 : 0.5,
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (venue.mapUrl) window.open(venue.mapUrl, "_self");
-              }}
-              disabled={!venue.mapUrl}
-            >
-              Google Maps
-            </button>
-
-            <button
-              style={{
-                flex: 1,
-                background: "#F0E6DC",
-                color: "#4A3F36",
-                border: "none",
-                borderRadius: "0 0 18px 0",
-                fontWeight: 700,
-                fontSize: 15,
-                padding: "12px 0",
-                cursor: "pointer",
-                outline: "none",
-                letterSpacing: 0.2,
-                boxShadow: "0 -1px 6px rgba(79,111,134,0.04)",
-                margin: 0,
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleExpanded();
-              }}
-              aria-expanded={expanded}
-              aria-controls={`expand-details-${String(venue.id)}`}
-            >
-              {expanded ? "Hide details" : "More details"}
-            </button>
-          </div>
-        }
-        after={
-          expanded ? (
-            <div
-              id={`expand-details-${String(venue.id)}`}
-              style={{
-                background: "#fff",
-                border: "1px solid rgba(0,0,0,0.06)",
-                borderRadius: 12,
-                marginTop: 0,
-                padding: "16px 14px",
-                fontSize: 15,
-                color: "#333",
-                boxShadow: "0 1px 6px rgba(79,111,134,0.07)",
-                transition: "all 0.2s",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  gap: 10,
-                  marginBottom: 14,
-                  justifyContent: "flex-start",
-                  flexWrap: "wrap",
-                }}
-              >
-                <a
-                  href={instagramHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background:
-                      "linear-gradient(90deg, rgba(245,133,41,0.08) 0%, rgba(221,42,123,0.08) 50%, rgba(129,52,175,0.08) 100%)",
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    borderRadius: 18,
-                    height: 44,
-                    minWidth: 140,
-                    padding: "0 16px",
-                    fontWeight: 600,
-                    color: "#1A1A1A",
-                    fontSize: 15,
-                    textDecoration: "none",
-                    boxShadow: "0 1px 4px rgba(79,111,134,0.06)",
-                    transition: "background 0.2s, box-shadow 0.2s",
-                    opacity: venue.instagramUrl ? 1 : 0.6,
-                    gap: 8,
-                    cursor: "pointer",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background =
-                      "linear-gradient(90deg, rgba(245,133,41,0.12) 0%, rgba(221,42,123,0.12) 50%, rgba(129,52,175,0.12) 100%)";
-                    e.currentTarget.style.boxShadow =
-                      "0 4px 12px rgba(0,0,0,0.08)";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background =
-                      "linear-gradient(90deg, rgba(245,133,41,0.08) 0%, rgba(221,42,123,0.08) 50%, rgba(129,52,175,0.08) 100%)";
-                    e.currentTarget.style.boxShadow =
-                      "0 1px 4px rgba(79,111,134,0.06)";
-                  }}
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 448 448"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <linearGradient
-                        id="ig-gradient"
-                        x1="0"
-                        y1="0"
-                        x2="1"
-                        y2="1"
-                      >
-                        <stop offset="0%" stopColor="#F58529" />
-                        <stop offset="50%" stopColor="#DD2A7B" />
-                        <stop offset="100%" stopColor="#8134AF" />
-                      </linearGradient>
-                    </defs>
-                    <rect
-                      width="448"
-                      height="448"
-                      rx="90"
-                      fill="url(#ig-gradient)"
-                    />
-                    <path
-                      d="M224 144c-44.2 0-80 35.8-80 80s35.8 80 80 80 80-35.8 80-80-35.8-80-80-80zm0 128c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm85-88c0 10.5-8.5 19-19 19s-19-8.5-19-19 8.5-19 19-19 19 8.5 19 19zm49 19c-1.1-23.6-6.4-44.5-23.4-61.5S347.6 97.1 324 96c-23.6-1.1-94.4-1.1-118 0-23.6 1.1-44.5 6.4-61.5 23.4S97.1 100.4 96 124c-1.1 23.6-1.1 94.4 0 118 1.1 23.6 6.4 44.5 23.4 61.5S100.4 350.9 124 352c23.6 1.1 94.4 1.1 118 0 23.6-1.1 44.5-6.4 61.5-23.4s22.3-37.9 23.4-61.5c1.1-23.6 1.1-94.4 0-118zm-28.1 143.5c-7.8 19.6-22.9 34.7-42.5 42.5-29.4 11.7-99.2 9-132.8 0-19.6-7.8-34.7-22.9-42.5-42.5-11.7-29.4-9-99.2 0-132.8 7.8-19.6 22.9-34.7 42.5-42.5 29.4-11.7 99.2-9 132.8 0 19.6 7.8 34.7 22.9 42.5 42.5 11.7 29.4 9 99.2 0 132.8z"
-                      fill="#fff"
-                    />
-                  </svg>
-                  Instagram
-                </a>
-
-                <a
-                  href={whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "rgba(37, 211, 102, 0.08)",
-                    border: "1px solid rgba(37, 211, 102, 0.18)",
-                    borderRadius: 18,
-                    height: 44,
-                    minWidth: 140,
-                    padding: "0 16px",
-                    fontWeight: 600,
-                    color: "#1FAF5A",
-                    fontSize: 15,
-                    textDecoration: "none",
-                    boxShadow: "0 1px 4px rgba(79,111,134,0.06)",
-                    transition: "background 0.2s",
-                    opacity: venue.whatsapp ? 1 : 0.6,
-                    gap: 8,
-                  }}
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 32 32"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect width="32" height="32" rx="8" fill="#25D366" />
-                    <path
-                      d="M22.472 19.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.198.297-.767.967-.94 1.166-.173.198-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.007-.372-.009-.571-.009-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.099 3.205 5.077 4.366.711.306 1.264.489 1.697.625.713.227 1.362.195 1.872.118.571-.085 1.758-.719 2.007-1.413.248-.694.248-1.288.173-1.413-.074-.124-.272-.198-.57-.347z"
-                      fill="#fff"
-                    />
-                  </svg>
-                  WhatsApp
-                </a>
-              </div>
-
-              {venue.description ? (
-                <div style={{ marginBottom: 10 }}>{venue.description}</div>
-              ) : null}
-
-              {venue.bestFor?.length ? (
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Best for:</strong> {venue.bestFor.join(", ")}
-                </div>
-              ) : null}
-
-              {venue.howToClaim ? (
-                <div style={{ marginBottom: 8 }}>
-                  <strong>How to claim:</strong> {venue.howToClaim}
-                </div>
-              ) : null}
-
-              {venue.restrictions ? (
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Restrictions:</strong> {venue.restrictions}
-                </div>
-              ) : null}
-
-              {venue.whatsapp ? (
-                <div style={{ marginBottom: 8 }}>
-                  <strong>WhatsApp:</strong> {venue.whatsapp}
-                </div>
-              ) : null}
-
-              {venue.instagramUrl ? (
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Instagram:</strong> {venue.instagramUrl}
-                </div>
-              ) : null}
-            </div>
-          ) : null
-        }
       />
     </div>
   );

@@ -1,5 +1,4 @@
-import { Button, Card, Typography } from "antd";
-import type { ReactNode } from "react";
+import { Button, Card, ConfigProvider, Typography } from "antd";
 
 const { Text, Title } = Typography;
 
@@ -15,10 +14,6 @@ export function FreeGuideWhatsAppCtaMobile({
   const href = `https://wa.me/${encodeURIComponent(whatsappNumberE164)}?text=${encodeURIComponent(
     prefilledText,
   )}`;
-
-  const buttonIcon: ReactNode = (
-    <span style={{ fontSize: 14, marginRight: 6 }}>💬</span>
-  );
 
   return (
     <Card
@@ -47,64 +42,58 @@ export function FreeGuideWhatsAppCtaMobile({
               letterSpacing: -0.2,
             }}
           >
-            Get the free 2026 Ahangama guide
+            Free 2026 Ahangama Guide
           </Title>
           <Text
             type="secondary"
             style={{
               display: "block",
-              marginTop: 6,
+              marginTop: 10,
               fontSize: 13,
               lineHeight: 1.35,
             }}
           >
-            Instant WhatsApp delivery. Cafés, surf, stays & hidden gems.
+            Cafés, surf spots, laptop-friendly cafés & hidden gems.
           </Text>
 
-          <Button
-            block
-            type="default"
-            size="large"
-            icon={buttonIcon}
-            onClick={() => {
-              window.open(href, "_blank", "noopener,noreferrer");
-            }}
-            style={{
-              marginTop: 12,
-              height: 48,
-              borderRadius: 999,
-              fontWeight: 800,
-              fontSize: 13,
-              paddingInline: 18,
-
-              background:
-                "color-mix(in srgb, var(--pass-primary) 12%, #ffffff)",
-              border: "1px solid rgba(0,0,0,0.08)",
-              color: "var(--pass-primary)",
-              boxShadow: "0 10px 24px rgba(0,0,0,0.10)",
-              transition: "transform 0.15s ease, box-shadow 0.15s ease",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = "translateY(-1px)";
-              e.currentTarget.style.boxShadow = "0 14px 30px rgba(0,0,0,0.16)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 10px 24px rgba(0,0,0,0.10)";
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#25D366",
+                colorPrimaryHover: "#1EBE5C",
+                colorPrimaryActive: "#1AA64F",
+              },
             }}
           >
-            Get Free Guide on WhatsApp
-          </Button>
+            <Button
+              block
+              type="primary"
+              size="large"
+              onClick={() => {
+                window.open(href, "_blank", "noopener,noreferrer");
+              }}
+              style={{
+                marginTop: 14,
+                height: 52,
+                borderRadius: 14,
+                fontWeight: 800,
+                fontSize: 15,
+                boxShadow: "0 12px 26px rgba(0,0,0,0.12)",
+              }}
+            >
+              📲 Get the Guide on WhatsApp
+            </Button>
+          </ConfigProvider>
 
           <Text
             style={{
               display: "block",
-              marginTop: 8,
+              marginTop: 10,
               fontSize: 12,
               color: "rgba(0,0,0,0.55)",
             }}
           >
-            No spam. One message.
+            Delivered instantly. No spam.
           </Text>
         </div>
       </div>
