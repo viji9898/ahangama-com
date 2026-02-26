@@ -2,8 +2,6 @@ import { Tooltip } from "antd";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import type { Venue } from "../../types/venue";
 
-const numberFormatter = new Intl.NumberFormat("en-US");
-
 type Props = {
   venue: Venue;
   variant: "list" | "carousel";
@@ -116,19 +114,6 @@ function getEmojiPrefix(venue: Venue): string {
   return "⭐";
 }
 
-function getRatingBadge(venue: Venue): string | null {
-  const stars = toNumber(venue.stars);
-  if (stars == null) return null;
-  const reviews = toNumber(venue.reviews);
-  const reviewsCount = reviews != null ? Math.round(reviews) : 0;
-
-  if (reviewsCount > 0) {
-    return `⭐ ${stars.toFixed(1)} · ${numberFormatter.format(reviewsCount)}`;
-  }
-
-  return `⭐ ${stars.toFixed(1)}`;
-}
-
 function formatDistance(distanceKm: number): string {
   if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m away`;
   return `${distanceKm.toFixed(1)} km away`;
@@ -169,8 +154,6 @@ export function HomeVenueCardMobile({
           : null;
 
   const savePercent = isPassPartner ? getSavePercent(venue) : null;
-  const ribbonText = savePercent != null ? `SAVE ${savePercent}%` : null;
-  const ratingBadge = getRatingBadge(venue);
   const emoji = getEmojiPrefix(venue);
   const saveLine = isPassPartner
     ? savePercent != null
@@ -219,13 +202,7 @@ export function HomeVenueCardMobile({
           />
         )}
 
-        {isPassPartner && ribbonText ? (
-          <div style={{ position: "absolute", top: 10, left: 10 }}>
-            <div className="ahg-venue-ribbon">{ribbonText}</div>
-          </div>
-        ) : null}
-
-        {venue.staffPick || ratingBadge ? (
+        {venue.staffPick ? (
           <div
             style={{
               position: "absolute",
@@ -251,23 +228,6 @@ export function HomeVenueCardMobile({
                 }}
               >
                 Staff Pick
-              </div>
-            ) : null}
-
-            {ratingBadge ? (
-              <div
-                style={{
-                  fontSize: 11,
-                  fontWeight: 900,
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  background: "rgba(255,255,255,0.82)",
-                  border: "1px solid rgba(0,0,0,0.08)",
-                  color: "#1A1A1A",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {ratingBadge}
               </div>
             ) : null}
           </div>
