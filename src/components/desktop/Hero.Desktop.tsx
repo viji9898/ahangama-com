@@ -70,7 +70,7 @@ export function HeroAhangamaPass(_props: Props) {
               }}
             >
               <h2>
-                Perks & Privilages{" "}
+                Perks & Privilages <small>with</small>{" "}
                 <span
                   style={{
                     display: "inline-flex",

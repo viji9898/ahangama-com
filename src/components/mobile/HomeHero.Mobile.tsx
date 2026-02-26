@@ -68,7 +68,7 @@ export function HomeHeroMobile({ ...props }: Props) {
               }}
             >
               <h2>
-                Perks & Privilages{" "}
+                Perks & Privilages with{" "}
                 <span
                   style={{
                     display: "inline-flex",
