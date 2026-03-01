@@ -552,9 +552,7 @@ export function PassLanding() {
                               fontVariantNumeric: "tabular-nums",
                             }}
                           >
-                            <Typography.Text
-                              style={{ color: token.colorText }}
-                            >
+                            <Typography.Text style={{ color: token.colorText }}>
                               {item.url ? (
                                 <a
                                   href={item.url}
@@ -571,9 +569,7 @@ export function PassLanding() {
                               ) : (
                                 item.label
                               )}{" "}
-                              <span
-                                style={{ color: token.colorTextSecondary }}
-                              >
+                              <span style={{ color: token.colorTextSecondary }}>
                                 →
                               </span>
                             </Typography.Text>
@@ -1250,7 +1246,19 @@ export function PassLanding() {
 
           <Collapse
             accordion
+            defaultActiveKey={[]}
             items={[
+              {
+                key: "what",
+                label: "What is the Ahangama Pass?",
+                children: (
+                  <Typography.Paragraph style={{ marginBottom: 0 }}>
+                    A digital wallet pass that unlocks perks at partner venues
+                    across Ahangama. Add it to Apple/Google Wallet, show the QR
+                    at checkout, and the perk is applied.
+                  </Typography.Paragraph>
+                ),
+              },
               {
                 key: "validity",
                 label: "When does my Pass start?",
