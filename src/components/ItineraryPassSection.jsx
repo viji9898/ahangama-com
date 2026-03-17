@@ -209,13 +209,13 @@ export function ItineraryPassSection({
 }) {
   return (
     <section
-      aria-label="Choose your stay"
+      aria-label="See how much you can save with these sample itineraries"
       className={[styles.section, className].filter(Boolean).join(" ")}
     >
       <div className={styles.header}>
         <div>
           <Typography.Title level={2} className={styles.title}>
-            Choose your stay
+            See how much you can save with these sample itineraries
           </Typography.Title>
           <p className={styles.subtitle}>
             Simple itineraries built around your time in Ahangama. Save across

@@ -1,16 +1,13 @@
-import { Alert, Collapse, Empty, Spin, Switch, Tag } from "antd";
+import { Alert, Empty, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AhangamaStatsBar from "../../components/AhangamaStatsBar";
 import { ItineraryPassSection } from "../../components/ItineraryPassSection";
-import { SavingsSummary } from "../../components/SavingsSummary";
+import StaySavingsHighlight from "../../components/StaySavingsHighlight";
+import TripCalculator from "../../components/TripCalculator";
 import { TripPlannerHero } from "../../components/TripPlannerHero";
 import styles from "./Home.desktop.module.css";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
-import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
-import { HowItWorks } from "../../components/desktop/HowItWorks.Desktop";
-import { PassExplainerDesktop } from "../../components/desktop/PassExplainer.Desktop";
-import { SocialProofBannerDesktop } from "../../components/desktop/SocialProofBanner.Desktop";
 import { VenueCard } from "../../components/VenueCard";
 import {
   EDITORIAL_TAGS,
@@ -48,6 +45,7 @@ export default function HomeDesktop() {
   const [userLocation, setUserLocation] = useState<LatLng | null>(null);
   const [passOnly, setPassOnly] = useState(false);
   const [editorialTag, setEditorialTag] = useState<string>("");
+  const [selectedStay, setSelectedStay] = useState("samba");
 
   const { venues, loading, error } = useVenues({
     destinationSlug,
@@ -135,7 +133,7 @@ export default function HomeDesktop() {
         <AhangamaStatsBar />
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      {/* <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
           onGuideClick={() => {
             const text = encodeURIComponent(
@@ -148,9 +146,9 @@ export default function HomeDesktop() {
             );
           }}
         />
-      </div>
+      </div> */}
 
-      <div style={{ marginTop: 12 }}>
+      {/* <div style={{ marginTop: 12 }}>
         <div
           style={{
             background: "var(--venue-card-bg)",
@@ -193,8 +191,8 @@ export default function HomeDesktop() {
             ]}
           />
         </div>
-      </div>
-
+      </div> */}
+      {/* 
       <div style={{ marginTop: 16 }}>
         <ItineraryPassSection
           onGetPassClick={() => {
@@ -208,6 +206,29 @@ export default function HomeDesktop() {
             document
               .getElementById("included")
               ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          onViewSampleItineraryClick={() => {
+            document
+              .getElementById("included")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
+      </div> */}
+
+      <div style={{ marginTop: 16 }}>
+        <StaySavingsHighlight onSelectStay={setSelectedStay} />
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <TripCalculator
+          selectedStay={selectedStay}
+          onStayChange={setSelectedStay}
+          onGetPassClick={() => {
+            window.open(
+              "https://pass.ahangama.com",
+              "_blank",
+              "noopener,noreferrer",
+            );
           }}
           onViewSampleItineraryClick={() => {
             document

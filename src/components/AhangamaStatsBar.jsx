@@ -3,8 +3,8 @@ import styles from "./AhangamaStatsBar.module.css";
 
 const stats = [
   { value: "1,200+", label: "Passes activated" },
-  { value: "$45+", label: "Average savings per trip" },
-  { value: "70+", label: "Partner venues" },
+  { value: "$200+", label: "Average savings per trip" },
+  { value: "120+", label: "Partner venues" },
 ];
 
 export default function AhangamaStatsBar({ className }) {
