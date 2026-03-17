@@ -1,0 +1,421 @@
+.section {
+  /* Local tokens (aligned with TripPlannerHero look & feel) */
+  --ips-radius: 32px;
+  --ips-accent: #16a3a6;
+  --ips-accent-dark: #0f7f82;
+  --ips-ink: rgba(0, 0, 0, 0.88);
+  --ips-muted: rgba(0, 0, 0, 0.62);
+
+  width: 100%;
+  border-radius: var(--ips-radius);
+  padding: 30px 26px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background:
+    radial-gradient(
+      900px circle at 10% 0%,
+      rgba(255, 255, 255, 0.88),
+      rgba(255, 255, 255, 0) 60%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 209, 232, 0.42) 0%,
+      rgba(205, 255, 239, 0.44) 100%
+    );
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-weight: 950;
+  letter-spacing: -0.6px;
+  line-height: 1.06;
+  color: var(--ips-ink);
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  max-width: 720px;
+  color: var(--ips-muted);
+  font-weight: 650;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.cards {
+  margin-top: 18px;
+}
+
+.cardsScroller {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 4px 6px 12px;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cardItem {
+  flex: 1 1 0;
+  min-width: 320px;
+  scroll-snap-align: start;
+}
+
+@media (max-width: 992px) {
+  .cardsScroller {
+    scrollbar-gutter: stable;
+  }
+
+  .cardItem {
+    flex-basis: 78vw;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 520px) {
+  .cardsScroller {
+    padding-inline: 4px;
+    gap: 12px;
+  }
+
+  .cardItem {
+    flex-basis: 86vw;
+    max-width: none;
+  }
+}
+
+.cardsScroller::-webkit-scrollbar {
+  height: 10px;
+}
+
+.cardsScroller::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+}
+
+.cardsScroller::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+}
+
+.passCard {
+  height: 100%;
+  border-radius: 22px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 150ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+@media (hover: hover) {
+  .passCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.passCardBody {
+  padding: 18px 18px 14px;
+}
+
+.passCardPopular {
+  border-color: rgba(22, 163, 166, 0.3);
+  box-shadow: 0 26px 64px rgba(0, 0, 0, 0.12);
+  transform: translateZ(0);
+}
+
+.popularBadge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(22, 163, 166, 0.22);
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+}
+
+.cardTop {
+  position: relative;
+}
+
+.passTitle {
+  margin: 0;
+  font-weight: 950;
+  letter-spacing: -0.3px;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--ips-ink);
+}
+
+.sampleLabel {
+  margin-top: 6px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.savingsChip {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.savingsChipStrong {
+  font-weight: 950;
+  color: rgba(0, 0, 0, 0.86);
+  letter-spacing: -0.2px;
+}
+
+.savingsChipMuted {
+  font-weight: 750;
+  color: rgba(0, 0, 0, 0.58);
+  font-size: 12px;
+}
+
+.timeline {
+  margin-top: 14px;
+  padding-top: 2px;
+}
+
+.dayRow {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.dayRow + .dayRow {
+  margin-top: 12px;
+}
+
+.dotCol {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.dotCol::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: -16px;
+  width: 2px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+}
+
+.dayRow:last-child .dotCol::before {
+  display: none;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  margin-top: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.dotActive {
+  border-color: rgba(22, 163, 166, 0.55);
+  background: rgba(22, 163, 166, 0.18);
+}
+
+.dotInactive {
+  opacity: 0.6;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dayLabel {
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: -0.1px;
+  color: rgba(0, 0, 0, 0.82);
+  white-space: nowrap;
+}
+
+.daySummary {
+  font-weight: 750;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.52);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemList {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 7px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 750;
+  color: rgba(0, 0, 0, 0.66);
+}
+
+.bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.pricing {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+
+.priceLabel {
+  font-size: 11px;
+  font-weight: 850;
+  color: rgba(0, 0, 0, 0.52);
+}
+
+.priceValue {
+  margin-top: 2px;
+  font-size: 16px;
+  font-weight: 950;
+  letter-spacing: -0.2px;
+  color: rgba(0, 0, 0, 0.86);
+}
+
+.priceValueMuted {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.savingsLine {
+  grid-column: 1 / -1;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(22, 163, 166, 0.1);
+  font-weight: 950;
+  color: rgba(0, 0, 0, 0.78);
+  font-size: 13px;
+}
+
+.viewLink {
+  margin-top: 10px;
+  padding: 0;
+  height: auto;
+  font-weight: 900;
+}
+
+.viewLink:global(.ant-btn) {
+  color: var(--ips-accent-dark);
+}
+
+.viewLink:global(.ant-btn):hover {
+  color: var(--ips-accent-dark);
+  text-decoration: underline;
+}
+
+.ctaRow {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.ctaInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.getPassBtn {
+  height: 44px;
+  padding-inline: 18px;
+  border-radius: 999px;
+  font-weight: 900;
+}
+
+.getPassBtn:global(.ant-btn) {
+  border: none !important;
+  background: linear-gradient(
+    135deg,
+    var(--ips-accent) 0%,
+    rgba(70, 214, 182, 0.98) 100%
+  ) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14) !important;
+}
+
+.getPassBtn:global(.ant-btn):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16) !important;
+}
+
+.getPassBtn:global(.ant-btn):active {
+  transform: translateY(0);
+  background: linear-gradient(
+    135deg,
+    var(--ips-accent-dark) 0%,
+    rgba(50, 196, 168, 0.98) 100%
+  ) !important;
+}
+
+@media (max-width: 992px) {
+  .section {
+    padding: 22px 16px;
+    border-radius: 26px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+}

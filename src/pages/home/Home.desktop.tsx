@@ -1,11 +1,14 @@
-import { Alert, Col, Collapse, Empty, Row, Spin, Switch, Tag } from "antd";
+import { Alert, Collapse, Empty, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import AhangamaStatsBar from "../../components/AhangamaStatsBar";
+import { ItineraryPassSection } from "../../components/ItineraryPassSection";
 import { SavingsSummary } from "../../components/SavingsSummary";
+import { TripPlannerHero } from "../../components/TripPlannerHero";
+import styles from "./Home.desktop.module.css";
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
 import { FreeGuideCtaDesktop } from "../../components/desktop/FreeGuideCta.Desktop";
 import { HowItWorks } from "../../components/desktop/HowItWorks.Desktop";
-import { HeroDesktop } from "../../components/desktop/Hero.Desktop";
 import { PassExplainerDesktop } from "../../components/desktop/PassExplainer.Desktop";
 import { SocialProofBannerDesktop } from "../../components/desktop/SocialProofBanner.Desktop";
 import { VenueCard } from "../../components/VenueCard";
@@ -113,7 +116,7 @@ export default function HomeDesktop() {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-      <HeroDesktop
+      <TripPlannerHero
         onPrimaryClick={() => {
           window.open(
             "https://pass.ahangama.com",
@@ -127,6 +130,10 @@ export default function HomeDesktop() {
             ?.scrollIntoView({ behavior: "smooth", block: "start" });
         }}
       />
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <AhangamaStatsBar />
+      </div>
 
       <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
@@ -188,9 +195,32 @@ export default function HomeDesktop() {
         </div>
       </div>
 
+      <div style={{ marginTop: 16 }}>
+        <ItineraryPassSection
+          onGetPassClick={() => {
+            window.open(
+              "https://pass.ahangama.com",
+              "_blank",
+              "noopener,noreferrer",
+            );
+          }}
+          onSeeAllBenefitsClick={() => {
+            document
+              .getElementById("included")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+          onViewSampleItineraryClick={() => {
+            document
+              .getElementById("included")
+              ?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }}
+        />
+      </div>
+
       <div
         id="included"
-        style={{ marginTop: 16, background: "var(--venue-listing-bg)" }}
+        className={styles.includedShell}
+        style={{ marginTop: 16 }}
       >
         {error ? (
           <Alert
@@ -340,16 +370,16 @@ export default function HomeDesktop() {
                   }
                 />
               ) : (
-                <Row gutter={[12, 18]} justify="start">
+                <div
+                  role="list"
+                  aria-label="Included venues"
+                  className={styles.venueScroller}
+                >
                   {visibleVenues.map((v) => (
-                    <Col
+                    <div
                       key={String(v.id)}
-                      xs={24}
-                      sm={12}
-                      md={12}
-                      lg={8}
-                      xl={6}
-                      style={{ display: "flex", justifyContent: "flex-start" }}
+                      role="listitem"
+                      className={styles.venueItem}
                     >
                       <VenueCard
                         venue={v}
@@ -357,9 +387,9 @@ export default function HomeDesktop() {
                         distanceKm={distanceById.get(String(v.id)) ?? null}
                         cardStyle={{ width: 250, height: 340 }}
                       />
-                    </Col>
+                    </div>
                   ))}
-                </Row>
+                </div>
               )}
             </div>
           </>
