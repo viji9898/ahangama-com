@@ -1,0 +1,173 @@
+.wrap {
+  display: grid;
+  gap: 14px;
+}
+
+.heading {
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.82);
+}
+
+.supporting {
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 650;
+}
+
+.groupTitle {
+  margin-top: 10px;
+  font-weight: 950;
+  color: rgba(0, 0, 0, 0.74);
+  letter-spacing: -0.2px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.selectionTable {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 480px;
+}
+
+.selectionTable th,
+.selectionTable td {
+  padding: 14px 16px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.selectionTable th {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.48);
+  background: rgba(247, 248, 246, 0.92);
+}
+
+.selectionTable tbody tr + tr td {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.tableRow {
+  cursor: pointer;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.tableRow:hover {
+  background: rgba(22, 163, 166, 0.04);
+}
+
+.tableRow:focus {
+  outline: none;
+}
+
+.tableRow:focus-visible td {
+  box-shadow: inset 0 0 0 2px rgba(22, 163, 166, 0.3);
+}
+
+.tableRowSelected {
+  background: rgba(22, 163, 166, 0.08);
+}
+
+.tableRowLocked {
+  cursor: default;
+}
+
+.tableRowHigh .title {
+  font-size: 16px;
+}
+
+.tableRowExtra .title {
+  font-size: 14px;
+}
+
+.optionCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.icon {
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.78;
+  flex: 0 0 auto;
+}
+
+.checkCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.92);
+  color: rgba(0, 0, 0, 0.6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.checkCircleSelected {
+  border-color: rgba(22, 163, 166, 0.34);
+  background: rgba(22, 163, 166, 0.16);
+  color: rgba(22, 163, 166, 0.95);
+}
+
+.title {
+  font-weight: 950;
+  color: rgba(0, 0, 0, 0.86);
+  letter-spacing: -0.25px;
+  line-height: 1.15;
+}
+
+.titleHighImpact {
+  font-size: 16px;
+}
+
+.titleExtra {
+  font-size: 14px;
+}
+
+.valuePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.9);
+  font-weight: 900;
+  color: rgba(0, 0, 0, 0.78);
+  white-space: nowrap;
+}
+
+.valuePillArrow {
+  font-weight: 950;
+  color: rgba(0, 0, 0, 0.5);
+  transform: translateY(-0.5px);
+}
+
+.selectColumn,
+.selectCell {
+  width: 72px;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .selectionTable {
+    min-width: 440px;
+  }
+
+  .selectionTable th,
+  .selectionTable td {
+    padding: 12px 14px;
+  }
+}

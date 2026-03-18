@@ -59,6 +59,11 @@
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
 }
 
+.perkCardFeatured {
+  border-color: rgba(22, 163, 166, 0.18);
+  background: rgba(22, 163, 166, 0.025);
+}
+
 .check {
   width: 20px;
   height: 20px;
@@ -152,6 +157,33 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.examplePerk {
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.74);
+
+  word-break: keep-all;
+  overflow-wrap: normal;
+  white-space: normal;
+  hyphens: none;
+}
+
+.description {
+  font-size: 13px;
+  font-weight: 650;
+  color: rgba(0, 0, 0, 0.48);
+
+  word-break: keep-all;
+  overflow-wrap: normal;
+  white-space: normal;
+  hyphens: none;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
   overflow: hidden;
 }
 
