@@ -1,39 +1,55 @@
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Row, Space, Tag, Typography } from "antd";
-import { useMemo } from "react";
+import { Button, Card, Col, Row, Select, Space, Tag, Typography } from "antd";
+import { useMemo, useState } from "react";
 
 const { Title, Text } = Typography;
 
-const featuredStays = [
+const featuredStayOptions = [
   {
-    id: "samba",
+    id: "samba-ahangama",
+    calculatorStayId: "samba",
     name: "Samba Ahangama",
-    pricePerNightUSD: 95,
-    discount: 0.3,
     badge: "Best value",
-    summary: "Relaxed Ahangama stay with the strongest headline savings.",
-    comparisonNote: "30% off — typically around 20% cheaper than Booking.com",
+    badgeTone: "mint",
+    pricePerNight: 95,
+    discountPercent: 30,
+    description: "Relaxed Ahangama stay with the strongest headline savings.",
     exampleNights: 2,
+    originalTotal: 190,
+    discountedTotal: 133,
+    savings: 57,
+    supportingNote: "30% off — typically around 20% cheaper than Booking.com",
   },
   {
-    id: "unu",
+    id: "unu-boutique-hotel",
+    calculatorStayId: "unu",
     name: "UNU Boutique Hotel",
-    pricePerNightUSD: 225,
-    discount: 0.2,
     badge: "Popular",
-    summary: "Boutique stay option with meaningful pass savings.",
-    comparisonNote: "20% off — typically cheaper than Booking.com",
+    badgeTone: "lavender",
+    pricePerNight: 225,
+    discountPercent: 20,
+    description: "Boutique stay option with meaningful pass savings.",
     exampleNights: 2,
+    originalTotal: 450,
+    discountedTotal: 360,
+    savings: 90,
+    supportingNote: "20% off — typically cheaper than Booking.com",
   },
   {
-    id: "mosvold",
+    id: "mosvold-villa",
+    calculatorStayId: "mosvold",
     name: "Mosvold Villa",
-    pricePerNightUSD: 250,
-    discount: 0.2,
     badge: "Premium",
-    summary: "Higher-end stay where the pass unlocks larger absolute savings.",
-    comparisonNote: "20% off — typically cheaper than Booking.com",
+    badgeTone: "sand",
+    pricePerNight: 250,
+    discountPercent: 20,
+    description:
+      "Higher-end stay where the pass unlocks larger absolute savings.",
     exampleNights: 2,
+    originalTotal: 500,
+    discountedTotal: 400,
+    savings: 100,
+    supportingNote: "20% off — typically cheaper than Booking.com",
   },
 ];
 
@@ -86,20 +102,16 @@ function getBadgeStyle(badge) {
 }
 
 export default function StaySavingsHighlight({ onSelectStay, className }) {
-  const computed = useMemo(() => {
-    return featuredStays.map((stay) => {
-      const originalTotal = stay.pricePerNightUSD * stay.exampleNights;
-      const discountedTotal = originalTotal * (1 - stay.discount);
-      const savings = originalTotal - discountedTotal;
+  const [selectedFeaturedStayId, setSelectedFeaturedStayId] = useState(
+    featuredStayOptions[0]?.id ?? "samba-ahangama",
+  );
 
-      return {
-        ...stay,
-        originalTotal,
-        discountedTotal,
-        savings,
-      };
-    });
-  }, []);
+  const selectedStay = useMemo(() => {
+    return (
+      featuredStayOptions.find((s) => s.id === selectedFeaturedStayId) ??
+      featuredStayOptions[0]
+    );
+  }, [selectedFeaturedStayId]);
 
   return (
     <section
@@ -116,69 +128,111 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
         boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
       }}
     >
-      <div style={{ display: "grid", gap: 10 }}>
-        <Text
-          style={{
-            fontWeight: 900,
-            letterSpacing: 0.4,
-            color: "rgba(0,0,0,0.62)",
-          }}
-        >
-          Featured stay savings
-        </Text>
-
-        <Title
-          level={2}
-          style={{ margin: 0, fontWeight: 950, letterSpacing: -0.6 }}
-        >
-          Big savings start with where you stay
-        </Title>
-
-        <Text
-          style={{ color: "rgba(0,0,0,0.62)", fontWeight: 650, maxWidth: 920 }}
-        >
-          Selected Ahangama Pass stays offer direct discounts that can make the
-          pass worth it before you even use your food, surf, scooter, or
-          wellness perks.
-        </Text>
-
-        <div
-          style={{
-            marginTop: 6,
-            padding: "10px 12px",
-            borderRadius: 18,
-            border: "1px solid rgba(0,0,0,0.08)",
-            background: "rgba(255,255,255,0.72)",
-            fontWeight: 950,
-            color: "rgba(0,0,0,0.80)",
-          }}
-        >
-          Save on your stay first. Everything else is a bonus.
-        </div>
-      </div>
-
       <div style={{ marginTop: 16 }}>
-        <Row gutter={[14, 14]} align="stretch">
-          {computed.map((stay) => {
-            const badge = getBadgeStyle(stay.badge);
-            const discountPct = Math.round(stay.discount * 100);
+        <Row gutter={[14, 14]} align="top">
+          <Col xs={24} md={12}>
+            <div style={{ display: "grid", gap: 10 }}>
+              <Text
+                style={{
+                  fontWeight: 900,
+                  letterSpacing: 0.4,
+                  color: "rgba(0,0,0,0.62)",
+                }}
+              >
+                Featured stay savings
+              </Text>
 
-            return (
-              <Col key={stay.id} xs={24} md={8}>
-                <Card
-                  hoverable
-                  onClick={() => onSelectStay?.(stay.id)}
-                  styles={{ body: { padding: 16 } }}
-                  style={{
-                    height: "100%",
-                    borderRadius: 22,
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    background: "rgba(255,255,255,0.78)",
-                    backdropFilter: "blur(6px)",
-                    boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
-                    cursor: "pointer",
+              <Title
+                level={2}
+                style={{ margin: 0, fontWeight: 950, letterSpacing: -0.6 }}
+              >
+                Big savings start with where you stay
+              </Title>
+
+              <Text
+                style={{
+                  color: "rgba(0,0,0,0.62)",
+                  fontWeight: 650,
+                  maxWidth: 920,
+                }}
+              >
+                Selected Ahangama Pass stays offer direct discounts that can
+                make the pass worth it before you even use your food, surf,
+                scooter, or wellness perks.
+              </Text>
+            </div>
+            <br></br>
+            <Card
+              styles={{ body: { padding: 16 } }}
+              style={{
+                borderRadius: 22,
+                border: "1px solid rgba(0,0,0,0.08)",
+                background: "rgba(255,255,255,0.78)",
+                backdropFilter: "blur(6px)",
+                boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
+              }}
+            >
+              <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
+                Stay venue
+              </Text>
+              <div style={{ marginTop: 8 }}>
+                <Select
+                  value={selectedFeaturedStayId}
+                  onChange={setSelectedFeaturedStayId}
+                  style={{ width: "100%" }}
+                  optionLabelProp="label"
+                  options={featuredStayOptions.map((s) => ({
+                    value: s.id,
+                    label: `${s.name} — $${s.pricePerNight}/night — ${s.discountPercent}% off`,
+                  }))}
+                  optionRender={(option) => {
+                    const s =
+                      featuredStayOptions.find((x) => x.id === option.value) ??
+                      featuredStayOptions[0];
+                    const badge = getBadgeStyle(s.badge);
+
+                    return (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: 10,
+                        }}
+                      >
+                        <div style={{ fontWeight: 850 }}>
+                          {s.name} — ${s.pricePerNight}/night —{" "}
+                          {s.discountPercent}% off
+                        </div>
+                        <Tag
+                          color={badge.color}
+                          style={{ ...badge.style, marginInlineEnd: 0 }}
+                        >
+                          {s.badge}
+                        </Tag>
+                      </div>
+                    );
                   }}
-                >
+                />
+              </div>
+            </Card>
+          </Col>
+
+          <Col xs={24} md={12}>
+            <Card
+              styles={{ body: { padding: 16 } }}
+              style={{
+                borderRadius: 22,
+                border: "1px solid rgba(0,0,0,0.08)",
+                background: "rgba(255,255,255,0.78)",
+                backdropFilter: "blur(6px)",
+                boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
+              }}
+            >
+              {(() => {
+                const badge = getBadgeStyle(selectedStay.badge);
+
+                return (
                   <div style={{ display: "grid", gap: 10 }}>
                     <div
                       style={{
@@ -186,6 +240,7 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                         alignItems: "flex-start",
                         justifyContent: "space-between",
                         gap: 10,
+                        flexWrap: "wrap",
                       }}
                     >
                       <div style={{ minWidth: 0 }}>
@@ -198,7 +253,7 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                             lineHeight: 1.2,
                           }}
                         >
-                          {stay.name}
+                          {selectedStay.name}
                         </div>
                         <Text
                           style={{
@@ -208,19 +263,20 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                             fontWeight: 750,
                           }}
                         >
-                          ${stay.pricePerNightUSD}/night • {discountPct}% off
+                          ${selectedStay.pricePerNight}/night •{" "}
+                          {selectedStay.discountPercent}% off
                         </Text>
                       </div>
 
                       <Tag color={badge.color} style={badge.style}>
-                        {stay.badge}
+                        {selectedStay.badge}
                       </Tag>
                     </div>
 
                     <Text
                       style={{ color: "rgba(0,0,0,0.62)", fontWeight: 650 }}
                     >
-                      {stay.summary}
+                      {selectedStay.description}
                     </Text>
 
                     <div
@@ -238,7 +294,7 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                           fontWeight: 850,
                         }}
                       >
-                        Example saving on {stay.exampleNights} nights
+                        Example saving on {selectedStay.exampleNights} nights
                       </Text>
 
                       <div
@@ -251,7 +307,7 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                           color: "rgba(0,0,0,0.86)",
                         }}
                       >
-                        Save {formatUsd(stay.savings)}
+                        Save {formatUsd(selectedStay.savings)}
                       </div>
 
                       <Text
@@ -262,24 +318,23 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                           fontWeight: 750,
                         }}
                       >
-                        From {formatUsd(stay.originalTotal)} to{" "}
-                        {formatUsd(stay.discountedTotal)} with the pass
+                        From {formatUsd(selectedStay.originalTotal)} to{" "}
+                        {formatUsd(selectedStay.discountedTotal)} with the pass
                       </Text>
                     </div>
 
                     <Text
                       style={{ color: "rgba(0,0,0,0.52)", fontWeight: 650 }}
                     >
-                      {stay.comparisonNote}
+                      {selectedStay.supportingNote}
                     </Text>
 
                     <div style={{ marginTop: 2 }}>
                       <Button
                         type="text"
                         icon={<ArrowRightOutlined />}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectStay?.(stay.id);
+                        onClick={() => {
+                          onSelectStay?.(selectedStay.calculatorStayId);
                         }}
                         style={{ paddingInline: 0, fontWeight: 850 }}
                       >
@@ -287,10 +342,10 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                       </Button>
                     </div>
                   </div>
-                </Card>
-              </Col>
-            );
-          })}
+                );
+              })()}
+            </Card>
+          </Col>
         </Row>
       </div>
 

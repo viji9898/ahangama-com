@@ -2,7 +2,6 @@ import { Alert, Empty, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AhangamaStatsBar from "../../components/AhangamaStatsBar";
-import { ItineraryPassSection } from "../../components/ItineraryPassSection";
 import StaySavingsHighlight from "../../components/StaySavingsHighlight";
 import TripCalculator from "../../components/TripCalculator";
 import { TripPlannerHero } from "../../components/TripPlannerHero";

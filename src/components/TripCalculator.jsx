@@ -1,8 +1,7 @@
-import { ArrowRightOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined, CheckOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   InputNumber,
   Progress,
@@ -14,6 +13,7 @@ import {
   Typography,
 } from "antd";
 import { useMemo, useState } from "react";
+import perkStyles from "./TripCalculatorPerks.module.css";
 
 const { Title, Text } = Typography;
 
@@ -55,14 +55,66 @@ const perkValuesUsd = {
   wellness: 15,
 };
 
-const perkMeta = [
-  { key: "coffee", label: "Coffee perks", group: "food" },
-  { key: "breakfast", label: "Breakfast / brunch perks", group: "food" },
-  { key: "dinner", label: "Dinner perks", group: "food" },
-  { key: "surf", label: "Surf rental perks", group: "activity" },
-  { key: "scooter", label: "Scooter rental perks", group: "activity" },
-  { key: "wellness", label: "Wellness / massage perks", group: "wellness" },
+const perkOptions = [
+  {
+    id: "coffee",
+    label: "Coffee perks",
+    savingsLabel: "Worth ~$3–$6/day",
+    venues: ["Kaffi", "Cactus", "Black Honey"],
+    example: "Free coffee add-on or drink discount",
+  },
+  {
+    id: "breakfast",
+    label: "Breakfast / brunch perks",
+    savingsLabel: "Worth ~$5–$10/meal",
+    venues: ["Kaffi", "The Kip", "Cactus", "Black Honey"],
+    example: "Breakfast combo or free item with meal",
+  },
+  {
+    id: "dinner",
+    label: "Dinner perks",
+    savingsLabel: "Worth ~$8–$15/meal",
+    venues: ["UNU", "Samba", "Teddies", "Meori"],
+    example: "Free starter, dessert, or % off dinner",
+  },
+  {
+    id: "surf",
+    label: "Surf & activity perks",
+    savingsLabel: "Worth ~$10–$20/session",
+    venues: ["Board Hut", "Lotus Surf & Wellness"],
+    example: "Extra time or discounted board rental",
+  },
+  {
+    id: "scooter",
+    label: "Scooter rental perks",
+    savingsLabel: "Worth ~$5–$10/rental",
+    venues: ["Niya Scooters"],
+    example: "Extra hours or reduced daily rate",
+  },
+  {
+    id: "wellness",
+    label: "Wellness / massage perks",
+    savingsLabel: "Worth ~$15–$30/visit",
+    venues: ["Aksaaya Ayurveda", "Shramalaya", "Senses"],
+    example: "Treatment add-on or discounted session",
+  },
 ];
+
+const travelStylePerkDefaults = {
+  Surf: ["coffee", "breakfast", "surf", "scooter"],
+  Chill: ["coffee", "breakfast", "dinner"],
+  Wellness: ["coffee", "breakfast", "wellness"],
+  Mixed: ["coffee", "breakfast", "dinner", "scooter", "wellness"],
+};
+
+const perkIcons = {
+  coffee: "☕",
+  breakfast: "🍳",
+  dinner: "🍽️",
+  surf: "🏄",
+  scooter: "🛵",
+  wellness: "🧘",
+};
 
 const travelStyleUsage = {
   Surf: (nights) => ({
@@ -172,7 +224,6 @@ export default function TripCalculator({
     "coffee",
     "breakfast",
     "dinner",
-    "surf",
     "scooter",
     "wellness",
   ]);
@@ -259,11 +310,11 @@ export default function TripCalculator({
   }, [savings.staySavingsUsd]);
 
   const selectedPerkTags = useMemo(() => {
-    const metaByKey = new Map(perkMeta.map((p) => [p.key, p]));
+    const metaByKey = new Map(perkOptions.map((p) => [p.id, p]));
     return selectedPerks
       .map((k) => metaByKey.get(k))
       .filter(Boolean)
-      .map((p) => ({ key: p.key, label: p.label }));
+      .map((p) => ({ key: p.id, label: p.label }));
   }, [selectedPerks]);
 
   return (
@@ -428,7 +479,15 @@ export default function TripCalculator({
                 <div style={{ marginTop: 8 }}>
                   <Segmented
                     value={travelStyle}
-                    onChange={setTravelStyle}
+                    onChange={(next) => {
+                      const nextStyle = String(next);
+                      setTravelStyle(nextStyle);
+
+                      const defaults =
+                        travelStylePerkDefaults[nextStyle] ??
+                        travelStylePerkDefaults.Mixed;
+                      setSelectedPerks(defaults);
+                    }}
                     options={["Surf", "Chill", "Wellness", "Mixed"]}
                     block
                   />
@@ -437,7 +496,7 @@ export default function TripCalculator({
 
               <div>
                 <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
-                  What will you likely use?
+                  What do you think you’ll use most?
                 </Text>
                 <Text
                   style={{
@@ -447,33 +506,90 @@ export default function TripCalculator({
                     fontWeight: 650,
                   }}
                 >
-                  Select the perks you expect to use on this trip.
+                  Select the kinds of places you’re likely to visit. We’ll
+                  estimate your savings using real Ahangama Pass partners.
                 </Text>
 
                 <div style={{ marginTop: 10 }}>
-                  <Checkbox.Group
-                    value={selectedPerks}
-                    onChange={(vals) => setSelectedPerks(vals)}
-                    style={{ width: "100%" }}
-                  >
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                        gap: 10,
-                      }}
-                    >
-                      {perkMeta.map((p) => (
-                        <Checkbox
-                          key={p.key}
-                          value={p.key}
-                          style={{ fontWeight: 750 }}
+                  <div className={perkStyles.perkGrid}>
+                    {perkOptions.map((p) => {
+                      const isSelected = selectedPerks.includes(p.id);
+                      const icon = perkIcons[p.id] ?? "";
+                      const venuesLine = (p.venues ?? [])
+                        .filter(Boolean)
+                        .join(" • ");
+                      const cardClassName = [
+                        perkStyles.perkCard,
+                        isSelected ? perkStyles.perkCardSelected : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ");
+                      const badgeClassName = [
+                        perkStyles.savingsBadge,
+                        isSelected ? perkStyles.savingsBadgeSelected : "",
+                      ]
+                        .filter(Boolean)
+                        .join(" ");
+
+                      const toggle = () => {
+                        setSelectedPerks((prev) => {
+                          if (prev.includes(p.id))
+                            return prev.filter((x) => x !== p.id);
+                          return [...prev, p.id];
+                        });
+                      };
+
+                      return (
+                        <div
+                          key={p.id}
+                          role="button"
+                          tabIndex={0}
+                          aria-pressed={isSelected}
+                          className={cardClassName}
+                          onClick={toggle}
+                          onKeyDown={(e) => {
+                            if (e.key !== "Enter" && e.key !== " ") return;
+                            e.preventDefault();
+                            toggle();
+                          }}
                         >
-                          {p.label}
-                        </Checkbox>
-                      ))}
-                    </div>
-                  </Checkbox.Group>
+                          <div className={perkStyles.topRow}>
+                            <div className={perkStyles.headerLeft}>
+                              {icon ? (
+                                <span
+                                  className={perkStyles.icon}
+                                  aria-hidden="true"
+                                >
+                                  {icon}
+                                </span>
+                              ) : null}
+                              <span className={perkStyles.titleText}>
+                                {p.label}
+                              </span>
+                            </div>
+
+                            <div className={perkStyles.headerRight}>
+                              <Tag className={badgeClassName}>
+                                {p.savingsLabel}
+                              </Tag>
+                              {isSelected ? (
+                                <span
+                                  className={perkStyles.check}
+                                  aria-hidden="true"
+                                >
+                                  <CheckOutlined />
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+
+                          <div className={perkStyles.venues}>{venuesLine}</div>
+
+                          <div className={perkStyles.example}>{p.example}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
