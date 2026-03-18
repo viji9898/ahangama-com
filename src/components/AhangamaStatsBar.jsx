@@ -1,4 +1,3 @@
-import { Typography } from "antd";
 import styles from "./AhangamaStatsBar.module.css";
 
 const stats = [
@@ -13,9 +12,8 @@ export default function AhangamaStatsBar({ className }) {
       aria-label="Ahangama Pass stats"
       className={[styles.section, className].filter(Boolean).join(" ")}
     >
-      <Typography.Title level={3} className={styles.title}>
-        Join travellers saving more in Ahangama
-      </Typography.Title>
+      <div className={styles.topRule} aria-hidden="true" />
+      <p className={styles.kicker}>Join travellers saving more in Ahangama</p>
 
       <div className={styles.grid} role="list" aria-label="Key stats">
         {stats.map((stat) => (
