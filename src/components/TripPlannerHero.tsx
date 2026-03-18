@@ -46,16 +46,22 @@ export function TripPlannerHero({
       <div className={styles.shell}>
         <div className={styles.grid}>
           <div className={styles.left}>
+            <div className={styles.eyebrowRow}>
+              <span className={styles.eyebrow}>Ahangama Pass</span>
+              <span className={styles.eyebrowNote}>
+                Wallet-ready digital access
+              </span>
+            </div>
+
             <h1 className={styles.title}>
-              Experience<span className={styles.emphasis}>Ahangama</span>
-              <br />
-              Do More | Pay Less
-              <br />
+              <span className={styles.titleLead}>One pass for the best of</span>
+              <span className={styles.emphasis}>Ahangama</span>
+              <span className={styles.titleTail}>Do More | Payless</span>
             </h1>
 
             <p className={styles.subtext}>
-              Savings at Over 100 Attractions, Restaurants, and Experiences in
-              Ahangama
+              One digital pass for stays, cafes, surf, wellness, and more in
+              Ahangama.
             </p>
 
             <div className={styles.ctaRow} aria-label="Hero calls to action">
@@ -64,7 +70,7 @@ export function TripPlannerHero({
                 className={styles.primaryBtn}
                 onClick={onPrimaryClick}
               >
-                Get The Pass
+                Get your pass
               </button>
 
               <button
@@ -72,14 +78,18 @@ export function TripPlannerHero({
                 className={styles.secondaryBtn}
                 onClick={onSecondaryClick}
               >
-                <SparkleIcon size={16} />
-                See what's included
+                Preview your savings
               </button>
             </div>
 
-            <div className={styles.metaRow} aria-label="Hero meta">
-              <span>Powered by our data and AI</span>
-              <span className={styles.beta}>BETA</span>
+            <p className={styles.microcopy}>
+              Instant QR access • Use across 100+ venues
+            </p>
+
+            <div className={styles.metaRow} aria-label="Hero product benefits">
+              <span className={styles.metaPill}>Instant delivery</span>
+              <span className={styles.metaPill}>Apple &amp; Google Wallet</span>
+              <span className={styles.metaPill}>Use it the same day</span>
             </div>
           </div>
 
@@ -92,6 +102,14 @@ export function TripPlannerHero({
                 aria-hidden="true"
                 draggable={false}
               />
+              <div className={styles.productBadge}>
+                <span className={styles.productBadgeLabel}>
+                  Live pass preview
+                </span>
+                <span className={styles.productBadgeValue}>
+                  QR access in seconds
+                </span>
+              </div>
               <div className={[styles.floatPhoto, styles.float1].join(" ")} />
               <div
                 className={[
