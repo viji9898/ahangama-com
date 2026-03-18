@@ -212,6 +212,19 @@
   max-width: 100%;
 }
 
+.phoneBackdrop {
+  position: absolute;
+  inset: -50px;
+  width: calc(100% + 250px);
+  height: calc(100% + 88px);
+  object-fit: cover;
+  transform: translateX(-100px);
+  border-radius: 0px;
+  opacity: 0.42;
+  pointer-events: none;
+  user-select: none;
+}
+
 .phone {
   position: relative;
   margin: 0 auto;

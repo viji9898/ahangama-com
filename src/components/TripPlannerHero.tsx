@@ -1,5 +1,6 @@
 import styles from "./TripPlannerHero.module.css";
 import heroPassAppleWalletPng from "../assets/hero_pass_apple_wallet.png";
+import heroBackgroundJpg from "../assets/hero_backgound.png";
 
 type Props = {
   onPrimaryClick?: () => void;
@@ -84,6 +85,13 @@ export function TripPlannerHero({
 
           <div className={styles.right} aria-label="App mockup">
             <div className={styles.phoneWrap}>
+              <img
+                className={styles.phoneBackdrop}
+                src={heroBackgroundJpg}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+              />
               <div className={[styles.floatPhoto, styles.float1].join(" ")} />
               <div
                 className={[
