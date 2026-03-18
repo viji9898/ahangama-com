@@ -28,7 +28,7 @@ export function GetPassStickyCta() {
             textAlign: "center",
           }}
         >
-          Get Pass — from $18
+          Get Pass — from $30
         </div>
 
         <a

@@ -2,6 +2,7 @@ import { Alert, Empty, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AhangamaStatsBar from "../../components/AhangamaStatsBar";
+import PricingClaritySection from "../../components/PricingClaritySection";
 import StaySavingsHighlight from "../../components/StaySavingsHighlight";
 import TripCalculator from "../../components/TripCalculator";
 import { TripPlannerHero } from "../../components/TripPlannerHero";
@@ -130,6 +131,18 @@ export default function HomeDesktop() {
 
       <div style={{ marginTop: 12, marginBottom: 12 }}>
         <AhangamaStatsBar />
+      </div>
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <PricingClaritySection
+          onPrimaryClick={() => {
+            window.open(
+              "https://pass.ahangama.com",
+              "_blank",
+              "noopener,noreferrer",
+            );
+          }}
+        />
       </div>
 
       {/* <div style={{ marginBottom: 12 }}>

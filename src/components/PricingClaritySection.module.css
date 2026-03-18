@@ -1,0 +1,253 @@
+.section {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 24px 22px 22px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background:
+    radial-gradient(
+      900px circle at 10% 0%,
+      rgba(255, 255, 255, 0.88),
+      rgba(255, 255, 255, 0) 60%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 209, 232, 0.42) 0%,
+      rgba(205, 255, 239, 0.44) 100%
+    );
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
+}
+
+.header {
+  display: grid;
+  gap: 8px;
+  max-width: 760px;
+}
+
+.kicker {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 34px;
+  font-weight: 950;
+  line-height: 1.02;
+  letter-spacing: -0.8px;
+}
+
+.supporting {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.62);
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.summaryGrid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.summaryCard {
+  border-radius: 20px;
+  padding: 16px 16px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.summaryLabel {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.summaryValue {
+  margin: 8px 0 0;
+  color: rgba(0, 0, 0, 0.86);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+.compareShell {
+  margin-top: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  padding: 18px;
+}
+
+.compareHeader {
+  display: grid;
+  gap: 4px;
+}
+
+.compareTitle {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.86);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+}
+
+.compareNote {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.58);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.compareGrid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.compareCard {
+  min-height: 168px;
+  border-radius: 20px;
+  padding: 18px 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.72);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.compareCardFeatured {
+  background: rgba(22, 163, 166, 0.08);
+  border-color: rgba(22, 163, 166, 0.2);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+}
+
+.compareLabel {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.52);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.compareValue {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.compareDetail {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.62);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.footer {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 22px;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  background: linear-gradient(
+    135deg,
+    #16a3a6 0%,
+    rgba(70, 214, 182, 0.98) 100%
+  );
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14);
+  transition:
+    transform 140ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16);
+}
+
+.primaryBtn:active {
+  transform: translateY(0);
+}
+
+.trustCopy {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.58);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .section {
+    border-radius: 22px;
+    padding: 18px 16px 16px;
+  }
+
+  .title {
+    font-size: 28px;
+    line-height: 1.05;
+  }
+
+  .summaryGrid,
+  .compareGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .compareShell {
+    border-radius: 20px;
+    padding: 16px;
+  }
+
+  .compareCard {
+    min-height: 0;
+  }
+
+  .compareValue {
+    font-size: 28px;
+  }
+
+  .footer {
+    align-items: stretch;
+  }
+
+  .primaryBtn {
+    width: 100%;
+  }
+}
