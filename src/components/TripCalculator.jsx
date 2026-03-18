@@ -97,13 +97,13 @@ export default function TripCalculator({
       className={className}
       style={{
         width: "100%",
-        borderRadius: 32,
-        padding: 24,
+        borderRadius: 28,
+        padding: 18,
         overflow: "hidden",
         border: "1px solid rgba(0,0,0,0.06)",
         background:
           "radial-gradient(900px circle at 10% 0%, rgba(255,255,255,0.88), rgba(255,255,255,0) 60%), linear-gradient(135deg, rgba(255,209,232,0.42) 0%, rgba(205,255,239,0.44) 100%)",
-        boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
+        boxShadow: "0 14px 36px rgba(0,0,0,0.08)",
       }}
     >
       <div
@@ -117,16 +117,23 @@ export default function TripCalculator({
         <div>
           <Title
             level={2}
-            style={{ margin: 0, fontWeight: 950, letterSpacing: -0.6 }}
+            style={{
+              margin: 0,
+              fontWeight: 950,
+              letterSpacing: -0.6,
+              fontSize: 32,
+              lineHeight: 1.05,
+            }}
           >
             Estimate Your Ahangama Pass Value
           </Title>
           <Text
             style={{
               display: "block",
-              marginTop: 8,
+              marginTop: 6,
               color: "rgba(0,0,0,0.62)",
               fontWeight: 650,
+              fontSize: 14,
             }}
           >
             Not a discount calculator — a meaningful value unlock tool.
@@ -134,18 +141,20 @@ export default function TripCalculator({
         </div>
       </div>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 16 }} align="stretch">
+      <Row gutter={[14, 14]} style={{ marginTop: 12 }} align="stretch">
         <Col xs={24} md={24}>
           <Space size={8} wrap>
             {TRIP_PRESETS.map((p) => (
               <Button
                 key={p.key}
-                size="middle"
+                size="small"
                 style={{
                   borderRadius: 999,
                   fontWeight: 850,
                   borderColor: "rgba(0,0,0,0.14)",
                   background: "rgba(255,255,255,0.82)",
+                  height: 32,
+                  paddingInline: 12,
                 }}
                 onClick={() => {
                   setNights(p.nights);
@@ -161,22 +170,22 @@ export default function TripCalculator({
         </Col>
         <Col xs={24} md={12}>
           <Card
-            styles={{ body: { padding: 16 } }}
+            styles={{ body: { padding: 14 } }}
             style={{
               height: "100%",
-              borderRadius: 22,
+              borderRadius: 20,
               border: "1px solid rgba(0,0,0,0.08)",
               background: "rgba(255,255,255,0.76)",
               backdropFilter: "blur(6px)",
-              boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
+              boxShadow: "0 14px 34px rgba(0,0,0,0.08)",
             }}
           >
-            <div style={{ display: "grid", gap: 14 }}>
+            <div style={{ display: "grid", gap: 12 }}>
               <div>
                 <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
                   Number of nights
                 </Text>
-                <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 6 }}>
                   <InputNumber
                     min={1}
                     max={14}
@@ -191,10 +200,12 @@ export default function TripCalculator({
                 <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
                   Accommodation
                 </Text>
-                <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 6 }}>
                   <Select
                     value={stayId}
                     onChange={setStayId}
+                    className="ahg-stay-select"
+                    popupClassName="ahg-stay-select-dropdown"
                     style={{ width: "100%" }}
                     options={ACCOMMODATIONS.map((a) => ({
                       value: a.id,
@@ -223,7 +234,7 @@ export default function TripCalculator({
                   />
                 </div>
 
-                <div style={{ marginTop: 8, display: "grid", gap: 4 }}>
+                <div style={{ marginTop: 6, display: "grid", gap: 3 }}>
                   <Text style={{ color: "rgba(0,0,0,0.58)", fontWeight: 750 }}>
                     Nightly value unlocked:{" "}
                     <span style={{ fontWeight: 950 }}>
@@ -246,7 +257,7 @@ export default function TripCalculator({
                 <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
                   Travel style
                 </Text>
-                <div style={{ marginTop: 8 }}>
+                <div style={{ marginTop: 6 }}>
                   <Segmented
                     value={travelStyle}
                     onChange={(next) => {
@@ -265,8 +276,9 @@ export default function TripCalculator({
               </div>
 
               <div>
-                <div style={{ marginTop: 6 }}>
+                <div style={{ marginTop: 2 }}>
                   <ValueProfileSelector
+                    compact
                     selectedKeys={selectedPerks}
                     selectedStayId={stayId}
                     stayValuePerNight={result.meta.stayValuePerNight}
@@ -286,23 +298,23 @@ export default function TripCalculator({
 
         <Col xs={24} md={12}>
           <Card
-            styles={{ body: { padding: 16 } }}
+            styles={{ body: { padding: 14 } }}
             style={{
               height: "100%",
-              borderRadius: 22,
+              borderRadius: 20,
               border: "1px solid rgba(22,163,166,0.22)",
               background: "rgba(255,255,255,0.82)",
               backdropFilter: "blur(6px)",
-              boxShadow: "0 26px 64px rgba(0,0,0,0.12)",
+              boxShadow: "0 20px 48px rgba(0,0,0,0.12)",
             }}
           >
             <div
               style={{
-                borderRadius: 18,
+                borderRadius: 16,
                 border: "1px solid rgba(22,163,166,0.22)",
                 background: "rgba(22,163,166,0.10)",
-                padding: 14,
-                marginBottom: 14,
+                padding: 12,
+                marginBottom: 12,
               }}
             >
               <div
@@ -320,10 +332,10 @@ export default function TripCalculator({
                   </Text>
                   <div
                     style={{
-                      marginTop: 6,
-                      fontSize: 40,
+                      marginTop: 4,
+                      fontSize: 34,
                       fontWeight: 950,
-                      letterSpacing: -0.8,
+                      letterSpacing: -0.6,
                       lineHeight: 1.02,
                     }}
                   >
@@ -332,7 +344,7 @@ export default function TripCalculator({
                   <Text
                     style={{
                       display: "block",
-                      marginTop: 6,
+                      marginTop: 4,
                       color: "rgba(0,0,0,0.60)",
                       fontWeight: 750,
                     }}
@@ -341,13 +353,14 @@ export default function TripCalculator({
                   </Text>
                 </div>
 
-                <div style={{ display: "grid", gap: 8, justifyItems: "end" }}>
+                <div style={{ display: "grid", gap: 6, justifyItems: "end" }}>
                   <Tag
                     color={strengthMeta.color}
                     style={{
                       borderRadius: 999,
                       fontWeight: 950,
-                      paddingInline: 12,
+                      paddingInline: 10,
+                      marginInlineEnd: 0,
                     }}
                   >
                     Pass value: {strengthMeta.label}
@@ -358,7 +371,7 @@ export default function TripCalculator({
                 </div>
               </div>
 
-              <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
+              <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
                 <div
                   style={{
                     display: "flex",
@@ -393,16 +406,16 @@ export default function TripCalculator({
               </div>
             </div>
 
-            <div style={{ display: "grid", gap: 10 }}>
+            <div style={{ display: "grid", gap: 8 }}>
               <div>
                 <Text style={{ fontWeight: 950, color: "rgba(0,0,0,0.78)" }}>
                   Biggest wins
                 </Text>
                 <div
                   style={{
-                    marginTop: 8,
+                    marginTop: 6,
                     display: "flex",
-                    gap: 8,
+                    gap: 6,
                     flexWrap: "wrap",
                   }}
                 >
@@ -428,7 +441,7 @@ export default function TripCalculator({
                   Value breakdown
                 </Text>
 
-                <div style={{ marginTop: 10, display: "grid", gap: 10 }}>
+                <div style={{ marginTop: 8, display: "grid", gap: 8 }}>
                   {["stay", "activity", "transport", "food", "wellness"].map(
                     (key) => {
                       const item = result.breakdown?.[key];
@@ -469,7 +482,7 @@ export default function TripCalculator({
             </div>
 
             {selectedPerkTags.length > 0 ? (
-              <div style={{ marginTop: 12 }}>
+              <div style={{ marginTop: 10 }}>
                 <Space size={[6, 6]} wrap>
                   {selectedPerkTags.map((p) => (
                     <Tag
@@ -488,7 +501,7 @@ export default function TripCalculator({
                 </Space>
               </div>
             ) : (
-              <div style={{ marginTop: 12 }}>
+              <div style={{ marginTop: 10 }}>
                 <Text style={{ color: "rgba(0,0,0,0.55)", fontWeight: 700 }}>
                   Select a couple of tiles to reveal your biggest wins.
                 </Text>
@@ -497,15 +510,15 @@ export default function TripCalculator({
 
             <div
               style={{
-                marginTop: 14,
+                marginTop: 12,
                 borderTop: "1px solid rgba(0,0,0,0.08)",
-                paddingTop: 14,
+                paddingTop: 12,
               }}
             >
               <div
                 style={{
-                  padding: "10px 12px",
-                  borderRadius: 16,
+                  padding: "8px 10px",
+                  borderRadius: 14,
                   border: "1px solid rgba(0,0,0,0.08)",
                   background: "rgba(22,163,166,0.10)",
                   fontWeight: 900,
@@ -518,7 +531,7 @@ export default function TripCalculator({
 
             <div
               style={{
-                marginTop: 14,
+                marginTop: 12,
                 display: "flex",
                 gap: 10,
                 flexWrap: "wrap",
@@ -527,7 +540,7 @@ export default function TripCalculator({
             >
               <Button
                 type="primary"
-                size="large"
+                size="middle"
                 onClick={onGetPassClick}
                 style={{
                   borderRadius: 999,
@@ -535,7 +548,7 @@ export default function TripCalculator({
                   border: "none",
                   background:
                     "linear-gradient(135deg, rgba(22,163,166,1) 0%, rgba(70,214,182,0.98) 100%)",
-                  boxShadow: "0 14px 30px rgba(0,0,0,0.14)",
+                  boxShadow: "0 10px 22px rgba(0,0,0,0.14)",
                 }}
               >
                 Get the Pass

@@ -352,6 +352,31 @@
   white-space: nowrap;
 }
 
+.ahg-stay-select-dropdown .ant-select-item {
+  color: rgba(0, 0, 0, 0.78);
+}
+
+.ahg-stay-select-dropdown .ant-select-item-option-selected:not(
+    .ant-select-item-option-disabled
+  ) {
+  background: rgba(22, 163, 166, 0.1) !important;
+}
+
+.ahg-stay-select-dropdown .ant-select-item-option-active:not(
+    .ant-select-item-option-disabled
+  ) {
+  background: rgba(22, 163, 166, 0.06) !important;
+}
+
+.ahg-stay-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+  .ant-select-item-option-content,
+.ahg-stay-select-dropdown
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+  .ant-select-item-option-state {
+  color: rgba(0, 0, 0, 0.78) !important;
+}
+
 /* Venue filters (desktop + small-screen responsive) */
 .ahg-filter-with-icon {
   position: relative;

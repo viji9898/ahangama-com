@@ -132,6 +132,7 @@ function SelectionTable({ items, kind }) {
 }
 
 export default function ValueProfileSelector({
+  compact = false,
   selectedKeys,
   onToggleKey,
   selectedStayId,
@@ -281,20 +282,52 @@ export default function ValueProfileSelector({
   ];
 
   return (
-    <div className={styles.wrap}>
-      <Text className={styles.heading}>Where will you get the most value?</Text>
-      <Text className={styles.supporting}>
+    <div
+      className={[styles.wrap, compact ? styles.wrapCompact : ""]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      <Text
+        className={[styles.heading, compact ? styles.headingCompact : ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
+        Where will you get the most value?
+      </Text>
+      <Text
+        className={[styles.supporting, compact ? styles.supportingCompact : ""]
+          .filter(Boolean)
+          .join(" ")}
+      >
         Select the perks you’re most likely to use. We’ll estimate your pass
         value based on real Ahangama partners.
       </Text>
 
       <div>
-        <div className={styles.groupTitle}>High-impact value</div>
+        <div
+          className={[
+            styles.groupTitle,
+            compact ? styles.groupTitleCompact : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          High-impact value
+        </div>
         <SelectionTable items={highImpact} kind="high" />
       </div>
 
       <div>
-        <div className={styles.groupTitle}>Everyday extras</div>
+        <div
+          className={[
+            styles.groupTitle,
+            compact ? styles.groupTitleCompact : "",
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          Everyday extras
+        </div>
         <SelectionTable items={extras} kind="extra" />
       </div>
     </div>

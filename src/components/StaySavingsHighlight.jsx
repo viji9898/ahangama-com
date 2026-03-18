@@ -179,6 +179,8 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                 <Select
                   value={selectedFeaturedStayId}
                   onChange={setSelectedFeaturedStayId}
+                  className="ahg-stay-select"
+                  popupClassName="ahg-stay-select-dropdown"
                   style={{ width: "100%" }}
                   optionLabelProp="label"
                   options={featuredStayOptions.map((s) => ({
