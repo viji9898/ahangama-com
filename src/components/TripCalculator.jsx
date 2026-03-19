@@ -118,10 +118,16 @@ export default function TripCalculator({
     });
   }, [nights, stayId, travelStyle, selectedPerks]);
 
-  const strengthMeta = useMemo(
-    () => getStrengthMeta(result.strength),
-    [result.strength],
-  );
+  const comparisonSummary = useMemo(() => {
+    return {
+      withoutPassTotal: result.publicPriceEquivalent,
+      withPassTotal: result.passAdjustedValue,
+      totalSavings: Math.max(
+        0,
+        result.publicPriceEquivalent - result.passAdjustedValue,
+      ),
+    };
+  }, [result.passAdjustedValue, result.publicPriceEquivalent]);
 
   const valueSourceOptions = useMemo(() => {
     return [
@@ -266,9 +272,13 @@ export default function TripCalculator({
       <Row gutter={[14, 14]} style={{ marginTop: 14 }} align="stretch">
         <Col xs={24} lg={11}>
           <Card
-            styles={{ body: { padding: 16 } }}
+            styles={{
+              body: { padding: 16, maxHeight: 650, overflowY: "auto" },
+            }}
             style={{
               height: "100%",
+              maxHeight: 650,
+              overflow: "hidden",
               borderRadius: 22,
               border: "1px solid rgba(0,0,0,0.08)",
               background: "rgba(255,255,255,0.78)",
@@ -532,9 +542,13 @@ export default function TripCalculator({
 
         <Col xs={24} lg={13}>
           <Card
-            styles={{ body: { padding: 14 } }}
+            styles={{
+              body: { padding: 14, maxHeight: 650, overflowY: "auto" },
+            }}
             style={{
               height: "100%",
+              maxHeight: 650,
+              overflow: "hidden",
               borderRadius: 20,
               border: "1px solid rgba(22,163,166,0.22)",
               background: "rgba(255,255,255,0.82)",
@@ -542,7 +556,7 @@ export default function TripCalculator({
               boxShadow: "0 20px 48px rgba(0,0,0,0.12)",
             }}
           >
-            <div style={{ display: "grid", gap: 12 }}>
+            <div style={{ display: "grid", gap: 10 }}>
               <div style={{ display: "grid", gap: 6 }}>
                 <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
                   Selected stay
@@ -587,110 +601,168 @@ export default function TripCalculator({
               <div
                 style={{
                   borderRadius: 16,
-                  border: "1px solid rgba(22,163,166,0.22)",
-                  background: "rgba(22,163,166,0.10)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  background: "rgba(255,255,255,0.74)",
                   padding: 12,
+                  display: "grid",
+                  gap: 10,
                 }}
               >
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "flex-start",
+                    alignItems: "center",
                     justifyContent: "space-between",
-                    gap: 12,
+                    gap: 10,
                     flexWrap: "wrap",
                   }}
                 >
-                  <div>
-                    <Text
-                      style={{ fontWeight: 950, color: "rgba(0,0,0,0.78)" }}
-                    >
-                      Estimated value unlocked
-                    </Text>
+                  <Text style={{ fontWeight: 950, color: "rgba(0,0,0,0.82)" }}>
+                    With Pass vs Without Pass
+                  </Text>
+                  <Tag
+                    style={{
+                      marginInlineEnd: 0,
+                      borderRadius: 999,
+                      paddingInline: 10,
+                      fontWeight: 950,
+                      borderColor: "rgba(22,163,166,0.20)",
+                      background: "rgba(22,163,166,0.10)",
+                      color: "rgba(0,0,0,0.78)",
+                    }}
+                  >
+                    Save {formatUsd(comparisonSummary.totalSavings)}
+                  </Tag>
+                </div>
+
+                <Row gutter={[8, 8]}>
+                  <Col xs={24} sm={8}>
                     <div
                       style={{
-                        marginTop: 4,
-                        fontSize: 38,
-                        fontWeight: 950,
-                        letterSpacing: -0.8,
-                        lineHeight: 1.02,
+                        height: "100%",
+                        borderRadius: 14,
+                        border: "1px solid rgba(0,0,0,0.07)",
+                        background: "rgba(255,255,255,0.86)",
+                        padding: 10,
+                        display: "grid",
+                        gap: 4,
                       }}
                     >
-                      {formatUsd(result.totalValue)}
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.55)",
+                          fontWeight: 800,
+                          fontSize: 11,
+                          textTransform: "uppercase",
+                          letterSpacing: 0.45,
+                        }}
+                      >
+                        Without pass
+                      </Text>
+                      <Text
+                        style={{ color: "rgba(0,0,0,0.68)", fontWeight: 750 }}
+                      >
+                        Public total
+                      </Text>
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.86)",
+                          fontWeight: 950,
+                          fontSize: 22,
+                          letterSpacing: -0.4,
+                          lineHeight: 1.1,
+                        }}
+                      >
+                        {formatUsd(comparisonSummary.withoutPassTotal)}
+                      </Text>
                     </div>
-                    <Text
+                  </Col>
+
+                  <Col xs={24} sm={8}>
+                    <div
                       style={{
-                        display: "block",
-                        marginTop: 4,
-                        color: "rgba(0,0,0,0.60)",
-                        fontWeight: 750,
+                        height: "100%",
+                        borderRadius: 14,
+                        border: "1px solid rgba(22,163,166,0.18)",
+                        background: "rgba(22,163,166,0.08)",
+                        padding: 10,
+                        display: "grid",
+                        gap: 4,
                       }}
                     >
-                      {result.narrative.subheadline}
-                    </Text>
-                  </div>
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.55)",
+                          fontWeight: 800,
+                          fontSize: 11,
+                          textTransform: "uppercase",
+                          letterSpacing: 0.45,
+                        }}
+                      >
+                        With pass
+                      </Text>
+                      <Text
+                        style={{ color: "rgba(0,0,0,0.68)", fontWeight: 750 }}
+                      >
+                        Pass total
+                      </Text>
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.86)",
+                          fontWeight: 950,
+                          fontSize: 22,
+                          letterSpacing: -0.4,
+                          lineHeight: 1.1,
+                        }}
+                      >
+                        {formatUsd(comparisonSummary.withPassTotal)}
+                      </Text>
+                    </div>
+                  </Col>
 
-                  <div style={{ display: "grid", gap: 6, justifyItems: "end" }}>
-                    <Tag
-                      color={strengthMeta.color}
+                  <Col xs={24} sm={8}>
+                    <div
                       style={{
-                        borderRadius: 999,
-                        fontWeight: 950,
-                        paddingInline: 10,
-                        marginInlineEnd: 0,
+                        height: "100%",
+                        borderRadius: 14,
+                        border: "1px solid rgba(22,163,166,0.18)",
+                        background:
+                          "linear-gradient(135deg, rgba(22,163,166,0.16) 0%, rgba(70,214,182,0.10) 100%)",
+                        padding: 10,
+                        display: "grid",
+                        gap: 4,
                       }}
                     >
-                      Pass value: {strengthMeta.label}
-                    </Tag>
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.58)", fontWeight: 750 }}
-                    >
-                      Updates live as you complete each step
-                    </Text>
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 10, display: "grid", gap: 6 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 10,
-                    }}
-                  >
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.60)", fontWeight: 750 }}
-                    >
-                      Public price equivalent
-                    </Text>
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.82)", fontWeight: 950 }}
-                    >
-                      {formatUsd(result.publicPriceEquivalent)}
-                    </Text>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: 10,
-                    }}
-                  >
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.60)", fontWeight: 750 }}
-                    >
-                      With Ahangama Pass value
-                    </Text>
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.82)", fontWeight: 950 }}
-                    >
-                      {formatUsd(result.passAdjustedValue)}
-                    </Text>
-                  </div>
-                  <Text style={{ color: "rgba(0,0,0,0.52)", fontWeight: 700 }}>
-                    {result.narrative.stayLine}
-                  </Text>
-                </div>
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.58)",
+                          fontWeight: 800,
+                          fontSize: 11,
+                          textTransform: "uppercase",
+                          letterSpacing: 0.45,
+                        }}
+                      >
+                        Total savings
+                      </Text>
+                      <Text
+                        style={{ color: "rgba(0,0,0,0.68)", fontWeight: 750 }}
+                      >
+                        Your delta
+                      </Text>
+                      <Text
+                        style={{
+                          color: "rgba(0,0,0,0.88)",
+                          fontWeight: 950,
+                          fontSize: 24,
+                          letterSpacing: -0.5,
+                          lineHeight: 1.05,
+                        }}
+                      >
+                        {formatUsd(comparisonSummary.totalSavings)}
+                      </Text>
+                    </div>
+                  </Col>
+                </Row>
               </div>
 
               <div style={{ display: "grid", gap: 8 }}>
