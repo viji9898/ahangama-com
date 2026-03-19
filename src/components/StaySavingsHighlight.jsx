@@ -203,7 +203,12 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                     >
                       Stay venue
                     </Text>
-                    <div style={{ width: isSmall ? "100%" : 420, maxWidth: "100%" }}>
+                    <div
+                      style={{
+                        width: isSmall ? "100%" : 420,
+                        maxWidth: "100%",
+                      }}
+                    >
                       <Select
                         value={selectedFeaturedStayId}
                         onChange={setSelectedFeaturedStayId}
@@ -217,8 +222,9 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                         }))}
                         optionRender={(option) => {
                           const stayOption =
-                            featuredStayOptions.find((x) => x.id === option.value) ??
-                            featuredStayOptions[0];
+                            featuredStayOptions.find(
+                              (x) => x.id === option.value,
+                            ) ?? featuredStayOptions[0];
                           const optionBadge = getBadgeStyle(stayOption.badge);
 
                           return (
@@ -231,12 +237,15 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                               }}
                             >
                               <div style={{ fontWeight: 850 }}>
-                                {stayOption.name} — ${stayOption.pricePerNight}/night —{" "}
-                                {stayOption.discountPercent}% off
+                                {stayOption.name} — ${stayOption.pricePerNight}
+                                /night — {stayOption.discountPercent}% off
                               </div>
                               <Tag
                                 color={optionBadge.color}
-                                style={{ ...optionBadge.style, marginInlineEnd: 0 }}
+                                style={{
+                                  ...optionBadge.style,
+                                  marginInlineEnd: 0,
+                                }}
                               >
                                 {stayOption.badge}
                               </Tag>
@@ -254,7 +263,10 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                       justifyItems: isSmall ? "start" : "end",
                     }}
                   >
-                    <Tag color={badge.color} style={{ ...badge.style, marginInlineEnd: 0 }}>
+                    <Tag
+                      color={badge.color}
+                      style={{ ...badge.style, marginInlineEnd: 0 }}
+                    >
                       {selectedStay.badge}
                     </Tag>
                     <Text
@@ -415,7 +427,8 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                             fontSize: 14,
                           }}
                         >
-                          Direct accommodation savings before adding any other pass perks.
+                          Direct accommodation savings before adding any other
+                          pass perks.
                         </Text>
                       </div>
 
