@@ -1,5 +1,15 @@
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Row, Select, Space, Tag, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Grid,
+  Row,
+  Select,
+  Space,
+  Tag,
+  Typography,
+} from "antd";
 import { useMemo, useState } from "react";
 
 const { Title, Text } = Typography;
@@ -102,6 +112,8 @@ function getBadgeStyle(badge) {
 }
 
 export default function StaySavingsHighlight({ onSelectStay, className }) {
+  const screens = Grid.useBreakpoint();
+  const isSmall = !screens.md;
   const [selectedFeaturedStayId, setSelectedFeaturedStayId] = useState(
     featuredStayOptions[0]?.id ?? "samba-ahangama",
   );
@@ -128,131 +140,153 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
         boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
       }}
     >
-      <div style={{ marginTop: 16 }}>
-        <Row gutter={[14, 14]} align="top">
-          <Col xs={24} md={12}>
-            <div style={{ display: "grid", gap: 10 }}>
-              <Text
-                style={{
-                  fontWeight: 900,
-                  letterSpacing: 0.4,
-                  color: "rgba(0,0,0,0.62)",
-                }}
-              >
-                Featured stay savings
-              </Text>
+      <div style={{ display: "grid", gap: 12 }}>
+        <div style={{ display: "grid", gap: 10, maxWidth: 780 }}>
+          <Text
+            style={{
+              fontWeight: 900,
+              letterSpacing: 0.4,
+              color: "rgba(0,0,0,0.62)",
+            }}
+          >
+            Featured stay savings
+          </Text>
 
-              <Title
-                level={2}
-                style={{ margin: 0, fontWeight: 950, letterSpacing: -0.6 }}
-              >
-                Big savings start with where you stay
-              </Title>
+          <Title
+            level={2}
+            style={{ margin: 0, fontWeight: 950, letterSpacing: -0.6 }}
+          >
+            Big savings start with where you stay
+          </Title>
 
-              <Text
-                style={{
-                  color: "rgba(0,0,0,0.62)",
-                  fontWeight: 650,
-                  maxWidth: 920,
-                }}
-              >
-                Selected Ahangama Pass stays offer direct discounts that can
-                make the pass worth it before you even use your food, surf,
-                scooter, or wellness perks.
-              </Text>
-            </div>
-            <br></br>
-            <Card
-              styles={{ body: { padding: 16 } }}
-              style={{
-                borderRadius: 22,
-                border: "1px solid rgba(0,0,0,0.08)",
-                background: "rgba(255,255,255,0.78)",
-                backdropFilter: "blur(6px)",
-                boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
-              }}
-            >
-              <Text style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}>
-                Stay venue
-              </Text>
-              <div style={{ marginTop: 8 }}>
-                <Select
-                  value={selectedFeaturedStayId}
-                  onChange={setSelectedFeaturedStayId}
-                  className="ahg-stay-select"
-                  popupClassName="ahg-stay-select-dropdown"
-                  style={{ width: "100%" }}
-                  optionLabelProp="label"
-                  options={featuredStayOptions.map((s) => ({
-                    value: s.id,
-                    label: `${s.name} — $${s.pricePerNight}/night — ${s.discountPercent}% off`,
-                  }))}
-                  optionRender={(option) => {
-                    const s =
-                      featuredStayOptions.find((x) => x.id === option.value) ??
-                      featuredStayOptions[0];
-                    const badge = getBadgeStyle(s.badge);
+          <Text
+            style={{
+              color: "rgba(0,0,0,0.62)",
+              fontWeight: 650,
+              maxWidth: 900,
+              lineHeight: 1.6,
+            }}
+          >
+            Accommodation savings often create the biggest absolute value in the
+            pass. In many cases, the hotel discount alone can justify buying it
+            before you even use cafes, surf, transport, or wellness perks.
+          </Text>
+        </div>
 
-                    return (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          gap: 10,
-                        }}
-                      >
-                        <div style={{ fontWeight: 850 }}>
-                          {s.name} — ${s.pricePerNight}/night —{" "}
-                          {s.discountPercent}% off
-                        </div>
-                        <Tag
-                          color={badge.color}
-                          style={{ ...badge.style, marginInlineEnd: 0 }}
-                        >
-                          {s.badge}
-                        </Tag>
-                      </div>
-                    );
+        <Card
+          styles={{ body: { padding: isSmall ? 16 : 18 } }}
+          style={{
+            borderRadius: 24,
+            border: "1px solid rgba(0,0,0,0.08)",
+            background: "rgba(255,255,255,0.78)",
+            backdropFilter: "blur(6px)",
+            boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
+          }}
+        >
+          {(() => {
+            const badge = getBadgeStyle(selectedStay.badge);
+
+            return (
+              <div style={{ display: "grid", gap: 18 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "space-between",
+                    gap: 14,
+                    flexWrap: "wrap",
                   }}
-                />
-              </div>
-            </Card>
-          </Col>
+                >
+                  <div style={{ display: "grid", gap: 8, minWidth: 0 }}>
+                    <Text
+                      style={{ fontWeight: 900, color: "rgba(0,0,0,0.82)" }}
+                    >
+                      Stay venue
+                    </Text>
+                    <div style={{ width: isSmall ? "100%" : 420, maxWidth: "100%" }}>
+                      <Select
+                        value={selectedFeaturedStayId}
+                        onChange={setSelectedFeaturedStayId}
+                        className="ahg-stay-select"
+                        popupClassName="ahg-stay-select-dropdown"
+                        style={{ width: "100%" }}
+                        optionLabelProp="label"
+                        options={featuredStayOptions.map((s) => ({
+                          value: s.id,
+                          label: `${s.name} — $${s.pricePerNight}/night — ${s.discountPercent}% off`,
+                        }))}
+                        optionRender={(option) => {
+                          const stayOption =
+                            featuredStayOptions.find((x) => x.id === option.value) ??
+                            featuredStayOptions[0];
+                          const optionBadge = getBadgeStyle(stayOption.badge);
 
-          <Col xs={24} md={12}>
-            <Card
-              styles={{ body: { padding: 16 } }}
-              style={{
-                borderRadius: 22,
-                border: "1px solid rgba(0,0,0,0.08)",
-                background: "rgba(255,255,255,0.78)",
-                backdropFilter: "blur(6px)",
-                boxShadow: "0 18px 44px rgba(0,0,0,0.08)",
-              }}
-            >
-              {(() => {
-                const badge = getBadgeStyle(selectedStay.badge);
+                          return (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                gap: 10,
+                              }}
+                            >
+                              <div style={{ fontWeight: 850 }}>
+                                {stayOption.name} — ${stayOption.pricePerNight}/night —{" "}
+                                {stayOption.discountPercent}% off
+                              </div>
+                              <Tag
+                                color={optionBadge.color}
+                                style={{ ...optionBadge.style, marginInlineEnd: 0 }}
+                              >
+                                {stayOption.badge}
+                              </Tag>
+                            </div>
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
 
-                return (
-                  <div style={{ display: "grid", gap: 10 }}>
-                    <div
+                  <div
+                    style={{
+                      display: "grid",
+                      gap: 8,
+                      justifyItems: isSmall ? "start" : "end",
+                    }}
+                  >
+                    <Tag color={badge.color} style={{ ...badge.style, marginInlineEnd: 0 }}>
+                      {selectedStay.badge}
+                    </Tag>
+                    <Text
                       style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        justifyContent: "space-between",
-                        gap: 10,
-                        flexWrap: "wrap",
+                        color: "rgba(0,0,0,0.58)",
+                        fontWeight: 750,
+                        fontSize: 12,
                       }}
                     >
-                      <div style={{ minWidth: 0 }}>
+                      Often cheaper than booking platforms
+                    </Text>
+                  </div>
+                </div>
+
+                <Row gutter={[16, 16]} align="stretch">
+                  <Col xs={24} lg={10}>
+                    <div style={{ display: "grid", gap: 14, height: "100%" }}>
+                      <div
+                        style={{
+                          borderRadius: 20,
+                          border: "1px solid rgba(0,0,0,0.08)",
+                          background: "rgba(255,255,255,0.72)",
+                          padding: 16,
+                        }}
+                      >
                         <div
                           style={{
                             fontWeight: 950,
-                            letterSpacing: -0.2,
-                            color: "rgba(0,0,0,0.86)",
-                            fontSize: 16,
-                            lineHeight: 1.2,
+                            letterSpacing: -0.3,
+                            color: "rgba(0,0,0,0.88)",
+                            fontSize: 22,
+                            lineHeight: 1.1,
                           }}
                         >
                           {selectedStay.name}
@@ -260,146 +294,282 @@ export default function StaySavingsHighlight({ onSelectStay, className }) {
                         <Text
                           style={{
                             display: "block",
-                            marginTop: 6,
+                            marginTop: 8,
                             color: "rgba(0,0,0,0.62)",
-                            fontWeight: 750,
+                            fontWeight: 650,
+                            lineHeight: 1.55,
                           }}
                         >
-                          ${selectedStay.pricePerNight}/night •{" "}
-                          {selectedStay.discountPercent}% off
+                          {selectedStay.description}
                         </Text>
                       </div>
 
-                      <Tag color={badge.color} style={badge.style}>
-                        {selectedStay.badge}
-                      </Tag>
-                    </div>
-
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.62)", fontWeight: 650 }}
-                    >
-                      {selectedStay.description}
-                    </Text>
-
-                    <div
-                      style={{
-                        borderRadius: 18,
-                        border: "1px solid rgba(22,163,166,0.22)",
-                        background: "rgba(22,163,166,0.10)",
-                        padding: 14,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          display: "block",
-                          color: "rgba(0,0,0,0.70)",
-                          fontWeight: 850,
-                        }}
-                      >
-                        Example saving on {selectedStay.exampleNights} nights
-                      </Text>
-
                       <div
                         style={{
-                          marginTop: 6,
-                          fontSize: 34,
-                          fontWeight: 950,
-                          letterSpacing: -0.7,
-                          lineHeight: 1.05,
-                          color: "rgba(0,0,0,0.86)",
+                          display: "grid",
+                          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                          gap: 10,
                         }}
                       >
-                        Save {formatUsd(selectedStay.savings)}
+                        {[
+                          {
+                            label: "Nightly rate",
+                            value: formatUsd(selectedStay.pricePerNight),
+                          },
+                          {
+                            label: "Discount",
+                            value: `${selectedStay.discountPercent}% off`,
+                          },
+                          {
+                            label: "Stay length",
+                            value: `${selectedStay.exampleNights} nights`,
+                          },
+                        ].map((item) => (
+                          <div
+                            key={item.label}
+                            style={{
+                              borderRadius: 18,
+                              border: "1px solid rgba(0,0,0,0.08)",
+                              background: "rgba(255,255,255,0.78)",
+                              padding: 14,
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "rgba(0,0,0,0.5)",
+                                fontWeight: 850,
+                                fontSize: 11,
+                                letterSpacing: 0.9,
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              {item.label}
+                            </div>
+                            <div
+                              style={{
+                                marginTop: 8,
+                                color: "rgba(0,0,0,0.86)",
+                                fontWeight: 900,
+                                fontSize: 18,
+                                letterSpacing: -0.3,
+                                lineHeight: 1.15,
+                              }}
+                            >
+                              {item.value}
+                            </div>
+                          </div>
+                        ))}
                       </div>
 
                       <Text
-                        style={{
-                          display: "block",
-                          marginTop: 6,
-                          color: "rgba(0,0,0,0.58)",
-                          fontWeight: 750,
-                        }}
+                        style={{ color: "rgba(0,0,0,0.56)", fontWeight: 700 }}
                       >
-                        From {formatUsd(selectedStay.originalTotal)} to{" "}
-                        {formatUsd(selectedStay.discountedTotal)} with the pass
+                        {selectedStay.supportingNote}. Stays often drive the
+                        biggest absolute savings because the nightly rate is the
+                        largest part of most trips.
                       </Text>
                     </div>
+                  </Col>
 
-                    <Text
-                      style={{ color: "rgba(0,0,0,0.52)", fontWeight: 650 }}
+                  <Col xs={24} lg={14}>
+                    <div
+                      style={{
+                        height: "100%",
+                        borderRadius: 22,
+                        border: "1px solid rgba(22,163,166,0.22)",
+                        background: "rgba(22,163,166,0.10)",
+                        padding: isSmall ? 16 : 20,
+                        display: "grid",
+                        gap: 14,
+                      }}
                     >
-                      {selectedStay.supportingNote}
-                    </Text>
+                      <div style={{ display: "grid", gap: 6 }}>
+                        <Text
+                          style={{
+                            color: "rgba(0,0,0,0.68)",
+                            fontWeight: 850,
+                            fontSize: 12,
+                            letterSpacing: 0.8,
+                            textTransform: "uppercase",
+                          }}
+                        >
+                          Example saving on {selectedStay.exampleNights} nights
+                        </Text>
 
-                    <div style={{ marginTop: 2 }}>
-                      <Button
-                        type="text"
-                        icon={<ArrowRightOutlined />}
-                        onClick={() => {
-                          onSelectStay?.(selectedStay.calculatorStayId);
+                        <div
+                          style={{
+                            fontSize: isSmall ? 42 : 54,
+                            fontWeight: 950,
+                            letterSpacing: -1.4,
+                            lineHeight: 0.94,
+                            color: "rgba(0,0,0,0.88)",
+                          }}
+                        >
+                          {formatUsd(selectedStay.savings)}
+                        </div>
+
+                        <Text
+                          style={{
+                            color: "rgba(0,0,0,0.60)",
+                            fontWeight: 750,
+                            fontSize: 14,
+                          }}
+                        >
+                          Direct accommodation savings before adding any other pass perks.
+                        </Text>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: isSmall
+                            ? "1fr"
+                            : "repeat(3, minmax(0, 1fr))",
+                          gap: 10,
                         }}
-                        style={{ paddingInline: 0, fontWeight: 850 }}
                       >
-                        Use this stay in calculator
-                      </Button>
-                    </div>
-                  </div>
-                );
-              })()}
-            </Card>
-          </Col>
-        </Row>
-      </div>
+                        {[
+                          {
+                            label: "Before price",
+                            value: formatUsd(selectedStay.originalTotal),
+                          },
+                          {
+                            label: "After price",
+                            value: formatUsd(selectedStay.discountedTotal),
+                          },
+                          {
+                            label: "Total savings",
+                            value: formatUsd(selectedStay.savings),
+                          },
+                        ].map((item) => (
+                          <div
+                            key={item.label}
+                            style={{
+                              borderRadius: 18,
+                              border: "1px solid rgba(0,0,0,0.08)",
+                              background: "rgba(255,255,255,0.72)",
+                              padding: 14,
+                            }}
+                          >
+                            <div
+                              style={{
+                                color: "rgba(0,0,0,0.5)",
+                                fontWeight: 850,
+                                fontSize: 11,
+                                letterSpacing: 0.9,
+                                textTransform: "uppercase",
+                              }}
+                            >
+                              {item.label}
+                            </div>
+                            <div
+                              style={{
+                                marginTop: 8,
+                                color: "rgba(0,0,0,0.88)",
+                                fontWeight: 950,
+                                fontSize: 24,
+                                letterSpacing: -0.7,
+                                lineHeight: 1,
+                              }}
+                            >
+                              {item.value}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
 
-      <div style={{ marginTop: 14 }}>
-        <div
-          style={{
-            borderRadius: 18,
-            border: "1px solid rgba(0,0,0,0.08)",
-            background: "rgba(255,255,255,0.72)",
-            padding: 12,
-          }}
-        >
-          <Space
-            size={[8, 8]}
-            wrap
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Tag
-              style={{
-                borderRadius: 999,
-                fontWeight: 900,
-                background: "rgba(22,163,166,0.12)",
-                borderColor: "rgba(22,163,166,0.20)",
-                color: "rgba(0,0,0,0.78)",
-              }}
-            >
-              Up to 30% off selected stays
-            </Tag>
-            <Tag
-              style={{
-                borderRadius: 999,
-                fontWeight: 900,
-                background: "rgba(255,255,255,0.95)",
-                borderColor: "rgba(0,0,0,0.14)",
-                color: "rgba(0,0,0,0.78)",
-              }}
-            >
-              Typically cheaper than Booking.com
-            </Tag>
-            <Tag
-              style={{
-                borderRadius: 999,
-                fontWeight: 900,
-                background: "rgba(255,209,232,0.26)",
-                borderColor: "rgba(0,0,0,0.10)",
-                color: "rgba(0,0,0,0.78)",
-              }}
-            >
-              Then stack food, surf, scooter, and wellness perks
-            </Tag>
-          </Space>
-        </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: 12,
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <Text
+                          style={{ color: "rgba(0,0,0,0.58)", fontWeight: 750 }}
+                        >
+                          Often cheaper than booking platforms
+                        </Text>
+
+                        <Button
+                          type="primary"
+                          icon={<ArrowRightOutlined />}
+                          iconPosition="end"
+                          onClick={() => {
+                            onSelectStay?.(selectedStay.calculatorStayId);
+                          }}
+                          style={{
+                            borderRadius: 999,
+                            fontWeight: 900,
+                            border: "none",
+                            minHeight: 46,
+                            paddingInline: 18,
+                            background:
+                              "linear-gradient(135deg, rgba(22,163,166,1) 0%, rgba(70,214,182,0.98) 100%)",
+                            boxShadow: "0 12px 26px rgba(0,0,0,0.14)",
+                          }}
+                        >
+                          Use this stay in calculator
+                        </Button>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+
+                <div
+                  style={{
+                    borderRadius: 18,
+                    border: "1px solid rgba(0,0,0,0.08)",
+                    background: "rgba(255,255,255,0.72)",
+                    padding: 12,
+                  }}
+                >
+                  <Space
+                    size={[8, 8]}
+                    wrap
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Tag
+                      style={{
+                        borderRadius: 999,
+                        fontWeight: 900,
+                        background: "rgba(22,163,166,0.12)",
+                        borderColor: "rgba(22,163,166,0.20)",
+                        color: "rgba(0,0,0,0.78)",
+                      }}
+                    >
+                      Up to 30% off selected stays
+                    </Tag>
+                    <Tag
+                      style={{
+                        borderRadius: 999,
+                        fontWeight: 900,
+                        background: "rgba(255,255,255,0.95)",
+                        borderColor: "rgba(0,0,0,0.14)",
+                        color: "rgba(0,0,0,0.78)",
+                      }}
+                    >
+                      Often cheaper than booking platforms
+                    </Tag>
+                    <Tag
+                      style={{
+                        borderRadius: 999,
+                        fontWeight: 900,
+                        background: "rgba(255,209,232,0.26)",
+                        borderColor: "rgba(0,0,0,0.10)",
+                        color: "rgba(0,0,0,0.78)",
+                      }}
+                    >
+                      Then stack cafes, surf, transport, and wellness perks
+                    </Tag>
+                  </Space>
+                </div>
+              </div>
+            );
+          })()}
+        </Card>
       </div>
     </section>
   );
