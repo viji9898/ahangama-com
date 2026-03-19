@@ -280,6 +280,50 @@
   max-width: 100%;
 }
 
+.deviceLabel {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(10px);
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  line-height: 1.15;
+  animation: labelFloat 4.6s ease-in-out infinite;
+}
+
+.deviceLabelTop {
+  top: 86px;
+  left: -88px;
+}
+
+.deviceLabelBottom {
+  right: -116px;
+  bottom: 66px;
+  animation-delay: 0.7s;
+}
+
+.deviceLabelDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    var(--tp-teal) 0%,
+    rgba(70, 214, 182, 1) 100%
+  );
+  box-shadow: 0 0 0 4px rgba(22, 163, 166, 0.12);
+  flex: 0 0 auto;
+}
+
 .productBadge {
   position: absolute;
   top: 22px;
@@ -334,6 +378,7 @@
   background: #0b0b0b;
   padding: 5px;
   box-shadow: 0 16px 42px rgba(0, 0, 0, 0.22);
+  animation: deviceBob 6.2s ease-in-out infinite;
 }
 
 .screen {
@@ -454,6 +499,7 @@
 }
 
 .cardImage {
+  position: relative;
   flex: 1 1 auto;
   min-height: 78px;
   display: flex;
@@ -474,7 +520,88 @@
     );
 }
 
+.passGlow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 110px;
+  height: 110px;
+  transform: translate(-50%, -48%);
+  border-radius: 28px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.68) 0%,
+    rgba(22, 163, 166, 0.18) 46%,
+    rgba(22, 163, 166, 0) 76%
+  );
+  filter: blur(4px);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.scanFrame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 102px;
+  height: 132px;
+  transform: translate(-50%, -50%);
+  border-radius: 18px;
+  border: 1px solid rgba(22, 163, 166, 0.36);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.45) inset,
+    0 0 22px rgba(22, 163, 166, 0.14);
+  pointer-events: none;
+  animation: scanPulse 3s ease-in-out infinite;
+}
+
+.scanFrame::before,
+.scanFrame::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-color: rgba(22, 163, 166, 0.75);
+}
+
+.scanFrame::before {
+  top: 10px;
+  left: 10px;
+  border-top: 2px solid rgba(22, 163, 166, 0.75);
+  border-left: 2px solid rgba(22, 163, 166, 0.75);
+  border-top-left-radius: 6px;
+}
+
+.scanFrame::after {
+  right: 10px;
+  bottom: 10px;
+  border-right: 2px solid rgba(22, 163, 166, 0.75);
+  border-bottom: 2px solid rgba(22, 163, 166, 0.75);
+  border-bottom-right-radius: 6px;
+}
+
+.scanBeam {
+  position: absolute;
+  left: 50%;
+  top: 32px;
+  width: 108px;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(22, 163, 166, 0) 0%,
+    rgba(22, 163, 166, 0.92) 50%,
+    rgba(22, 163, 166, 0) 100%
+  );
+  box-shadow: 0 0 14px rgba(22, 163, 166, 0.34);
+  pointer-events: none;
+  animation: scanSweep 3.2s ease-in-out infinite;
+}
+
 .cardImageImg {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: auto;
   max-height: 100%;
@@ -598,6 +725,66 @@
   opacity: 0.75;
 }
 
+@keyframes deviceBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes labelFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes scanPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.02);
+  }
+}
+
+@keyframes scanSweep {
+  0% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(82px);
+    opacity: 0.95;
+  }
+
+  85% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(96px);
+    opacity: 0;
+  }
+}
+
 /* Responsive */
 @media (max-width: 920px) {
   .shell {
@@ -642,6 +829,14 @@
 
   .productBadge {
     right: -18px;
+  }
+
+  .deviceLabelTop {
+    left: -36px;
+  }
+
+  .deviceLabelBottom {
+    right: -42px;
   }
 
   .phone {
@@ -728,5 +923,23 @@
 
   .productBadgeValue {
     font-size: 13px;
+  }
+
+  .deviceLabel {
+    position: static;
+    margin-top: 10px;
+    justify-self: center;
+    max-width: min(100%, 240px);
+  }
+
+  .deviceLabelTop,
+  .deviceLabelBottom {
+    animation-delay: 0s;
+  }
+
+  .phoneWrap {
+    display: grid;
+    justify-items: center;
+    gap: 0;
   }
 }

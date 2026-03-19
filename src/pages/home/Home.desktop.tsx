@@ -418,7 +418,7 @@ export default function HomeDesktop() {
                         venue={v}
                         variant="desktop"
                         distanceKm={distanceById.get(String(v.id)) ?? null}
-                        cardStyle={{ width: 250, height: 340 }}
+                        cardStyle={{ width: 280, height: 418 }}
                       />
                     </div>
                   ))}

@@ -110,6 +110,22 @@ export function TripPlannerHero({
                   QR access in seconds
                 </span>
               </div>
+              <div
+                className={[styles.deviceLabel, styles.deviceLabelTop].join(
+                  " ",
+                )}
+              >
+                <span className={styles.deviceLabelDot} aria-hidden="true" />
+                <span>This is your pass</span>
+              </div>
+              <div
+                className={[styles.deviceLabel, styles.deviceLabelBottom].join(
+                  " ",
+                )}
+              >
+                <span className={styles.deviceLabelDot} aria-hidden="true" />
+                <span>Scan at venues to unlock savings</span>
+              </div>
               <div className={[styles.floatPhoto, styles.float1].join(" ")} />
               <div
                 className={[
@@ -145,6 +161,9 @@ export function TripPlannerHero({
 
                   <div className={styles.card} aria-label="Attraction card">
                     <div className={styles.cardImage} aria-hidden="true">
+                      <div className={styles.passGlow} />
+                      <div className={styles.scanFrame} />
+                      <div className={styles.scanBeam} />
                       <img
                         className={styles.cardImageImg}
                         src={heroPassAppleWalletPng}
