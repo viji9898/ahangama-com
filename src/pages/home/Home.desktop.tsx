@@ -1,120 +1,18 @@
-import { Alert, Empty, Spin, Switch, Tag } from "antd";
-import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+
 import AhangamaStatsBar from "../../components/AhangamaStatsBar";
 import GuideDownloadSection from "../../components/GuideDownloadSection";
 import PassEsimSection from "../../components/PassEsimSection";
-import PricingClaritySection from "../../components/PricingClaritySection";
-import StaySavingsHighlight from "../../components/StaySavingsHighlight";
+
 import StaySavingsVenuesMap from "../../components/StaySavingsVenuesMap";
 import TeamAdviceSection from "../../components/TeamAdviceSection";
 import TripCalculator from "../../components/TripCalculator";
 import { TripPlannerHero } from "../../components/TripPlannerHero";
-import styles from "./Home.desktop.module.css";
+
 import { FooterDesktop } from "../../components/desktop/Footer.Desktop";
-import { VenueCard } from "../../components/VenueCard";
-import {
-  EDITORIAL_TAGS,
-  getEditorialTagDescription,
-} from "../../config/editorialTags";
-import { useVenues } from "../../hooks/useVenues";
-import { hasEditorialTag } from "../../utils/venueEditorial";
-import { sortVenues } from "../../utils/venueList";
-
-type LatLng = { lat: number; lng: number };
-
-function getDistanceFromLatLonInKm(
-  lat1: number,
-  lon1: number,
-  lat2: number,
-  lon2: number,
-) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
 
 export default function HomeDesktop() {
-  const params = useParams();
-  const destinationSlug = String(params.destinationSlug || "ahangama");
-
-  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
-  const [passOnly, setPassOnly] = useState(false);
-  const [editorialTag, setEditorialTag] = useState<string>("");
   const [selectedStay, setSelectedStay] = useState("samba");
-
-  const { venues, loading, error } = useVenues({
-    destinationSlug,
-    liveOnly: true,
-  });
-
-  useEffect(() => {
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-        });
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 10000 },
-    );
-  }, []);
-
-  const distanceById = useMemo(() => {
-    const map = new Map<string, number>();
-    if (!userLocation) return map;
-
-    for (const v of venues) {
-      const pos =
-        v.position?.lat != null && v.position?.lng != null
-          ? v.position
-          : v.lat != null && v.lng != null
-            ? { lat: v.lat, lng: v.lng }
-            : null;
-      if (!pos) continue;
-
-      const distanceKm = getDistanceFromLatLonInKm(
-        userLocation.lat,
-        userLocation.lng,
-        pos.lat,
-        pos.lng,
-      );
-      if (!Number.isFinite(distanceKm)) continue;
-      map.set(String(v.id), distanceKm);
-    }
-
-    return map;
-  }, [venues, userLocation]);
-
-  const sortedVenues = useMemo(
-    () => sortVenues(venues, "curated", distanceById),
-    [venues, distanceById],
-  );
-
-  const visibleVenues = useMemo(() => {
-    let list = sortedVenues;
-    if (passOnly) list = list.filter((v) => Boolean(v.isPassVenue));
-    if (editorialTag)
-      list = list.filter((v) => hasEditorialTag(v, editorialTag));
-    return list;
-  }, [sortedVenues, passOnly, editorialTag]);
-
-  const buildVenuesHref = (overrides: Record<string, string>) => {
-    const p = new URLSearchParams({ destinationSlug, sort: "curated" });
-    for (const [k, v] of Object.entries(overrides)) p.set(k, v);
-    return `/venues?${p.toString()}`;
-  };
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto" }}>
