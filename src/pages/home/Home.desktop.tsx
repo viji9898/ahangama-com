@@ -2,8 +2,12 @@ import { Alert, Empty, Spin, Switch, Tag } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AhangamaStatsBar from "../../components/AhangamaStatsBar";
+import GuideDownloadSection from "../../components/GuideDownloadSection";
+import PassEsimSection from "../../components/PassEsimSection";
 import PricingClaritySection from "../../components/PricingClaritySection";
 import StaySavingsHighlight from "../../components/StaySavingsHighlight";
+import StaySavingsVenuesMap from "../../components/StaySavingsVenuesMap";
+import TeamAdviceSection from "../../components/TeamAdviceSection";
 import TripCalculator from "../../components/TripCalculator";
 import { TripPlannerHero } from "../../components/TripPlannerHero";
 import styles from "./Home.desktop.module.css";
@@ -131,6 +135,22 @@ export default function HomeDesktop() {
 
       <div style={{ marginTop: 12, marginBottom: 12 }}>
         <AhangamaStatsBar />
+      </div>
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <GuideDownloadSection />
+      </div>
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <StaySavingsVenuesMap />
+      </div>
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <PassEsimSection />
+      </div>
+
+      <div style={{ marginTop: 12, marginBottom: 12 }}>
+        <TeamAdviceSection />
       </div>
 
       <div style={{ marginTop: 12, marginBottom: 12 }}>
