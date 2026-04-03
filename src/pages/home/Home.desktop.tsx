@@ -153,7 +153,7 @@ export default function HomeDesktop() {
         <TeamAdviceSection />
       </div>
 
-      <div style={{ marginTop: 12, marginBottom: 12 }}>
+      {/* <div style={{ marginTop: 12, marginBottom: 12 }}>
         <PricingClaritySection
           onPrimaryClick={() => {
             window.open(
@@ -163,7 +163,7 @@ export default function HomeDesktop() {
             );
           }}
         />
-      </div>
+      </div> */}
 
       {/* <div style={{ marginBottom: 12 }}>
         <FreeGuideCtaDesktop
@@ -247,9 +247,9 @@ export default function HomeDesktop() {
         />
       </div> */}
 
-      <div style={{ marginTop: 16 }}>
+      {/* <div style={{ marginTop: 16 }}>
         <StaySavingsHighlight onSelectStay={setSelectedStay} />
-      </div>
+      </div> */}
 
       <div style={{ marginTop: 16 }}>
         <TripCalculator
@@ -270,7 +270,7 @@ export default function HomeDesktop() {
         />
       </div>
 
-      <div
+      {/* <div
         id="included"
         className={styles.includedShell}
         style={{ marginTop: 16 }}
@@ -447,7 +447,7 @@ export default function HomeDesktop() {
             </div>
           </>
         ) : null}
-      </div>
+      </div> */}
 
       <FooterDesktop />
     </div>
