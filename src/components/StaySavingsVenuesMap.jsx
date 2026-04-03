@@ -9,7 +9,9 @@ let googleMapsLoaderPromise;
 
 function loadGoogleMapsApi(apiKey) {
   if (typeof window === "undefined") {
-    return Promise.reject(new Error("Google Maps can only load in the browser."));
+    return Promise.reject(
+      new Error("Google Maps can only load in the browser."),
+    );
   }
 
   if (window.google?.maps) {
@@ -187,7 +189,8 @@ export default function StaySavingsVenuesMap() {
         place?.status === "active" &&
         place?.lat != null &&
         place?.lng != null &&
-        (place?.discount != null || (Array.isArray(place?.offer) && place.offer.length)),
+        (place?.discount != null ||
+          (Array.isArray(place?.offer) && place.offer.length)),
     );
   }, []);
 
@@ -251,7 +254,10 @@ export default function StaySavingsVenuesMap() {
     });
 
     if (mapPlaces.length === 1) {
-      mapRef.current.setCenter({ lat: mapPlaces[0].lat, lng: mapPlaces[0].lng });
+      mapRef.current.setCenter({
+        lat: mapPlaces[0].lat,
+        lng: mapPlaces[0].lng,
+      });
       mapRef.current.setZoom(15);
     } else if (mapPlaces.length > 1) {
       mapRef.current.fitBounds(bounds, 56);
@@ -286,7 +292,8 @@ export default function StaySavingsVenuesMap() {
           Pass venues map
         </Text>
         <Text style={{ color: "rgba(0,0,0,0.60)", fontWeight: 650 }}>
-          Browse nearby partner spots with the venue name and pass discount shown directly on the map.
+          Browse nearby partner spots with the venue name and pass discount
+          shown directly on the map.
         </Text>
       </div>
 

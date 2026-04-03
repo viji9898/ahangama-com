@@ -6,8 +6,16 @@
   padding: 20px 20px 18px;
   border: 1px solid rgba(0, 0, 0, 0.07);
   background:
-    radial-gradient(760px circle at 0% 0%, rgba(210, 255, 246, 0.88), rgba(255, 255, 255, 0) 52%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(242, 249, 255, 0.92));
+    radial-gradient(
+      760px circle at 0% 0%,
+      rgba(210, 255, 246, 0.88),
+      rgba(255, 255, 255, 0) 52%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(242, 249, 255, 0.92)
+    );
   backdrop-filter: blur(8px);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
 }
@@ -59,7 +67,11 @@
 
 .feature {
   text-align: left;
-  background: linear-gradient(135deg, rgba(22, 163, 166, 0.08), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(
+    135deg,
+    rgba(22, 163, 166, 0.08),
+    rgba(255, 255, 255, 0.9)
+  );
 }
 
 .featureTitle {
