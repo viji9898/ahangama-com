@@ -4081,8 +4081,8 @@ export const PLACES = [
     price: "Premium",
     hours: "24 Hours",
     area: "Ahangama",
-    lat: 5.974705517792553,
-    lng: 80.3504081161467,
+    lat: 5.979703587844841,
+    lng: 80.37420967063998,
     logo: "",
     image:
       "https://customer-apps-techhq.s3.eu-west-2.amazonaws.com/app-ahangama-demo/younger_villas_resorts.jpeg",

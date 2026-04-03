@@ -172,7 +172,8 @@ function createVenueOverlay(googleMaps, map, place, selectedPlaceId, onSelect) {
       pin.style.height = "12px";
       pin.style.borderRadius = "999px";
       pin.style.margin = "6px auto 0";
-      pin.style.background = place.id === selectedPlaceId ? "#0b5f61" : "#0f766e";
+      pin.style.background =
+        place.id === selectedPlaceId ? "#0b5f61" : "#0f766e";
       pin.style.border = "2px solid rgba(255,255,255,0.96)";
       pin.style.boxShadow = "0 4px 10px rgba(0,0,0,0.18)";
 
@@ -253,7 +254,11 @@ export default function StaySavingsVenuesMap() {
   );
 
   const selectedPlace = useMemo(() => {
-    return mapPlaces.find((place) => place.id === selectedPlaceId) ?? mapPlaces[0] ?? null;
+    return (
+      mapPlaces.find((place) => place.id === selectedPlaceId) ??
+      mapPlaces[0] ??
+      null
+    );
   }, [mapPlaces, selectedPlaceId]);
 
   function handleSelectPlace(placeId) {
@@ -424,25 +429,46 @@ export default function StaySavingsVenuesMap() {
                       <img
                         src={selectedPlace.logo}
                         alt={`${selectedPlace.name} logo`}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
                       />
                     ) : (
-                      <span style={{ fontWeight: 900, color: "rgba(0,0,0,0.62)" }}>
+                      <span
+                        style={{ fontWeight: 900, color: "rgba(0,0,0,0.62)" }}
+                      >
                         {selectedPlace.name.slice(0, 1)}
                       </span>
                     )}
                   </div>
 
                   <div style={{ minWidth: 0, display: "grid", gap: 4 }}>
-                    <Title level={4} style={{ margin: 0, fontWeight: 950, letterSpacing: -0.4 }}>
+                    <Title
+                      level={4}
+                      style={{
+                        margin: 0,
+                        fontWeight: 950,
+                        letterSpacing: -0.4,
+                      }}
+                    >
                       {selectedPlace.name}
                     </Title>
-                    <Text style={{ color: "rgba(0,0,0,0.58)", fontWeight: 700 }}>
-                      {selectedPlace.area || selectedPlace.category || "Ahangama"}
+                    <Text
+                      style={{ color: "rgba(0,0,0,0.58)", fontWeight: 700 }}
+                    >
+                      {selectedPlace.area ||
+                        selectedPlace.category ||
+                        "Ahangama"}
                     </Text>
                     {ratingLine ? (
-                      <Text style={{ color: "rgba(0,0,0,0.68)", fontWeight: 800 }}>
-                        <StarFilled style={{ color: "#f59e0b", marginRight: 6 }} />
+                      <Text
+                        style={{ color: "rgba(0,0,0,0.68)", fontWeight: 800 }}
+                      >
+                        <StarFilled
+                          style={{ color: "#f59e0b", marginRight: 6 }}
+                        />
                         {ratingLine}
                       </Text>
                     ) : null}
@@ -482,12 +508,19 @@ export default function StaySavingsVenuesMap() {
                     {formatDiscountLabel(selectedPlace)}
                   </div>
                   <Text style={{ color: "rgba(0,0,0,0.6)", fontWeight: 700 }}>
-                    {selectedPlace.cardPerk || selectedPlace.excerpt || selectedPlace.description}
+                    {selectedPlace.cardPerk ||
+                      selectedPlace.excerpt ||
+                      selectedPlace.description}
                   </Text>
                 </div>
 
                 <Paragraph
-                  style={{ margin: 0, color: "rgba(0,0,0,0.64)", fontWeight: 650, lineHeight: 1.6 }}
+                  style={{
+                    margin: 0,
+                    color: "rgba(0,0,0,0.64)",
+                    fontWeight: 650,
+                    lineHeight: 1.6,
+                  }}
                 >
                   {selectedPlace.description || selectedPlace.excerpt}
                 </Paragraph>
@@ -518,7 +551,11 @@ export default function StaySavingsVenuesMap() {
                       type="default"
                       icon={<EnvironmentOutlined />}
                       onClick={() => {
-                        window.open(selectedPlace.mapUrl, "_blank", "noopener,noreferrer");
+                        window.open(
+                          selectedPlace.mapUrl,
+                          "_blank",
+                          "noopener,noreferrer",
+                        );
                       }}
                       style={{
                         minHeight: 44,
@@ -539,7 +576,11 @@ export default function StaySavingsVenuesMap() {
                       type="default"
                       icon={<InstagramOutlined />}
                       onClick={() => {
-                        window.open(instagramUrl, "_blank", "noopener,noreferrer");
+                        window.open(
+                          instagramUrl,
+                          "_blank",
+                          "noopener,noreferrer",
+                        );
                       }}
                       style={{
                         minHeight: 44,
@@ -575,14 +616,14 @@ export default function StaySavingsVenuesMap() {
 
             {status === "loading" ? (
               <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "grid",
-                placeItems: "center",
-                borderRadius: 18,
-                background: "rgba(255,255,255,0.72)",
-              }}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "grid",
+                  placeItems: "center",
+                  borderRadius: 18,
+                  background: "rgba(255,255,255,0.72)",
+                }}
               >
                 <Spin size="large" />
               </div>
