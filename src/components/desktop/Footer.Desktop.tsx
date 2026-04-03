@@ -52,7 +52,8 @@ export function FooterDesktop() {
                 ahangama.com
               </Typography.Text>
               <Typography.Paragraph className={styles.brandCopy}>
-                Curated destination guides and local privileges for independent travellers.
+                Curated destination guides and local privileges for independent
+                travellers.
               </Typography.Paragraph>
               <div className={styles.metaRow}>
                 <span className={styles.metaPill}>Ahangama Pass</span>
@@ -98,7 +99,10 @@ export function FooterDesktop() {
                   >
                     Instagram
                   </ItemLink>
-                  <Typography.Text type="secondary" className={styles.mutedLink}>
+                  <Typography.Text
+                    type="secondary"
+                    className={styles.mutedLink}
+                  >
                     © {year} Ahangama
                   </Typography.Text>
                 </div>

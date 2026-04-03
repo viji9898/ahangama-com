@@ -1,41 +1,24 @@
+import styles from "./GetPassStickyCta.module.css";
+
 export function GetPassStickyCta() {
   return (
-    <div className="ahg-sticky-cta-bar">
-      <div
-        style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          padding: "10px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 12,
-          minHeight: "var(--ahg-mobile-cta-height)",
-          boxSizing: "border-box",
-        }}
-      >
-        <div
-          style={{
-            minWidth: 0,
-            maxWidth: "min(560px, 70vw)",
-            fontWeight: 800,
-            fontSize: 16,
-            lineHeight: "20px",
-            color: "#2F3E3A",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            textAlign: "center",
-          }}
-        >
-          Get Pass — from $30
+    <div className={styles.bar}>
+      <div className={styles.inner}>
+        <div className={styles.copy}>
+          <span className={styles.eyebrow}>Ahangama Pass</span>
+          <p className={styles.title}>
+            Get the pass and start saving across Ahangama
+          </p>
+          <p className={styles.subtext}>
+            Stays, cafes, surf, transport, wellness, and more from $30.
+          </p>
         </div>
 
         <a
           href="https://pass.ahangama.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="ahg-mobile-cta-button"
+          className={styles.button}
         >
           Get Pass
         </a>

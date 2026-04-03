@@ -127,7 +127,9 @@
   font-size: 13px;
   font-weight: 700;
   line-height: 1.35;
-  transition: opacity 140ms ease, transform 140ms ease;
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
 }
 
 .link:hover {
