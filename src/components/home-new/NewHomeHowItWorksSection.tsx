@@ -37,7 +37,7 @@ export function NewHomeHowItWorksSection() {
       <div className={styles.sectionHeader}>
         <span className={styles.eyebrow}>How it works</span>
         <Typography.Title level={2} className={styles.howItWorksTitle}>
-          Three steps from pass to savings
+          Three steps to instant savings
         </Typography.Title>
       </div>
 

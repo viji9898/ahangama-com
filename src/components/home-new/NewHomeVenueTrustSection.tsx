@@ -72,7 +72,7 @@ export function NewHomeVenueTrustSection() {
           Used at places you&apos;ll actually go
         </Typography.Title>
         <Typography.Paragraph className={styles.sectionDescription}>
-          100+ curated venues across Ahangama
+          100+ venues across Ahangama
         </Typography.Paragraph>
       </div>
 

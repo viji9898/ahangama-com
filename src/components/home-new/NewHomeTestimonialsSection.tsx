@@ -30,7 +30,7 @@ export function NewHomeTestimonialsSection() {
       <div className={styles.sectionHeader}>
         <span className={styles.eyebrow}>Testimonials</span>
         <Typography.Title level={2} className={styles.sectionTitle}>
-          Trusted by travellers who used it fast
+          Travellers said it paid back fast
         </Typography.Title>
       </div>
 

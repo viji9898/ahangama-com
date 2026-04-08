@@ -26,7 +26,7 @@ export function NewHomeExampleSavingsSection() {
       <div className={styles.sectionHeader}>
         <span className={styles.eyebrow}>Real example savings</span>
         <Typography.Title level={2} className={styles.sectionTitle}>
-          Make the pass value feel real in one believable trip.
+          See how it pays back fast
         </Typography.Title>
       </div>
 

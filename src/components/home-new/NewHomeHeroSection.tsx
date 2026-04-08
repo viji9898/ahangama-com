@@ -42,7 +42,7 @@ export function NewHomeHeroSection() {
               </Space>
 
               <Typography.Paragraph className={styles.heroTrustLine}>
-                Used across 100+ venues • Instant QR access • Works same day
+                100+ venues • Instant QR • Same-day use
               </Typography.Paragraph>
             </div>
           </Col>
@@ -61,9 +61,9 @@ export function NewHomeHeroSection() {
                       <p className={styles.heroPassLabel}>
                         Ahangama Savings Pass
                       </p>
-                      <p className={styles.heroPassTitle}>Apple Wallet-ready</p>
+                      <p className={styles.heroPassTitle}>Wallet-ready</p>
                     </div>
-                    <span className={styles.heroPassChip}>Live now</span>
+                    <span className={styles.heroPassChip}>Ready now</span>
                   </div>
 
                   <div className={styles.heroPassMediaWrap}>
@@ -94,7 +94,7 @@ export function NewHomeHeroSection() {
                     className={styles.heroVisualNoteDot}
                     aria-hidden="true"
                   />
-                  <span>Scan once and start using it the same day.</span>
+                  <span>Use it the day you buy.</span>
                 </div>
               </div>
             </div>

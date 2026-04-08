@@ -34,7 +34,7 @@ export function NewHomePassFeaturesSection() {
       <div className={styles.sectionHeader}>
         <span className={styles.eyebrow}>Pass features</span>
         <Typography.Title level={2} className={styles.sectionTitle}>
-          Everything you need to use the pass fast
+          Built to work on day one
         </Typography.Title>
       </div>
 
