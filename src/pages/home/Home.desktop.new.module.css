@@ -90,9 +90,9 @@
 }
 
 .heroTitle {
-  margin: 18px 0 0;
-  font-size: clamp(40px, 5vw, 48px);
-  line-height: 1.02;
+  margin: 14px 0 0;
+  font-size: clamp(44px, 5vw, 52px);
+  line-height: 0.98;
   letter-spacing: -0.05em;
   color: var(--new-home-text);
 }
@@ -102,15 +102,24 @@
 }
 
 .heroDescription {
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   max-width: 34ch;
   font-size: 18px;
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--new-home-muted);
 }
 
+.heroMicroProof {
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.54);
+}
+
 .heroActions {
-  margin-top: 30px;
+  margin-top: 18px;
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
@@ -153,10 +162,38 @@
 }
 
 .heroTrustLine {
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   font-size: 13px;
   line-height: 1.5;
   color: rgba(17, 24, 39, 0.7);
+}
+
+.heroWalletSupport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.heroWalletItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.04);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  color: rgba(17, 24, 39, 0.72);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heroWalletIcon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
 }
 
 .heroVisual {
@@ -166,121 +203,28 @@
 
 .heroVisualStage {
   position: relative;
-  width: min(100%, 560px);
-  padding: 28px 20px 18px;
-  border-radius: 36px;
-  background: rgba(17, 24, 39, 0.03);
-  border: 1px solid rgba(17, 24, 39, 0.05);
-  backdrop-filter: blur(16px);
-}
-
-.heroPassHalo {
-  position: absolute;
-  inset: 10% 8% 20%;
-  border-radius: 32px;
-  background: radial-gradient(
-    circle,
-    rgba(17, 24, 39, 0.08),
-    rgba(17, 24, 39, 0) 70%
-  );
-  filter: blur(18px);
+  width: min(100%, 620px);
 }
 
 .heroPassMockup {
   position: relative;
-  z-index: 1;
-  padding: 24px;
-  border-radius: 32px;
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.92),
-    rgba(245, 247, 244, 0.88)
-  );
-  box-shadow: 0 30px 80px rgba(17, 24, 39, 0.14);
-}
-
-.heroPassTopRow,
-.heroPassBottomRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.heroPassLabel,
-.heroPassMetricLabel,
-.heroVisualNote {
-  margin: 0;
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.52);
-}
-
-.heroPassTitle {
-  margin: 10px 0 0;
-  font-size: 26px;
-  line-height: 1.05;
-  letter-spacing: -0.04em;
-  color: var(--new-home-text);
-}
-
-.heroPassChip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(17, 24, 39, 0.08);
-  color: rgba(17, 24, 39, 0.68);
-  font-size: 12px;
-  font-weight: 800;
+  padding: 18px;
+  border-radius: 34px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 28px 64px rgba(17, 24, 39, 0.12);
 }
 
 .heroPassMediaWrap {
-  margin: 22px 0;
-  padding: 12px;
-  border-radius: 28px;
-  background: rgba(17, 24, 39, 0.03);
-  border: 1px solid rgba(17, 24, 39, 0.06);
+  margin: 0;
 }
 
 .heroPassImage {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 22px;
-}
-
-.heroPassMetricValue {
-  margin: 8px 0 0;
-  font-size: clamp(24px, 3.6vw, 36px);
-  line-height: 1.05;
-  letter-spacing: -0.05em;
-  color: var(--new-home-text);
-}
-
-.heroVisualNote {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(17, 24, 39, 0.08);
-  color: rgba(17, 24, 39, 0.66);
-}
-
-.heroVisualNoteDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(17, 24, 39, 0.32);
+  border-radius: 28px;
+  box-shadow: 0 18px 42px rgba(17, 24, 39, 0.16);
 }
 
 .microPill,
@@ -616,36 +560,86 @@
   flex: 0 0 auto;
 }
 
-.logoPill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 88px;
-  padding: 16px 20px;
-  text-align: center;
-  background: transparent;
-  border: 0;
-  backdrop-filter: none;
+.logoProofPanel {
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 48px rgba(17, 24, 39, 0.06);
 }
 
-.logoPillText {
+.logoProofHeader {
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.logoProofCopy {
+  max-width: 560px;
+}
+
+.logoProofTitle {
+  margin: 16px 0 0;
+  font-size: clamp(34px, 4.4vw, 44px);
+  line-height: 1.04;
+  letter-spacing: -0.05em;
+  color: var(--new-home-text);
+}
+
+.logoProofDescription {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--new-home-muted);
+}
+
+.logoProofMicrocopy {
+  margin: 8px 0 0;
+  max-width: 48ch;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(17, 24, 39, 0.58);
+}
+
+.logoProofBadge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.06);
   color: rgba(17, 24, 39, 0.72);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .logoWall {
-  padding: 12px 0 0;
+  padding: 0;
 }
 
 .logoColumns {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
+  width: 100%;
 }
 
 .logoCategoryColumn {
   display: grid;
   align-content: start;
   gap: 12px;
+  height: 100%;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(17, 24, 39, 0.028);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+.logoCategoryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 2px;
 }
 
 .logoGroupTitle {
@@ -654,7 +648,13 @@
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(17, 24, 39, 0.48);
+  color: rgba(17, 24, 39, 0.58);
+}
+
+.logoGroupCount {
+  color: rgba(17, 24, 39, 0.5);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .logoColumnList {
@@ -663,20 +663,85 @@
   gap: 10px;
 }
 
+.logoTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86px;
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  box-shadow: 0 8px 18px rgba(17, 24, 39, 0.04);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.logoTileFeatured {
+  border-color: rgba(17, 24, 39, 0.12);
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.06);
+}
+
+.logoTile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(17, 24, 39, 0.08);
+}
+
 .logoImage {
   display: block;
   width: 100%;
-  max-width: 104px;
-  height: 30px;
+  max-width: 142px;
+  height: 42px;
   object-fit: contain;
-  filter: grayscale(100%) contrast(1.05);
-  opacity: 0.78;
+  filter: grayscale(100%) contrast(1.14);
+  opacity: 0.96;
 }
 
-.logoSupport {
-  margin-top: 12px;
-  text-align: center;
+.logoStatsRow {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.logoStatCard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.05);
+  border: 1px solid rgba(17, 24, 39, 0.06);
+}
+
+.logoStatValue {
   font-size: 14px;
+  font-weight: 800;
+  color: var(--new-home-text);
+}
+
+.logoStatLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.56);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.logoProofLink {
+  display: inline-flex;
+  margin-top: 14px;
+  color: rgba(17, 24, 39, 0.72);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.logoProofLink:hover,
+.logoProofLink:focus {
+  color: var(--new-home-text);
 }
 
 .mapShell {
@@ -1142,14 +1207,27 @@
     padding: 22px 18px;
   }
 
-  .logoPill {
-    min-height: 64px;
-    padding: 10px 12px;
+  .logoColumns {
+    width: 100%;
   }
 
-  .logoColumns {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+  .logoProofPanel {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .logoProofHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .logoCategoryColumn {
+    padding: 14px;
+  }
+
+  .logoTile {
+    min-height: 78px;
   }
 
   .howItWorksStepCard {
@@ -1204,7 +1282,7 @@
   .heroDescription,
   .sectionDescription {
     font-size: 16px;
-    line-height: 1.65;
+    line-height: 1.55;
   }
 
   .mapPreviewTitle {
@@ -1235,6 +1313,11 @@
     max-width: none;
   }
 
+  .heroMicroProof {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
   .heroActions {
     flex-direction: column;
     align-items: stretch;
@@ -1259,21 +1342,18 @@
     font-size: 13px;
   }
 
-  .heroPassTopRow,
-  .heroPassBottomRow {
-    flex-direction: column;
-    align-items: flex-start;
+  .heroWalletSupport {
+    gap: 8px;
+  }
+
+  .heroWalletItem {
+    width: 100%;
+    justify-content: center;
   }
 
   .heroPassMockup {
-    padding: 18px;
-  }
-
-  .heroVisualNote {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-    border-radius: 18px;
+    padding: 12px;
+    border-radius: 26px;
   }
 
   .howItWorksStepCard {
@@ -1300,23 +1380,31 @@
     font-size: 28px;
   }
 
-  .logoImage {
-    max-width: 92px;
-    height: 28px;
-  }
-
-  .logoCategoryColumn {
-    gap: 10px;
-  }
-
   .logoColumns {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    width: 100%;
   }
 
   .logoColumnList {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
+  }
+
+  .logoProofTitle {
+    font-size: clamp(28px, 8vw, 34px);
+  }
+
+  .logoProofDescription {
+    font-size: 15px;
+  }
+
+  .logoTile {
+    min-height: 72px;
+    padding: 12px 10px;
+  }
+
+  .logoImage {
+    max-width: 118px;
+    height: 34px;
   }
 
   .howItWorksConnector {

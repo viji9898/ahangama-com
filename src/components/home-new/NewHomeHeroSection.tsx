@@ -1,5 +1,6 @@
-import { ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Space, Typography } from "antd";
+import appleWalletIconJpg from "../../assets/apple_wallet_icon.jpg";
+import googleWalletIconJpg from "../../assets/google_wallet_icon.jpg";
 import heroPassAppleWalletPng from "../../assets/hero_pass_apple_wallet.png";
 import styles from "../../pages/home/Home.desktop.new.module.css";
 
@@ -10,15 +11,17 @@ export function NewHomeHeroSection() {
     <section id="hero" className={styles.section} aria-label="Hero">
       <div className={styles.heroShell}>
         <Row gutter={[32, 32]} align="middle" className={styles.heroRow}>
-          <Col xs={{ span: 24, order: 1 }} lg={{ span: 11, order: 1 }}>
+          <Col xs={{ span: 24, order: 2 }} lg={{ span: 11, order: 1 }}>
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Ahangama Pass</span>
               <Typography.Title level={1} className={styles.heroTitle}>
-                Save $50–$150 on your{" "}
-                <span className={styles.heroAccent}>Ahangama trip</span>
+                Save $50–$150 on your Ahangama trip
               </Typography.Title>
               <Typography.Paragraph className={styles.heroDescription}>
-                One pass. 100+ places. Cafes, stays, surf, wellness.
+                One pass. Instant discounts at 100+ places.
+              </Typography.Paragraph>
+              <Typography.Paragraph className={styles.heroMicroProof}>
+                Cafes • Stays • Surf • Wellness
               </Typography.Paragraph>
 
               <Space size={14} wrap className={styles.heroActions}>
@@ -34,7 +37,6 @@ export function NewHomeHeroSection() {
                 <Button
                   size="large"
                   href="#how-it-works"
-                  icon={<ArrowRightOutlined />}
                   className={styles.heroSecondaryButton}
                 >
                   See how it works
@@ -42,30 +44,36 @@ export function NewHomeHeroSection() {
               </Space>
 
               <Typography.Paragraph className={styles.heroTrustLine}>
-                100+ venues • Instant QR • Same-day use
+                Works instantly • No app needed • Takes 30 seconds
               </Typography.Paragraph>
+
+              <div className={styles.heroWalletSupport}>
+                <div className={styles.heroWalletItem}>
+                  <span>Add to Wallet</span>
+                  <img
+                    src={appleWalletIconJpg}
+                    alt="Apple Wallet"
+                    className={styles.heroWalletIcon}
+                    draggable={false}
+                  />
+                  <img
+                    src={googleWalletIconJpg}
+                    alt="Google Wallet"
+                    className={styles.heroWalletIcon}
+                    draggable={false}
+                  />
+                </div>
+              </div>
             </div>
           </Col>
 
-          <Col xs={{ span: 24, order: 2 }} lg={{ span: 13, order: 2 }}>
+          <Col xs={{ span: 24, order: 1 }} lg={{ span: 13, order: 2 }}>
             <div className={styles.heroVisual}>
               <div className={styles.heroVisualStage}>
-                <div className={styles.heroPassHalo} aria-hidden="true" />
-
                 <div
                   className={styles.heroPassMockup}
                   aria-label="Ahangama pass preview"
                 >
-                  <div className={styles.heroPassTopRow}>
-                    <div>
-                      <p className={styles.heroPassLabel}>
-                        Ahangama Savings Pass
-                      </p>
-                      <p className={styles.heroPassTitle}>Wallet-ready</p>
-                    </div>
-                    <span className={styles.heroPassChip}>Ready now</span>
-                  </div>
-
                   <div className={styles.heroPassMediaWrap}>
                     <img
                       src={heroPassAppleWalletPng}
@@ -74,27 +82,6 @@ export function NewHomeHeroSection() {
                       draggable={false}
                     />
                   </div>
-
-                  <div className={styles.heroPassBottomRow}>
-                    <div>
-                      <p className={styles.heroPassMetricLabel}>
-                        Typical trip savings
-                      </p>
-                      <p className={styles.heroPassMetricValue}>$50–$150</p>
-                    </div>
-                    <div>
-                      <p className={styles.heroPassMetricLabel}>Access</p>
-                      <p className={styles.heroPassMetricValue}>100+ venues</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.heroVisualNote}>
-                  <span
-                    className={styles.heroVisualNoteDot}
-                    aria-hidden="true"
-                  />
-                  <span>Use it the day you buy.</span>
                 </div>
               </div>
             </div>
