@@ -36,13 +36,7 @@ const FEATURED_VENUE_GROUPS = [
   },
   {
     title: "Essentials",
-    venueIds: [
-      "focus-hub",
-      "colive",
-      "gusta",
-      "gik-bike-rentals",
-      "daydream",
-    ],
+    venueIds: ["focus-hub", "colive", "gusta", "gik-bike-rentals", "daydream"],
   },
 ] as const;
 
@@ -51,10 +45,13 @@ const venueGroups = FEATURED_VENUE_GROUPS.map((group) => ({
   venues: group.venueIds
     .map((venueId) =>
       PLACES.find(
-        (place) => place.id === venueId && place.status === "active" && place.logo,
+        (place) =>
+          place.id === venueId && place.status === "active" && place.logo,
       ),
     )
-    .filter((place): place is { id: string; name: string; logo: string } => Boolean(place))
+    .filter((place): place is { id: string; name: string; logo: string } =>
+      Boolean(place),
+    )
     .map((place) => ({
       id: place.id,
       name: place.name,
@@ -64,7 +61,11 @@ const venueGroups = FEATURED_VENUE_GROUPS.map((group) => ({
 
 export function NewHomeVenueTrustSection() {
   return (
-    <section id="venue-trust" className={styles.section} aria-label="Venue logos and trust">
+    <section
+      id="venue-trust"
+      className={styles.section}
+      aria-label="Venue logos and trust"
+    >
       <div className={styles.sectionHeader}>
         <span className={styles.eyebrow}>Venue trust</span>
         <Typography.Title level={2} className={styles.sectionTitle}>
