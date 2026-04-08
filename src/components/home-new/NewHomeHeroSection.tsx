@@ -1,5 +1,6 @@
-import { ArrowDownOutlined } from "@ant-design/icons";
+import { ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Space, Typography } from "antd";
+import heroPassAppleWalletPng from "../../assets/hero_pass_apple_wallet.png";
 import styles from "../../pages/home/Home.desktop.new.module.css";
 
 const PASS_URL = "https://pass.ahangama.com";
@@ -8,63 +9,81 @@ export function NewHomeHeroSection() {
   return (
     <section id="hero" className={styles.section} aria-label="Hero">
       <div className={styles.heroShell}>
-        <Row gutter={[32, 32]} align="middle">
-          <Col xs={24} lg={13}>
+        <Row gutter={[32, 32]} align="middle" className={styles.heroRow}>
+          <Col xs={{ span: 24, order: 2 }} lg={{ span: 11, order: 1 }}>
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Ahangama Pass</span>
               <Typography.Title level={1} className={styles.heroTitle}>
-                Travel lighter. Save more. <span className={styles.heroAccent}>Stay local.</span>
+                Save $50–$150 on your <span className={styles.heroAccent}>Ahangama trip</span>
               </Typography.Title>
               <Typography.Paragraph className={styles.heroDescription}>
-                A refined homepage scaffold for the next desktop experience:
-                clear value, calm layout, and room to expand each section
-                without adding noise.
+                One pass. 100+ places. Cafes, stays, surf, wellness.
               </Typography.Paragraph>
 
               <Space size={14} wrap className={styles.heroActions}>
-                <Button type="primary" size="large" href={PASS_URL} target="_blank">
-                  Get the pass
+                <Button
+                  type="primary"
+                  size="large"
+                  href={PASS_URL}
+                  target="_blank"
+                  className={styles.heroPrimaryButton}
+                >
+                  Get your pass
                 </Button>
-                <Button size="large" href="#how-it-works" icon={<ArrowDownOutlined />}>
+                <Button
+                  size="large"
+                  href="#how-it-works"
+                  icon={<ArrowRightOutlined />}
+                  className={styles.heroSecondaryButton}
+                >
                   See how it works
                 </Button>
               </Space>
 
-              <div className={styles.heroMeta}>
-                <span className={styles.heroMetaPill}>1200px centered layout</span>
-                <span className={styles.heroMetaPill}>Soft neutral background</span>
-                <span className={styles.heroMetaPill}>Responsive Ant Design grid</span>
-              </div>
+              <Typography.Paragraph className={styles.heroTrustLine}>
+                Used across 100+ venues • Instant QR access • Works same day
+              </Typography.Paragraph>
             </div>
           </Col>
 
-          <Col xs={24} lg={11}>
+          <Col xs={{ span: 24, order: 1 }} lg={{ span: 13, order: 2 }}>
             <div className={styles.heroVisual}>
-              <div className={styles.heroHighlightCard}>
-                <p className={styles.heroHighlightLabel}>This first pass focuses on structure</p>
-                <p className={styles.heroHighlightValue}>10 sections</p>
-                <p className={styles.heroHighlightText}>
-                  Each section lives in its own component so we can redesign,
-                  reorder, and deepen the content incrementally.
-                </p>
-              </div>
+              <div className={styles.heroVisualStage}>
+                <div className={styles.heroPassHalo} aria-hidden="true" />
 
-              <div className={styles.heroMiniGrid}>
-                <div className={styles.contentCard}>
-                  <p className={styles.cardEyebrow}>Design direction</p>
-                  <p className={styles.cardTitle}>Minimal and premium</p>
-                  <p className={styles.cardBodyText}>
-                    Borrowing the soft gradients and rounded surfaces already
-                    present in the current desktop experience.
-                  </p>
+                <div className={styles.heroPassMockup} aria-label="Ahangama pass preview">
+                  <div className={styles.heroPassTopRow}>
+                    <div>
+                      <p className={styles.heroPassLabel}>Ahangama Savings Pass</p>
+                      <p className={styles.heroPassTitle}>Apple Wallet-ready</p>
+                    </div>
+                    <span className={styles.heroPassChip}>Live now</span>
+                  </div>
+
+                  <div className={styles.heroPassMediaWrap}>
+                    <img
+                      src={heroPassAppleWalletPng}
+                      alt="Ahangama pass shown in an Apple Wallet style card"
+                      className={styles.heroPassImage}
+                      draggable={false}
+                    />
+                  </div>
+
+                  <div className={styles.heroPassBottomRow}>
+                    <div>
+                      <p className={styles.heroPassMetricLabel}>Typical trip savings</p>
+                      <p className={styles.heroPassMetricValue}>$50–$150</p>
+                    </div>
+                    <div>
+                      <p className={styles.heroPassMetricLabel}>Access</p>
+                      <p className={styles.heroPassMetricValue}>100+ venues</p>
+                    </div>
+                  </div>
                 </div>
-                <div className={styles.contentCard}>
-                  <p className={styles.cardEyebrow}>Built for iteration</p>
-                  <p className={styles.cardTitle}>Section by section</p>
-                  <p className={styles.cardBodyText}>
-                    Hero, trust, map, testimonials, and CTA are all isolated for
-                    follow-up instructions.
-                  </p>
+
+                <div className={styles.heroVisualNote}>
+                  <span className={styles.heroVisualNoteDot} aria-hidden="true" />
+                  <span>Scan once and start using it the same day.</span>
                 </div>
               </div>
             </div>
