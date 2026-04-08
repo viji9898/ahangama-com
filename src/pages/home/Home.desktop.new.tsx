@@ -7,13 +7,15 @@ import { NewHomeHeroSection } from "../../components/home-new/NewHomeHeroSection
 import { NewHomeHowItWorksSection } from "../../components/home-new/NewHomeHowItWorksSection";
 import { NewHomeLockedMapPreviewSection } from "../../components/home-new/NewHomeLockedMapPreviewSection";
 import { NewHomePassFeaturesSection } from "../../components/home-new/NewHomePassFeaturesSection";
+import { NewHomePassOptionsSection } from "../../components/home-new/NewHomePassOptionsSection";
 import { NewHomeSocialProofStripSection } from "../../components/home-new/NewHomeSocialProofStripSection";
 import { NewHomeTestimonialsSection } from "../../components/home-new/NewHomeTestimonialsSection";
 import { NewHomeVenueTrustSection } from "../../components/home-new/NewHomeVenueTrustSection";
 
 export default function HomeDesktopNew() {
   useEffect(() => {
-    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    const previousScrollBehavior =
+      document.documentElement.style.scrollBehavior;
     document.documentElement.style.scrollBehavior = "smooth";
 
     return () => {
@@ -31,6 +33,7 @@ export default function HomeDesktopNew() {
         <NewHomeVenueTrustSection />
         <NewHomeLockedMapPreviewSection />
         <NewHomePassFeaturesSection />
+        <NewHomePassOptionsSection />
         <NewHomeTestimonialsSection />
         <NewHomeFinalCtaSection />
         <NewHomeFooterSection />

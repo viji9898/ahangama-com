@@ -10,7 +10,7 @@ export function NewHomeHeroSection() {
     <section id="hero" className={styles.section} aria-label="Hero">
       <div className={styles.heroShell}>
         <Row gutter={[32, 32]} align="middle" className={styles.heroRow}>
-          <Col xs={{ span: 24, order: 2 }} lg={{ span: 11, order: 1 }}>
+          <Col xs={{ span: 24, order: 1 }} lg={{ span: 11, order: 1 }}>
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Ahangama Pass</span>
               <Typography.Title level={1} className={styles.heroTitle}>
@@ -47,7 +47,7 @@ export function NewHomeHeroSection() {
             </div>
           </Col>
 
-          <Col xs={{ span: 24, order: 1 }} lg={{ span: 13, order: 2 }}>
+          <Col xs={{ span: 24, order: 2 }} lg={{ span: 13, order: 2 }}>
             <div className={styles.heroVisual}>
               <div className={styles.heroVisualStage}>
                 <div className={styles.heroPassHalo} aria-hidden="true" />
