@@ -7,6 +7,7 @@ import PartnerSignupSuccessPage from "../pages/partners/success";
 import LegalPage from "../pages/legal";
 import NotFoundPage from "../pages/not-found";
 import PassLandingPage from "../pages/PassLandingPage";
+import HomeDesktopNew from "../pages/home/Home.desktop.new";
 import { ResponsiveAppShell } from "../app/ResponsiveAppShell";
 import { PartnerSignupShell } from "../app/PartnerSignupShell";
 
@@ -70,6 +71,14 @@ export const router = createBrowserRouter([
   {
     path: "/pass",
     element: <PassLandingPage />,
+  },
+  {
+    path: "/new",
+    element: (
+      <ResponsiveAppShell>
+        <HomeDesktopNew />
+      </ResponsiveAppShell>
+    ),
   },
   {
     path: "/destinations/:destinationSlug",

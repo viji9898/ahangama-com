@@ -1,0 +1,470 @@
+.page {
+  --new-home-bg: #f7f7f5;
+  --new-home-surface: rgba(255, 255, 255, 0.78);
+  --new-home-surface-strong: rgba(255, 255, 255, 0.92);
+  --new-home-border: rgba(17, 24, 39, 0.08);
+  --new-home-text: rgba(17, 24, 39, 0.92);
+  --new-home-muted: rgba(17, 24, 39, 0.62);
+  --new-home-accent: #1d7a72;
+  --new-home-accent-soft: #dff3ed;
+  --new-home-radius: 32px;
+  --new-home-shadow: 0 24px 60px rgba(17, 24, 39, 0.08);
+  --new-home-section-space: 80px;
+
+  min-height: 100%;
+  background:
+    radial-gradient(
+      900px circle at top left,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0) 48%
+    ),
+    linear-gradient(180deg, #fbfbfa 0%, var(--new-home-bg) 100%);
+  color: var(--new-home-text);
+}
+
+.pageInner {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 36px 24px 96px;
+}
+
+.section {
+  padding: var(--new-home-section-space) 0;
+}
+
+.sectionHeader {
+  max-width: 680px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--new-home-border);
+  color: var(--new-home-accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 16px 0 0;
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  color: var(--new-home-text);
+}
+
+.sectionDescription {
+  margin: 16px 0 0;
+  max-width: 58ch;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--new-home-muted);
+}
+
+.heroShell,
+.sectionPanel,
+.stripPanel,
+.ctaPanel,
+.mapShell {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--new-home-radius);
+  border: 1px solid var(--new-home-border);
+  box-shadow: var(--new-home-shadow);
+}
+
+.heroShell {
+  padding: 48px;
+  background:
+    radial-gradient(
+      720px circle at 0% 0%,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(242, 235, 226, 0.92) 0%,
+      rgba(223, 243, 237, 0.96) 100%
+    );
+}
+
+.heroCopy {
+  max-width: 560px;
+}
+
+.heroTitle {
+  margin: 18px 0 0;
+  font-size: clamp(44px, 7vw, 84px);
+  line-height: 0.96;
+  letter-spacing: -0.06em;
+  color: var(--new-home-text);
+}
+
+.heroAccent {
+  color: var(--new-home-accent);
+}
+
+.heroDescription {
+  margin: 20px 0 0;
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--new-home-muted);
+}
+
+.heroActions {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.heroMeta {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.heroMetaPill,
+.microPill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  color: rgba(17, 24, 39, 0.76);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.heroVisual {
+  display: grid;
+  gap: 16px;
+}
+
+.heroHighlightCard,
+.contentCard,
+.metricCard,
+.featureCard,
+.testimonialCard,
+.logoPill,
+.mapOverlayCard {
+  border-radius: 28px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: var(--new-home-surface);
+  backdrop-filter: blur(16px);
+}
+
+.heroHighlightCard {
+  padding: 28px;
+}
+
+.heroHighlightLabel {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.52);
+}
+
+.heroHighlightValue {
+  margin: 14px 0 10px;
+  font-size: clamp(28px, 4vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.heroHighlightText,
+.cardBodyText,
+.testimonialText,
+.mutedText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--new-home-muted);
+}
+
+.heroMiniGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.stripPanel,
+.sectionPanel,
+.ctaPanel,
+.mapShell {
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.stripPanel {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.7)),
+    linear-gradient(90deg, rgba(223, 243, 237, 0.48), rgba(242, 235, 226, 0.48));
+}
+
+.metricCard,
+.contentCard,
+.featureCard,
+.testimonialCard,
+.mapOverlayCard {
+  height: 100%;
+  padding: 24px;
+}
+
+.metricValue,
+.cardValue {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--new-home-text);
+}
+
+.metricLabel,
+.cardEyebrow,
+.testimonialMeta,
+.logoPillText,
+.featureTitle,
+.mapLabel {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(17, 24, 39, 0.5);
+}
+
+.metricDescription,
+.cardTitle,
+.featureDescription,
+.logoSupport {
+  margin: 14px 0 0;
+  color: var(--new-home-muted);
+}
+
+.cardTitle,
+.featureTitleText,
+.testimonialAuthor {
+  color: var(--new-home-text);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.stepsGrid,
+.featureGrid,
+.logoGrid,
+.testimonialGrid {
+  width: 100%;
+}
+
+.list {
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.listItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--new-home-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.listBullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--new-home-accent);
+  margin-top: 8px;
+  flex: 0 0 auto;
+}
+
+.logoPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 20px;
+  text-align: center;
+}
+
+.logoPillText {
+  color: rgba(17, 24, 39, 0.72);
+}
+
+.logoSupport {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.mapShell {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(223, 243, 237, 0.8), rgba(223, 243, 237, 0) 32%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(244, 241, 236, 0.9));
+}
+
+.mapStage {
+  position: relative;
+  min-height: 420px;
+  border-radius: 28px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(29, 122, 114, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 122, 114, 0.06) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(223, 243, 237, 0.64), rgba(242, 235, 226, 0.82));
+  background-size: 48px 48px, 48px 48px, auto;
+}
+
+.mapGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 34%, rgba(29, 122, 114, 0.16), transparent 18%),
+    radial-gradient(circle at 64% 58%, rgba(29, 122, 114, 0.18), transparent 20%),
+    radial-gradient(circle at 78% 22%, rgba(29, 122, 114, 0.12), transparent 16%);
+}
+
+.mapPin,
+.mapPath {
+  position: absolute;
+}
+
+.mapPin {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--new-home-accent);
+  box-shadow: 0 0 0 10px rgba(29, 122, 114, 0.14);
+}
+
+.mapPath {
+  border-top: 2px dashed rgba(29, 122, 114, 0.38);
+  transform-origin: left center;
+}
+
+.mapOverlayCard {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.featureIconWrap,
+.avatarCircle {
+  width: 54px;
+  height: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: var(--new-home-accent-soft);
+  color: var(--new-home-accent);
+}
+
+.testimonialHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.testimonialAuthor {
+  font-size: 18px;
+}
+
+.ctaPanel {
+  padding: 40px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(223, 243, 237, 0.9), rgba(223, 243, 237, 0) 42%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(242, 235, 226, 0.92));
+}
+
+.footerWrap {
+  padding-top: 80px;
+}
+
+@media (max-width: 991px) {
+  .pageInner {
+    padding: 24px 16px 72px;
+  }
+
+  .heroShell,
+  .sectionPanel,
+  .stripPanel,
+  .ctaPanel,
+  .mapShell {
+    border-radius: 24px;
+    padding: 24px;
+  }
+
+  .heroHighlightCard,
+  .contentCard,
+  .metricCard,
+  .featureCard,
+  .testimonialCard,
+  .mapOverlayCard {
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .mapStage {
+    min-height: 360px;
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    --new-home-section-space: 48px;
+  }
+
+  .heroTitle,
+  .sectionTitle {
+    letter-spacing: -0.05em;
+  }
+
+  .heroDescription,
+  .sectionDescription {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .heroMiniGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mapOverlayCard {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .footerWrap {
+    padding-top: 48px;
+  }
+}
