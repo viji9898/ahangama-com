@@ -5,7 +5,11 @@ const PASS_URL = "https://pass.ahangama.com";
 
 export function NewHomeFinalCtaSection() {
   return (
-    <section id="final-cta" className={styles.section} aria-label="Final call to action">
+    <section
+      id="final-cta"
+      className={styles.section}
+      aria-label="Final call to action"
+    >
       <div className={styles.ctaPanel}>
         <div className={styles.finalCtaWrap}>
           <span className={styles.eyebrow}>Get started</span>
