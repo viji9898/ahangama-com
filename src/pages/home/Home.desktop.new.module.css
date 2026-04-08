@@ -514,6 +514,106 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
+.exampleSavingsCard,
+.exampleSavingsComparison {
+  height: 100%;
+  padding: 28px;
+  border-radius: 28px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 18px 44px rgba(17, 24, 39, 0.08);
+}
+
+.exampleSavingsTitle {
+  margin: 14px 0 0;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  color: var(--new-home-text);
+}
+
+.exampleSavingsList {
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+
+.exampleSavingsRow,
+.exampleSavingsComparisonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.exampleSavingsRow {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.exampleSavingsRow:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.exampleSavingsLabel,
+.exampleSavingsComparisonLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(17, 24, 39, 0.72);
+}
+
+.exampleSavingsValue,
+.exampleSavingsComparisonValue {
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--new-home-text);
+}
+
+.exampleSavingsComparison {
+  display: grid;
+  align-content: space-between;
+  gap: 24px;
+}
+
+.exampleSavingsComparisonGrid {
+  display: grid;
+  gap: 18px;
+}
+
+.exampleSavingsComparisonRow {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.exampleSavingsHighlight {
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(47, 143, 82, 0.1);
+  border: 1px solid rgba(47, 143, 82, 0.18);
+}
+
+.exampleSavingsHighlightLabel {
+  display: block;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(39, 120, 71, 0.78);
+}
+
+.exampleSavingsHighlightValue {
+  margin: 10px 0 0;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: #277847 !important;
+}
+
 .list {
   margin: 18px 0 0;
   padding: 0;
@@ -721,6 +821,12 @@
     padding: 24px 18px;
   }
 
+  .exampleSavingsCard,
+  .exampleSavingsComparison {
+    border-radius: 22px;
+    padding: 22px;
+  }
+
   .howItWorksConnector {
     right: -12px;
     width: 24px;
@@ -807,6 +913,21 @@
 
   .howItWorksStepTitle {
     font-size: 20px;
+  }
+
+  .exampleSavingsTitle {
+    font-size: clamp(26px, 8vw, 32px);
+  }
+
+  .exampleSavingsRow,
+  .exampleSavingsComparisonRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .exampleSavingsValue,
+  .exampleSavingsComparisonValue {
+    font-size: 28px;
   }
 
   .howItWorksConnector {
