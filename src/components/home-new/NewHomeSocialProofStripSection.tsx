@@ -18,7 +18,11 @@ const metrics = [
 
 export function NewHomeSocialProofStripSection() {
   return (
-    <section id="social-proof" className={styles.section} aria-label="Savings highlight">
+    <section
+      id="social-proof"
+      className={styles.section}
+      aria-label="Savings highlight"
+    >
       <div className={styles.stripPanel}>
         <div className={styles.stripHeader}>
           <Typography.Title level={2} className={styles.stripTitle}>

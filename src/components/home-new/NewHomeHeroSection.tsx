@@ -14,7 +14,8 @@ export function NewHomeHeroSection() {
             <div className={styles.heroCopy}>
               <span className={styles.eyebrow}>Ahangama Pass</span>
               <Typography.Title level={1} className={styles.heroTitle}>
-                Save $50–$150 on your <span className={styles.heroAccent}>Ahangama trip</span>
+                Save $50–$150 on your{" "}
+                <span className={styles.heroAccent}>Ahangama trip</span>
               </Typography.Title>
               <Typography.Paragraph className={styles.heroDescription}>
                 One pass. 100+ places. Cafes, stays, surf, wellness.
@@ -51,10 +52,15 @@ export function NewHomeHeroSection() {
               <div className={styles.heroVisualStage}>
                 <div className={styles.heroPassHalo} aria-hidden="true" />
 
-                <div className={styles.heroPassMockup} aria-label="Ahangama pass preview">
+                <div
+                  className={styles.heroPassMockup}
+                  aria-label="Ahangama pass preview"
+                >
                   <div className={styles.heroPassTopRow}>
                     <div>
-                      <p className={styles.heroPassLabel}>Ahangama Savings Pass</p>
+                      <p className={styles.heroPassLabel}>
+                        Ahangama Savings Pass
+                      </p>
                       <p className={styles.heroPassTitle}>Apple Wallet-ready</p>
                     </div>
                     <span className={styles.heroPassChip}>Live now</span>
@@ -71,7 +77,9 @@ export function NewHomeHeroSection() {
 
                   <div className={styles.heroPassBottomRow}>
                     <div>
-                      <p className={styles.heroPassMetricLabel}>Typical trip savings</p>
+                      <p className={styles.heroPassMetricLabel}>
+                        Typical trip savings
+                      </p>
                       <p className={styles.heroPassMetricValue}>$50–$150</p>
                     </div>
                     <div>
@@ -82,7 +90,10 @@ export function NewHomeHeroSection() {
                 </div>
 
                 <div className={styles.heroVisualNote}>
-                  <span className={styles.heroVisualNoteDot} aria-hidden="true" />
+                  <span
+                    className={styles.heroVisualNoteDot}
+                    aria-hidden="true"
+                  />
                   <span>Scan once and start using it the same day.</span>
                 </div>
               </div>
