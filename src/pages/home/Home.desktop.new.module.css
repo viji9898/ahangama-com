@@ -859,6 +859,33 @@
   background: #277847 !important;
 }
 
+.passFeatureCard {
+  height: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 26px 20px;
+  text-align: center;
+  border-radius: 24px;
+  border: 1px solid rgba(17, 24, 39, 0.06);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.passFeatureTitle {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--new-home-text);
+}
+
+.passFeatureDescription {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--new-home-muted);
+}
+
 .featureIconWrap,
 .avatarCircle {
   width: 54px;
@@ -943,6 +970,11 @@
     padding: 20px;
   }
 
+  .passFeatureCard {
+    border-radius: 22px;
+    padding: 22px 18px;
+  }
+
   .logoPill {
     min-height: 64px;
     padding: 10px 12px;
@@ -1014,6 +1046,10 @@
 
   .mapPreviewDescription {
     font-size: 16px;
+  }
+
+  .passFeatureTitle {
+    font-size: 20px;
   }
 
   .heroDescription {
